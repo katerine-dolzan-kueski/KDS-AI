@@ -1,0 +1,21 @@
+name: Snyk to Jira
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.repository }}-${{ github.event_name }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  snyk-to-jira:
+    name: Create Jira Issue
+    uses: kueski-dev/cicd-web-workflows/.github/workflows/public-snyk-findings.yml@master
+    secrets: inherit
+    with:
+      team: "Front End Platform"
+      project: "PRODU"
+      issue-type: "TASK"

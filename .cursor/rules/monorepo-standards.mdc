@@ -1,0 +1,359 @@
+---
+description: Standards for the Kueski Design System monorepo
+globs: ['**/*.ts', '**/*.tsx', '**/*.json']
+alwaysApply: true
+---
+
+# Monorepo Standards
+
+## Project Structure
+
+The Kueski Design System is a monorepo containing:
+
+- **`@kueski-dev/kds/react`**: Modern React components (React 16+, TypeScript, Tailwind CSS v4)
+- **`@kueski-dev/kds/react-legacy`**: Legacy React components (Styled Components) - DO NOT analyze or modify
+- **`@kueski-dev/kds/utils`**: Build tools and CLI utilities for building packages modules
+
+## Package Management
+
+### 1. pnpm Workspaces
+
+Use pnpm for dependency management:
+
+```json
+{
+  "name": "kueski-design-system",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "packageManager": "pnpm@8.0.0"
+}
+```
+
+### 2. Shared Dependencies
+
+```json
+{
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^4.0.0",
+    "vitest": "^0.34.0"
+  }
+}
+```
+
+### 3. Monorepo Scripts
+
+```json
+{
+  "scripts": {
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' nx run-many -t build",
+    "test": "nx run-many -t test:run --skip-nx-cache",
+    "lint": "eslint . --cache --report-unused-disable-directives --max-warnings 0",
+    "check:types": "tsc --noEmit",
+    "analyze": "NODE_OPTIONS='--max-old-space-size=4096' nx run-many -t analyze"
+  }
+}
+```
+
+## TypeScript Configuration
+
+### 1. tsconfig.base.json
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@kueski-dev/kds/react": ["./packages/react/src"],
+      "@kueski-dev/kds/react-legacy": ["./packages/react-legacy/src"],
+      "@kueski-dev/kds/utils": ["./packages/utils/src"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist", "build"]
+}
+```
+
+### 2. tsconfig.json per package
+
+```json
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "build"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "build", "**/*.test.*", "**/*.stories.*"]
+}
+```
+
+## ESLint Configuration
+
+### 1. eslint.config.js
+
+```javascript
+import js from '@eslint/js';
+import typescript from '@typescript-eslint/eslint-plugin';
+import typescriptParser from '@typescript-eslint/parser';
+
+export default [
+  js.configs.recommended,
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': typescript,
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+  {
+    files: ['**/*.stories.*', '**/*.test.*'],
+    languageOptions: {
+      parserOptions: {
+        project: null,
+      },
+    },
+  },
+];
+```
+
+## Vite Configuration
+
+### 1. vite.config.ts
+
+```typescript
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    lib: {
+      entry: resolve(__dirname, 'src/index.ts'),
+      name: 'KueskiDesignSystem',
+      fileName: 'index',
+    },
+    rollupOptions: {
+      external: ['react', 'react-dom'],
+      output: {
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM',
+        },
+      },
+    },
+  },
+});
+```
+
+## Testing Configuration
+
+### 1. vitest.config.ts
+
+```typescript
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/test/setup.ts'],
+    globals: true,
+  },
+});
+```
+
+### 2. setup.ts
+
+```typescript
+import '@testing-library/jest-dom';
+import { expect, afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
+
+afterEach(() => {
+  cleanup();
+});
+```
+
+## Storybook Configuration
+
+### 1. .storybook/main.ts
+
+```typescript
+import type { StorybookConfig } from '@storybook/react-vite';
+
+const config: StorybookConfig = {
+  stories: ['../packages/react/src/**/*.stories.@(js|jsx|ts|tsx)'],
+  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-a11y'],
+  framework: {
+    name: '@storybook/react-vite',
+    options: {},
+  },
+  typescript: {
+    check: false,
+    reactDocgen: 'react-docgen-typescript',
+  },
+};
+
+export default config;
+```
+
+## Build Configuration
+
+### 1. Build Scripts
+
+Use the existing build scripts from the project:
+
+```json
+{
+  "scripts": {
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' nx run-many -t build",
+    "analyze": "NODE_OPTIONS='--max-old-space-size=4096' nx run-many -t analyze"
+  }
+}
+```
+
+### 2. Bundle Analysis
+
+```typescript
+// vite.config.ts for bundle analysis
+import { defineConfig } from 'vite';
+import { visualizer } from 'rollup-plugin-visualizer';
+
+export default defineConfig({
+  plugins: [
+    visualizer({
+      filename: 'bundle-analysis/react-stats.html',
+      open: true,
+    }),
+  ],
+});
+```
+
+## CI/CD Configuration
+
+### 1. GitHub Actions
+
+```yaml
+name: CI/CD
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - run: pnpm install
+      - run: pnpm test
+      - run: pnpm lint
+      - run: pnpm check:types
+      - run: pnpm build
+```
+
+## Prettier Configuration
+
+### 1. prettier.config.mjs
+
+```javascript
+export default {
+  semi: true,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'es5',
+  printWidth: 80,
+  endOfLine: 'lf',
+};
+```
+
+## Stylelint Configuration
+
+### 1. stylelint.config.mjs
+
+```javascript
+export default {
+  extends: ['stylelint-config-standard'],
+  rules: {
+    'at-rule-no-unknown': [
+      true,
+      {
+        ignoreAtRules: ['tailwind', 'apply', 'variants', 'responsive', 'screen'],
+      },
+    ],
+  },
+};
+```
+
+## Monorepo Best Practices
+
+### 1. Dependencies
+
+- Use `pnpm` for package management
+- Keep dependencies updated
+- Use exact versions for critical dependencies
+- Separate development and production dependencies
+
+### 2. File Structure
+
+- Maintain consistency in directory structure
+- Use uniform naming conventions
+- Separate source code from configuration files
+
+### 3. Build and Deploy
+
+- Incremental build for development
+- Complete build for production
+- Bundle size analysis
+- Asset optimization
+
+### 4. Testing
+
+- Unit tests per package
+- Integration tests at monorepo level
+- Consolidated coverage reports
+- Accessibility testing
+
+## Monorepo Checklist
+
+- [ ] Consistent directory structure
+- [ ] Unified TypeScript configuration
+- [ ] ESLint configured for all packages
+- [ ] Testing configured and working
+- [ ] Storybook configured
+- [ ] Build scripts working
+- [ ] Dependencies updated
+- [ ] CI/CD configured
+- [ ] Bundle analysis implemented
+- [ ] Documentation updated

@@ -1,0 +1,12 @@
+---
+# This workflow sends metrics to datadog about the execution of the pipelines
+name: datadog-metrics
+on:
+  workflow_run:
+    workflows: [Kueski]
+    types: [completed]
+
+jobs:
+  collect-workflow-metrics:
+    uses: kueski-dev/cicd-gha-workflows/.github/workflows/job-collect-workflow-metrics.yml@master
+    secrets: inherit

@@ -1,0 +1,43 @@
+---
+name: Reusable job for testing
+
+on:
+  workflow_call:
+    inputs:
+      GH_RUNNER:
+        default: staging-shared
+        required: false
+        type: string
+
+jobs:
+  linter:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        run: npm install --global pnpm
+      - name: Check pnpm installation
+        run: pnpm --version
+      - name: Install modules
+        run: pnpm install
+      - name: Fix Test Report Paths
+        run: |
+          if [ -f ./coverage/coverage-final.json ] ; then
+             echo "coverage-final.json"
+            sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' ./coverage/coverage-final.json
+          fi
+          if [ -f ./coverage/clover.xml ] ; then
+            echo "clover.xml"
+            sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' ./coverage/clover.xml
+          fi
+          if [ -f ./coverage/test-report.xml ] ; then
+            echo "test-report.xml"
+            sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' ./coverage/test-report.xml
+          fi
+      - name: Send Test Results to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Coverage Report
+          path: coverage/**/*.*

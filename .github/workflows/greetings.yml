@@ -1,0 +1,36 @@
+---
+name: Greetings
+env:
+  ENV_FILE: .github/variables/.env
+on: [pull_request]
+jobs:
+  greetings:
+    name: Greetings
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: kueski-dev/devops-action-vars@master
+        continue-on-error: true
+        with:
+          path:
+      - uses: actions/first-interaction@v1
+        continue-on-error: true
+        with:
+          repo-token:
+          pr-message: |
+            Welcome to the Design System project.
+
+            This project has a trunk-based-development as a branching strategy, this means that if you make a pull request to the master branch, it will be validated and deployed to staging after receiving the review of one of the project owners, after passing all the checks you will be able to merge to master branch which will trigger a deployment to the production environment after receiving the review of one of the project owners.
+
+            The pull request **will be closed automatically** if it has no update in the last 3 days.
+
+            Every commit has to have a jira ticket id as prefix on commit message. `[TICKET-ID] commit message`.
+
+            Next steps you should consider:
+            * Review your catalog-info.yaml in the root of your repo
+            * Remember you can add more monitors inside the /.k8s/overlays/production/monitors.yaml file
+            * Although the default resource requests should work for you, review with real data (datadog) in case you need to tweak it.

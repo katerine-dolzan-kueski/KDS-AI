@@ -1,0 +1,113 @@
+@utility bg-linear-brand {
+  background:
+    linear-gradient(0deg, var(--color-states-hover) 0%, var(--color-states-hover) 100%),
+    var(--color-background-brand);
+}
+
+@utility bg-linear-pressed-brand {
+  background:
+    linear-gradient(0deg, var(--color-states-pressed) 0%, var(--color-states-pressed) 100%),
+    var(--color-background-brand);
+}
+
+@utility bg-linear-warning {
+  background:
+    linear-gradient(0deg, var(--color-states-hover) 0%, var(--color-states-hover) 100%),
+    var(--color-background-warning);
+}
+
+@utility bg-linear-pressed-warning {
+  background:
+    linear-gradient(0deg, var(--color-states-pressed) 0%, var(--color-states-pressed) 100%),
+    var(--color-background-warning);
+}
+
+@utility bg-linear-destructive {
+  background:
+    linear-gradient(0deg, var(--color-states-hover) 0%, var(--color-states-hover) 100%),
+    var(--color-background-danger);
+}
+
+@utility bg-linear-pressed-destructive {
+  background:
+    linear-gradient(0deg, var(--color-states-pressed) 0%, var(--color-states-pressed) 100%),
+    var(--color-background-danger);
+}
+
+@utility bg-linear-success {
+  background:
+    linear-gradient(0deg, var(--color-states-hover) 0%, var(--color-states-hover) 100%),
+    var(--color-background-success);
+}
+
+@utility bg-linear-pressed-success {
+  background:
+    linear-gradient(0deg, var(--color-states-pressed) 0%, var(--color-states-pressed) 100%),
+    var(--color-background-success);
+}
+
+@utility bg-linear-upsell {
+  background:
+    linear-gradient(0deg, var(--color-states-hover) 0%, var(--color-states-hover) 100%),
+    var(--color-background-upsell);
+}
+
+@utility bg-linear-pressed-upsell {
+  background:
+    linear-gradient(0deg, var(--color-states-pressed) 0%, var(--color-states-pressed) 100%),
+    var(--color-background-upsell);
+}
+
+@utility bg-linear-secondary {
+  background:
+    linear-gradient(0deg, var(--color-states-hover) 0%, var(--color-states-hover) 100%),
+    var(--color-background-primary);
+}
+
+@utility bg-linear-pressed-secondary {
+  background:
+    linear-gradient(0deg, var(--color-states-pressed) 0%, var(--color-states-pressed) 100%),
+    var(--color-background-primary);
+}
+
+@utility bg-linear-translucent {
+  background:
+    linear-gradient(0deg, var(--color-states-hover) 0%, var(--color-states-hover) 100%),
+    var(--color-background-invert-translucent);
+}
+
+@utility bg-linear-pressed-translucent {
+  background:
+    linear-gradient(0deg, var(--color-states-pressed) 0%, var(--color-states-pressed) 100%),
+    var(--color-background-invert-translucent);
+}
+
+@utility disabled-button-brand {
+  background:
+    linear-gradient(0deg, var(--color-states-disabled) 0%, var(--color-states-disabled) 100%),
+    var(--color-background-brand);
+}
+
+@utility disabled-button-warning {
+  background:
+    linear-gradient(0deg, var(--color-states-disabled) 0%, var(--color-states-disabled) 100%),
+    var(--color-background-warning);
+}
+
+@utility disabled-button-destructive {
+  background:
+    linear-gradient(0deg, var(--color-states-disabled) 0%, var(--color-states-disabled) 100%),
+    var(--color-background-danger);
+}
+
+@utility disabled-button-success {
+  background:
+    linear-gradient(0deg, var(--color-states-disabled) 0%, var(--color-states-disabled) 100%),
+    var(--color-background-success);
+}
+
+@utility disabled-button-upsell {
+  background:
+    linear-gradient(0deg, var(--color-states-disabled) 0%, var(--color-states-disabled) 100%),
+    var(--color-background-upsell);
+}

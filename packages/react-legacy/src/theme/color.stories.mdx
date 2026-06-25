@@ -1,0 +1,42 @@
+import { Meta } from "@storybook/addon-docs";
+
+import { DesignSystemGlobals } from "../hocs/withDesignSystem";
+import { color } from "./color";
+import { Grid, Text, Spacer } from "../Components";
+import { ColorCard } from "../utils/kds.components";
+import {
+  extractVariable,
+  getVariableValue,
+  groupByTokenName,
+} from "../utils/kds.utils";
+
+<Meta title="OLD Design System/Theme/Color" component={() => {}} group />
+
+# Colors
+
+A system of additional colors from the primary, secondary and semantic colors.
+
+## Product Palette
+
+<Grid>
+  <DesignSystemGlobals />
+  {Object.entries(groupByTokenName(color)).map(([groupName, values]) => (
+    <>
+      <Spacer $size="spacing05" />
+      <Text $format="Body/Large/Bold">{groupName}</Text>
+      <Spacer $size="spacing03" />
+      <Grid $cols="4" $gap="spacing05" $symetric>
+        {Object.entries(values).map(([itemName, value]) => (
+          <ColorCard color={value} title={`${groupName}${itemName}`}>
+            <Text $format="Label/Medium/Regular" $color="textSecondary">
+              <code>theme.color.{`${groupName}${itemName}`}</code>
+            </Text>
+            <Text $format="Label/Medium/Regular">
+              ({getVariableValue(extractVariable(value))})
+            </Text>
+          </ColorCard>
+        ))}
+      </Grid>
+    </>
+  ))}
+</Grid>

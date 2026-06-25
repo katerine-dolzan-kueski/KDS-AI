@@ -1,0 +1,431 @@
+---
+description: Architecture standards for the Kueski Design System
+globs:
+  [
+    'packages/react/src/**/*.tsx',
+    'packages/react/src/**/*.ts',
+    'packages/react/src/components/**/*',
+    'packages/react/src/hooks/**/*',
+    'packages/react/src/lib/**/*',
+  ]
+alwaysApply: true
+---
+
+# Architecture Standards
+
+## Project Structure
+
+The Kueski Design System follows a well-defined architecture pattern:
+
+```
+packages/react/src/
+├── components/           # React components
+│   ├── sub-atomic/      # Primitive elements (Icon, Spinner, Badge)
+│   ├── atoms/           # Basic components (Button, Input, Card)
+│   ├── molecules/       # Composite components (SearchBox, FormField)
+│   ├── organisms/       # Complex components (Header, Sidebar)
+│   └── patterns/        # Reusable patterns (Layout, Form)
+├── hooks/               # Custom React hooks
+├── lib/                 # Utility functions and constants
+├── styles/              # Design tokens and utilities
+│   ├── tokens/          # Design tokens (colors, spacing, typography)
+│   ├── utility/         # Utility classes (typography, elevation)
+│   └── fonts/           # Font files and definitions
+├── test/                # Test utilities and setup
+└── types/               # Global type definitions
+```
+
+## Component Architecture
+
+### 1. Atomic Design Hierarchy (Extended)
+
+#### **Sub-Atomic Particles** - Primitive Elements
+
+- **Purpose**: Most basic building blocks
+- **Characteristics**:
+  - Pure HTML elements or minimal wrappers
+  - No business logic
+  - Highly reusable
+  - Use Radix UI primitives
+- **Examples**: Icon, Spinner, Badge, Divider, Text
+
+#### **Atoms** - Basic Components
+
+- **Purpose**: Fundamental interactive components
+- **Characteristics**:
+  - Single responsibility
+  - Self-contained functionality
+  - No dependencies on other components
+  - Highly reusable
+- **Examples**: Button, Input, Card, BottomSheet, Radio, Checkbox
+
+#### **Molecules** - Composite Components
+
+- **Purpose**: Combine 2-3 atoms for specific functionality
+- **Characteristics**:
+  - Combine multiple atoms
+  - Specific use cases
+  - Reusable across the system
+- **Examples**: SearchBox, FormField, ButtonGroup, DatePicker, RadioGroup
+
+#### **Organisms** - Complex Components
+
+- **Purpose**: Complex components that combine multiple molecules and atoms
+- **Characteristics**:
+  - Combine multiple molecules and atoms
+  - Complex functionality
+  - Context-specific
+- **Examples**: Header, Sidebar, DataTable, Modal, Navigation
+
+#### **Patterns** - Reusable Patterns
+
+- **Purpose**: Reusable patterns that combine multiple organisms
+- **Characteristics**:
+  - Complete user flows
+  - Business logic patterns
+  - Layout patterns
+- **Examples**: Layout, Form, Dashboard, Authentication
+
+### 2. Component File Structure
+
+Each component must follow this structure:
+
+```
+ComponentName/
+├── ComponentName.tsx           # Main component
+├── ComponentName.types.ts      # Type definitions
+├── ComponentName.styles.ts     # CVA styles
+├── ComponentName.test.tsx      # Unit tests
+├── ComponentName.stories.tsx  # Storybook stories
+├── index.ts                    # Exports
+└── README.md                   # Documentation (optional)
+```
+
+### 3. Component Dependencies
+
+#### **Allowed Dependencies by Level**
+
+**Sub-Atomic Particles**:
+
+- ✅ React hooks (`useState`, `useEffect`, etc.)
+- ✅ Custom hooks from `/hooks`
+- ✅ Utility functions from `/lib`
+- ✅ Design tokens from `/styles`
+- ✅ Radix UI primitives
+- ❌ Other components
+
+**Atoms**:
+
+- ✅ All sub-atomic particle dependencies
+- ✅ Other sub-atomic particles
+- ❌ Other atoms, molecules, or organisms
+
+**Molecules**:
+
+- ✅ All atom dependencies
+- ✅ Other atoms and sub-atomic particles
+- ❌ Other molecules or organisms
+
+**Organisms**:
+
+- ✅ All molecule dependencies
+- ✅ Other molecules, atoms, and sub-atomic particles
+- ❌ Other organisms
+
+**Patterns**:
+
+- ✅ All organism dependencies
+- ✅ Other organisms, molecules, atoms, and sub-atomic particles
+
+## Hook Architecture
+
+### 1. Custom Hooks Structure
+
+```
+hooks/
+├── useEscapeKey/
+│   ├── useEscapeKey.ts      # Main hook implementation
+│   ├── useEscapeKey.test.ts # Unit tests
+│   ├── useEscapeKey.types.ts # Type definitions (if needed)
+│   └── index.ts             # Exports
+├── useClickOutside/
+│   ├── useClickOutside.ts
+│   ├── useClickOutside.test.ts
+│   ├── useClickOutside.types.ts
+│   └── index.ts
+├── useBottomSheet/
+│   ├── useBottomSheet.ts
+│   ├── useBottomSheet.test.ts
+│   ├── useBottomSheet.types.ts
+│   └── index.ts
+└── index.ts                  # Main exports
+```
+
+### 2. Hook File Structure
+
+Each hook must follow this structure:
+
+```
+HookName/
+├── HookName.ts              # Main hook implementation
+├── HookName.test.ts         # Unit tests
+├── HookName.types.ts        # Type definitions (if needed)
+├── index.ts                 # Exports
+└── README.md                # Documentation (optional)
+```
+
+### 3. Hook Naming Convention
+
+- **Prefix**: Always use `use` prefix
+- **Purpose**: Descriptive name indicating functionality
+- **Examples**: `useEscapeKey`, `useClickOutside`, `useBottomSheet`
+
+### 4. Hook Dependencies
+
+```typescript
+// ✅ Good - focused hook
+export const useEscapeKey = (callback: () => void) => {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        callback();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [callback]);
+};
+
+// ❌ Bad - too many responsibilities
+export const useKeyboardAndMouse = (onEscape: () => void, onClickOutside: () => void) => {
+  // Multiple responsibilities
+};
+```
+
+### 5. Hook Testing
+
+```typescript
+// useEscapeKey.test.ts
+import { renderHook } from '@testing-library/react';
+import { useEscapeKey } from './useEscapeKey';
+
+describe('useEscapeKey', () => {
+  it('should call callback when Escape key is pressed', () => {
+    const callback = vi.fn();
+    renderHook(() => useEscapeKey(callback));
+
+    // Simulate Escape key press
+    fireEvent.keyDown(document, { key: 'Escape' });
+
+    expect(callback).toHaveBeenCalled();
+  });
+});
+```
+
+## Library Architecture
+
+### 1. Utility Functions
+
+```
+lib/
+├── constants.ts              # Application constants
+├── utils.ts                 # Utility functions
+└── index.ts                 # Exports
+```
+
+### 2. Function Organization
+
+```typescript
+// ✅ Good - focused utility
+export const calculateDragTargetHeight = (
+  startHeight: number,
+  isDragUp: boolean,
+  isDragDown: boolean,
+  deltaY: number,
+  dragDistance: number,
+  minDragThreshold: number,
+  sizeConfig: 'half' | 'large' | 'fullScreen',
+): number => {
+  // Single responsibility
+};
+
+// ❌ Bad - multiple responsibilities
+export const handleDragAndResize = (element: HTMLElement, options: any) => {
+  // Multiple responsibilities
+};
+```
+
+## Style Architecture
+
+### 1. Design Token Structure
+
+```
+styles/
+├── tokens/                   # Design tokens
+│   ├── colors.css           # Color tokens
+│   ├── spacings.css         # Spacing tokens
+│   ├── font-sizes.css     # Typography tokens
+│   ├── radius.css            # Border radius tokens
+│   └── index.css            # Token imports
+├── utility/                 # Utility classes
+│   ├── typography.css       # Typography utilities
+│   ├── elevation.css        # Shadow utilities
+│   └── button.css           # Component utilities
+└── fonts/                   # Font files
+    └── inter/               # Inter font family
+```
+
+### 2. Token Usage Pattern
+
+```typescript
+// ✅ Good - using design tokens
+const buttonVariants = cva(
+  ['typo-body-2-emphasized whitespace-nowrap rounded-x2', 'flex items-center justify-center w-fit'],
+  {
+    variants: {
+      $variant: {
+        primary: 'bg-background-brand text-text-and-icons-always-white',
+        secondary: 'bg-background-secondary text-text-and-icons-primary',
+      },
+    },
+  },
+);
+
+// ❌ Bad - hardcoded values
+const buttonVariants = cva('text-sm font-medium rounded-md px-4 py-2', {
+  variants: {
+    $variant: {
+      primary: 'bg-blue-500 text-white',
+      secondary: 'bg-gray-200 text-gray-900',
+    },
+  },
+});
+```
+
+## Import/Export Architecture
+
+### 1. Component Exports
+
+```typescript
+// ComponentName/index.ts
+export { ComponentName } from './ComponentName';
+export type { ComponentNameProps } from './ComponentName.types';
+export { componentNameVariants } from './ComponentName.styles';
+```
+
+### 2. Library Exports
+
+```typescript
+// lib/index.ts
+export { calculateDragTargetHeight } from './utils';
+export { DRAG_BEHAVIOR_RULES } from './constants';
+```
+
+### 3. Hook Exports
+
+```typescript
+// hooks/index.ts
+export { useEscapeKey } from './useEscapeKey';
+export { useClickOutside } from './useClickOutside';
+export { useBottomSheet } from './useBottomSheet';
+```
+
+## Testing Architecture
+
+### 1. Test Organization
+
+```
+ComponentName/
+├── ComponentName.test.tsx      # Unit tests
+├── ComponentNameCompounds.test.tsx  # Compound tests
+└── __mocks__/                  # Test mocks
+```
+
+### 2. Test Structure
+
+```typescript
+// ✅ Good - focused test
+describe('Button', () => {
+  it('should render with default props', () => {
+    render(<Button>Test</Button>);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+
+  it('should handle click events', () => {
+    const handleClick = vi.fn();
+    render(<Button onClick={handleClick}>Test</Button>);
+    fireEvent.click(screen.getByRole('button'));
+    expect(handleClick).toHaveBeenCalled();
+  });
+});
+
+// ❌ Bad - too many responsibilities
+describe('Button', () => {
+  it('should do everything', () => {
+    // Testing multiple things at once
+  });
+});
+```
+
+## Documentation Architecture
+
+### 1. Storybook Structure
+
+```
+ComponentName/
+├── ComponentName.stories.tsx   # Storybook stories
+└── README.md                   # Component documentation
+```
+
+### 2. Story Organization
+
+```typescript
+// ✅ Good - organized stories
+export const Primary: Story = {
+  args: {
+    children: 'Primary Button',
+    $variant: 'primary',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    children: 'Secondary Button',
+    $variant: 'secondary',
+  },
+};
+
+// ❌ Bad - generic stories
+export const Default: Story = {
+  args: {
+    children: 'Button',
+  },
+};
+```
+
+## Best Practices
+
+### 1. Component Design
+
+- **Single Responsibility**: Each component should have one clear purpose
+- **Composition over Inheritance**: Use composition patterns
+- **Props Interface**: Clear, well-documented prop interfaces
+- **Accessibility**: WCAG 2.1 AA compliance
+- **Performance**: Optimized rendering and bundle size
+
+### 2. Code Organization
+
+- **Consistent Naming**: Follow established conventions
+- **Clear Dependencies**: Minimal, well-defined dependencies
+- **Type Safety**: Full TypeScript coverage
+- **Testing**: Comprehensive test coverage
+- **Documentation**: Clear, up-to-date documentation
+
+### 3. Architecture Principles
+
+- **Modularity**: Loosely coupled, highly cohesive
+- **Scalability**: Easy to extend and maintain
+- **Reusability**: Components can be reused across contexts
+- **Consistency**: Uniform patterns and conventions
+- **Performance**: Optimized for speed and bundle size

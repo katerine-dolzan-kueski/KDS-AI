@@ -1,0 +1,10 @@
+self-hosted-runner:
+  labels:
+    - staging
+    - staging-pay
+    - staging-card
+    - staging-shared
+    - production
+    - production-card
+    - production-pay
+    - production-shared

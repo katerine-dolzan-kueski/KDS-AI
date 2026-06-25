@@ -1,0 +1,41 @@
+@theme {
+  --color-shimmer-0: #cfd8df1a;
+  --color-shimmer-11: #cfd8df33;
+  --color-shimmer-22: #cfd8df4d;
+  --color-shimmer-33: #cfd8df66;
+  --color-shimmer-44: #cfd8df80;
+  --color-shimmer-56: #cfd8df99;
+  --color-shimmer-67: #cfd8dfb2;
+  --color-shimmer-78: #cfd8dfcc;
+  --color-shimmer-89: #cfd8dfe5;
+  --color-shimmer-100: #cfd8dfff;
+  --color-spinner-blue-0: #0069f100;
+  --color-spinner-blue-25: #0069f100;
+  --color-spinner-blue-95: #0069f1ff;
+  --color-spinner-blue-100: #0069f1ff;
+  --color-spinner-white-0: #ffffff00;
+  --color-spinner-white-25: #ffffff00;
+  --color-spinner-white-95: #ffffffff;
+  --color-spinner-white-100: #ffffffff;
+}
+
+[data-theme='dark'] {
+  --color-shimmer-0: #4f5b661a;
+  --color-shimmer-11: #4f5b6633;
+  --color-shimmer-22: #4f5b664d;
+  --color-shimmer-33: #4f5b6666;
+  --color-shimmer-44: #4f5b6680;
+  --color-shimmer-56: #4f5b6699;
+  --color-shimmer-67: #4f5b66b2;
+  --color-shimmer-78: #4f5b66cc;
+  --color-shimmer-89: #4f5b66e5;
+  --color-shimmer-100: #4f5b66ff;
+  --color-spinner-blue-0: #2988ff00;
+  --color-spinner-blue-25: #0069f100;
+  --color-spinner-blue-95: #0069f1ff;
+  --color-spinner-blue-100: #0069f1ff;
+  --color-spinner-white-0: #ffffff00;
+  --color-spinner-white-25: #ffffff00;
+  --color-spinner-white-95: #ffffffff;
+  --color-spinner-white-100: #ffffffff;
+}

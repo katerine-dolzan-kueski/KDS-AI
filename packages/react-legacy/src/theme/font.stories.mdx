@@ -1,0 +1,77 @@
+import React from 'react';
+import { Meta } from '@storybook/addon-docs';
+
+import { Grid, Header, Text, Card, Spacer } from '../Components';
+import { DesignSystemGlobals } from '../hocs/withDesignSystem';
+import { getAllFontTokens, fontTokenToTuple } from '../utils/utils';
+
+<Meta title="OLD Design System/Theme/Font" component={() => {}} group />
+
+# Font Stack
+
+## Design Tokens
+
+<Grid>
+  <DesignSystemGlobals />
+  {Object.entries(
+    getAllFontTokens().reduce((dicctionary, token) => {
+      const [family, type, size, weight] = fontTokenToTuple(token);
+      const group = dicctionary[family] ?? [];
+      return {
+        ...dicctionary,
+        [family]: [...group, `${type}/${size}/${weight}`],
+      };
+    }, {}),
+  )
+    .reverse()
+    .map(([groupName, values]) => (
+      <React.Fragment key={groupName}>
+        <Spacer $size="spacing06" />
+        <Text $format="Body/Large/Bold">{groupName}</Text>
+        <Spacer $size="spacing03" />
+        <Card>
+          <Grid $cols="3" $gap="spacing05" $symetric>
+            <Text $format="Body/Large/Bold">Token</Text>
+            <Text $format="Body/Large/Bold">Usage</Text>
+            <Text $format="Body/Large/Bold">Example</Text>
+            {values.map((token) => {
+              const isBody = Boolean(token.match(/Body|Label/));
+              const isNumber = groupName === 'Numbers';
+              const RenderComponent = isBody ? Text : Header;
+              const RenderComponentName = isBody ? 'Text' : 'Header';
+              const [type, size, weight] = token.split('/');
+              return (
+                <React.Fragment key={`${groupName}/${token}`}>
+                  <div>
+                    <Text $format="Body/Small/Regular">
+                      Typography/{groupName}/{type}/{size}/{weight}
+                    </Text>
+                  </div>
+                  <div>
+                    <Text $format="Label/Medium/Bold">With {RenderComponentName} component</Text>
+                    <Text>
+                      <code>
+                        &lt;{RenderComponentName} $format="{token}" {isNumber ? '$number' : ''}/&gt;
+                      </code>
+                    </Text>
+                    <Spacer $size="spacing04" />
+                    <Text $format="Label/Medium/Bold">In styled-components:</Text>
+                    <Text>
+                      <code>parseTypography('{`${groupName}/${token}`}')</code>
+                    </Text>
+                  </div>
+                  <RenderComponent
+                    $format={token}
+                    $number={isNumber}
+                    style={{ textTransform: 'capitalize' }}
+                  >
+                    {type} {size}
+                  </RenderComponent>
+                </React.Fragment>
+              );
+            })}
+          </Grid>
+        </Card>
+      </React.Fragment>
+    ))}
+</Grid>

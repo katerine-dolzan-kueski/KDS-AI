@@ -1,0 +1,64 @@
+/* Bottom Sheet Animation Keyframes */
+
+/* Slide animations for the bottom sheet */
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-to-bottom {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+/* Overlay fade animations */
+@keyframes fade-in-overlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out-overlay {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Data state selectors for automatic animation application */
+[data-state='open'] {
+  animation: slide-in-from-bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-state='closed'] {
+  animation: slide-out-to-bottom 0.2s cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Overlay animations based on data state */
+.bottom-sheet-overlay[data-state='open'] {
+  animation: fade-in-overlay 0.15s ease-out;
+  opacity: 1;
+}
+
+.bottom-sheet-overlay[data-state='closed'] {
+  animation: fade-out-overlay 0.1s ease-in;
+  opacity: 0;
+  display: none;
+}

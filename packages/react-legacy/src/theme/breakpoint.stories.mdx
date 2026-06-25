@@ -1,0 +1,49 @@
+import React from "react";
+
+import { Meta } from "@storybook/addon-docs";
+
+import { breakpoint } from "./breakpoint";
+import { Grid, Text, Card } from "../Components";
+import { DesignSystemGlobals } from "../hocs/withDesignSystem";
+
+<Meta title="OLD Design System/Theme/Breakpoint" component={() => {}} group />
+
+# Breakpoints
+
+KDS’s layouts and grids use uniform elements and spacing to encourage consistency across platforms, environments, and screen sizes.
+
+## Principles
+
+### Mobile First
+
+We focus on mobile first experiencies with consistent UI regions and spatial organization.
+
+### Consistent
+
+Layouts should use grids, keylines, and padding consistently.
+
+### Responsive
+
+Layouts are adaptive. They react to input from users, devices, and screen elements.
+
+## Design Tokens
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="3" $gap="spacing03">
+    <Text $format="Body/Large/Bold">Token</Text>
+    <Text $format="Body/Large/Bold">Usage</Text>
+    <Text $format="Body/Large/Bold">Value</Text>
+    {Object.entries(breakpoint).map(([size, value]) => (
+      <React.Fragment key={size}>
+        <Text>{size}</Text>
+        <Text>
+          <code>theme.breakpoint.{size}</code>
+        </Text>
+        <Text>
+          <code>{value}</code>
+        </Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>

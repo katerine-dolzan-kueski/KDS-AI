@@ -1,0 +1,41 @@
+import React from 'react';
+
+interface MoreHorizontalIconProps extends React.SVGProps<SVGSVGElement> {
+  $width?: number;
+  $height?: number;
+  $className?: string;
+  $fill?: string;
+}
+
+export const MoreHorizontalIcon = ({
+  $width = 24,
+  $height = 24,
+  $className,
+  $fill = 'currentColor',
+  ...props
+}: MoreHorizontalIconProps) => (
+  <svg
+    width={$width}
+    height={$height}
+    className={$className}
+    fill={$fill}
+    viewBox="0 0 32 32"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M6 16C6 14.8954 6.89543 14 8 14C9.10457 14 10 14.8954 10 16C10 17.1046 9.10457 18 8 18C6.89543 18 6 17.1046 6 16Z"
+      fill="currentColor"
+    />{' '}
+    <path
+      d="M14 16C14 14.8954 14.8954 14 16 14C17.1046 14 18 14.8954 18 16C18 17.1046 17.1046 18 16 18C14.8954 18 14 17.1046 14 16Z"
+      fill="currentColor"
+    />{' '}
+    <path
+      d="M24 14C22.8954 14 22 14.8954 22 16C22 17.1046 22.8954 18 24 18C25.1046 18 26 17.1046 26 16C26 14.8954 25.1046 14 24 14Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+MoreHorizontalIcon.displayName = 'MoreHorizontalIcon';

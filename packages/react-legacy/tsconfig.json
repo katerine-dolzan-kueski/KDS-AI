@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*", "vite.config.ts"],
+  "exclude": ["**/*.test.*", "**/*.spec.*", "**/*.stories.*", "node_modules", "dist"],
+  "references": [
+    {
+      "path": "../utils"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+name: Design Icons
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: false
+        type: string
+      figmaDocumentId:
+        type: string
+        required: true
+        default: bGfjpKPYuZr4tc3TtgvDK3
+      figmaNodesId:
+        type: string
+        required: true
+        default: 599-2624,599-2621,599-2622,599-2623,2107-1189,2382-229,2382-243
+
+concurrency:
+  group: ${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  update-icons:
+    name: Sync Icons
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: master
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup JS
+        uses: ./.github/composite/setup-js
+
+      - name: Setup Committer Bot Identity
+        run: |
+          git config --global user.name 'Frontend Platform Bot'
+          git config --global user.email 'no-reply@kueski.com'
+
+      - name: Generate PR branch name
+        id: branch
+        run: |
+          BRANCH=$PROVIDED_BRANCH
+
+          if [ -z "$BRANCH" ]; then
+            DATE=$(date '+%Y-%m-%d')
+            BRANCH="token-update-$DATE"
+          fi
+
+          echo "pr_branch=$BRANCH" >> "$GITHUB_OUTPUT"
+        env:
+          PROVIDED_BRANCH: ${{ inputs.branch }}
+
+      - name: Create and checkout to branch
+        run: |
+          branch_exist=$(git ls-remote --heads origin refs/heads/$BRANCH)
+
+          if [ -z "$branch_exist" ]; then
+            echo "Branch $BRANCH wasn't found, creating..."
+            git checkout -b $BRANCH
+          else
+            echo "Branch $BRANCH already exist, checking out..."
+            git fetch origin $BRANCH
+            git checkout $BRANCH
+            git pull
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.pr_branch }}
+
+      - name: Download and Generate icons
+        run: |
+          pnpm cli download-icons \
+            --figmaDocumentId=$FIGMA_FILE
+            --figmaNodesId=$FIGMA_NODES_ID
+        env:
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+          FIGMA_FILE: ${{ inputs.figmaDocumentId || 'bGfjpKPYuZr4tc3TtgvDK3' }}
+          FIGMA_NODES_ID: ${{ inputs.figmaNodesId || '599-2624,599-2621,599-2622,599-2623,2107-1189' }}
+
+      - name: Commit and push
+        run: |
+          git add lib cli
+          git commit -m "feat($BRANCH): Update Icons"
+          git push -u origin $BRANCH
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.pr_branch }}
+
+      - name: Create PR
+        run: |
+          DATE=$(date '+%Y-%m-%d')
+          gh pr create \
+            -t "feat($BRANCH): Update Icons - $DATE" \
+            -b "Syncing icons with Figma latest updates"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.branch.outputs.pr_branch }}

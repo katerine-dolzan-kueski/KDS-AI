@@ -1,0 +1,51 @@
+import React from "react";
+
+import { Meta } from "@storybook/addon-docs";
+
+import { spacing } from "./spacing";
+import { Grid, Text, Card, Spacer } from "../Components";
+import { DesignSystemGlobals } from "../hocs/withDesignSystem";
+import { groupByTokenName } from "../utils/kds.utils";
+import { Square } from "../utils/kds.components";
+
+<Meta title="OLD Design System/Theme/Spacing" component={() => {}} group />
+
+# Scales
+
+## Design Tokens
+
+<Grid>
+  <DesignSystemGlobals />
+  {Object.entries(groupByTokenName(spacing, true)).map(
+    ([groupName, values]) => (
+      <React.Fragment key={groupName}>
+        <Spacer $size="spacing06" />
+        <Text $format="Body/Large/Bold">{groupName}</Text>
+        <Spacer $size="spacing03" />
+        <Card>
+          <Grid $cols="4" $gap="spacing05" $symetric>
+            <Text $format="Body/Large/Bold">Token</Text>
+            <Text $format="Body/Large/Bold">Usage</Text>
+            <Text $format="Body/Large/Bold">Value</Text>
+            <Text $format="Body/Large/Bold">Example</Text>
+            {Object.entries(values).map(([itemName, value]) => (
+              <React.Fragment key={`${groupName}${itemName}`}>
+                <Text>
+                  {groupName}
+                  {itemName}
+                </Text>
+                <Text>
+                  <code>theme.spacing.{`${groupName}${itemName}`}</code>
+                </Text>
+                <Text>
+                  <code>{value}</code>
+                </Text>
+                <Square $size={value} />
+              </React.Fragment>
+            ))}
+          </Grid>
+        </Card>
+      </React.Fragment>
+    )
+  )}
+</Grid>

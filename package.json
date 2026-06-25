@@ -1,0 +1,150 @@
+{
+  "name": "@kueski-dev/kds",
+  "version": "2.30.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kueski-dev/kueski-design-system"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@kueski-dev"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "pnpm@10.16.1",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "deduplicate": "pnpm dedupe",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' nx run-many -t build",
+    "publish:all": "nx run-many -t publish",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "cli": "tsx cli/cli.ts",
+    "stylelint": "stylelint --reportInvalidScopeDisables --reportNeedlessDisables \"docs/**/*.{js,ts,tsx}\" \"**/*.css\" --ignore-path .gitignore",
+    "prettier": "pretty-quick --ignore-path .lintignore --branch master",
+    "prettier:all": "prettier --write . --ignore-path .prettierignore",
+    "prettier:format": "prettier --write .",
+    "prettier:check": "prettier --check . --ignore-path .prettierignore",
+    "lint": "eslint . --cache --report-unused-disable-directives --max-warnings 0",
+    "check:types": "tsc --noEmit",
+    "check:types:all": "nx run-many -t check:types",
+    "test": "nx run-many -t test:run --skip-nx-cache",
+    "test:ui": "nx run-many -t test:ui --skip-nx-cache",
+    "test:run": "nx run-many -t test:run --skip-nx-cache",
+    "test:coverage": "nx run-many -t test:coverage --skip-nx-cache",
+    "test:watch": "nx run-many -t test:watch --skip-nx-cache",
+    "test:all": "nx run-many -t test:all --skip-nx-cache",
+    "test:legacy": "nx run-many -t test:legacy --skip-nx-cache",
+    "test:affected": "nx affected -t test",
+    "test:affected:coverage": "nx affected -t test:coverage",
+    "test:list": "nx show projects --with-target=test",
+    "test:react": "nx run @kueski-dev/kds/react:test:run",
+    "test:react:watch": "nx run @kueski-dev/kds/react:test",
+    "test:react:ui": "nx run @kueski-dev/kds/react:test:ui",
+    "test:react:coverage": "nx run @kueski-dev/kds/react:test:coverage",
+    "analyze": "NODE_OPTIONS='--max-old-space-size=4096' nx run-many -t analyze"
+  },
+  "peerDependencies": {
+    "@types/react": ">=16.14.0",
+    "prop-types": ">=15.0.0",
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0",
+    "styled-components": ">=5.0.0",
+    "uuid": ">=8.0.0",
+    "vite": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": false
+    },
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    },
+    "styled-components": {
+      "optional": true
+    },
+    "prop-types": {
+      "optional": true
+    },
+    "uuid": {
+      "optional": true
+    },
+    "vite": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@storybook/addon-console": "^3.0.0",
+    "@storybook/addon-styling-webpack": "^2.0.0",
+    "@storybook/test": "^8.6.14",
+    "@xmldom/xmldom": "^0.8.11",
+    "camelcase": "^8.0.0",
+    "fast-glob": "^3.3.3"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-class-properties": "^7.27.1",
+    "@babel/plugin-transform-private-methods": "^7.27.1",
+    "@babel/plugin-transform-private-property-in-object": "^7.27.1",
+    "@eslint/compat": "^1.4.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.36.0",
+    "@mdx-js/mdx": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@nx/eslint": "21.5.2",
+    "@nx/storybook": "^21.5.3",
+    "@storybook/addon-docs": "^9.1.7",
+    "@storybook/addon-links": "^9.1.7",
+    "@storybook/addon-onboarding": "^9.1.7",
+    "@storybook/mdx2-csf": "^1.1.0",
+    "@storybook/react-vite": "^9.1.7",
+    "@tailwindcss/vite": "^4.1.18",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.5.2",
+    "@types/react": "^16.14.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/yargs": "^17.0.33",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
+    "@typescript-eslint/type-utils": "^8.18.2",
+    "@typescript-eslint/utils": "^8.18.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "@vitest/coverage-v8": "3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "autoprefixer": "^10.4.21",
+    "babel-plugin-styled-components": "^2.1.4",
+    "conventional-commits-parser": "3.2.0",
+    "eslint": "^9.17.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-better-styled-components": "^1.1.2",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-sort-keys-fix": "^1.1.2",
+    "eslint-plugin-storybook": "^9.1.7",
+    "globals": "^15.15.0",
+    "jsdom": "^27.0.0",
+    "nx": "21.5.2",
+    "postcss-pseudo-classes": "^0.4.0",
+    "prettier": "^3.6.2",
+    "pretty-quick": "^4.2.2",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "storybook": "^9.1.14",
+    "storybook-addon-pseudo-states": "^9.1.8",
+    "tailwindcss": "^4.1.18",
+    "tsx": "^4.20.5",
+    "typescript": "^5.6.3",
+    "vitest": "^3.2.4",
+    "yargs": "17.0.0"
+  }
+}

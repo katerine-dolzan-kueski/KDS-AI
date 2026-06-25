@@ -1,0 +1,21 @@
+---
+name: Mark stale pull requests
+on:
+  schedule:
+    - cron: "34 19 * * *"
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/stale@v5
+        continue-on-error: true
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-pr-message: "Stale pull request"
+          stale-pr-label: "no-pr-activity"
+          days-before-stale: 1
+          days-before-close: 2

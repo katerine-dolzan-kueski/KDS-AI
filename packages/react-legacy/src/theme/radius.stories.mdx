@@ -1,0 +1,42 @@
+import { Meta } from "@storybook/addon-docs";
+
+import { radius } from "./radius";
+import { Grid, Text, Card } from "../Components";
+import { DesignSystemGlobals } from "../hocs/withDesignSystem";
+import { RadiusCard } from "../utils/kds.components";
+
+<Meta title="OLD Design System/Theme/Radius" component={() => {}} group />
+
+# Shape scale
+
+Use the shape scale when building individual components.
+It includes small increments necessary to create the appropriate shapes for level-of-detail designs.
+This scale is applied and used within all Kueski components.
+
+## Design Tokens
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="3" $gap="spacing03">
+    <Text $format="Body/Large/Bold">Token</Text>
+    <Text $format="Body/Large/Bold">Usage</Text>
+    <Text $format="Body/Large/Bold">Sample</Text>
+    {Object.entries(radius).map(([name, size]) => (
+      <>
+        <Text>{name}</Text>
+        <Text>
+          <code>theme.radius.{name}</code>
+        </Text>
+        <RadiusCard
+          $size={size}
+          $background="successLight"
+          $padding="spacing05"
+        >
+          <Text $align="center" $color="white">
+            {size}
+          </Text>
+        </RadiusCard>
+      </>
+    ))}
+  </Grid>
+</Card>

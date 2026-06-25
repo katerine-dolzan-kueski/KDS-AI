@@ -1,0 +1,95 @@
+import React from 'react';
+
+import { Meta } from '@storybook/addon-docs';
+
+import { font } from './index';
+import { Grid, Text, Card } from '../Components';
+import { DesignSystemGlobals } from '../hocs/withDesignSystem';
+
+<Meta title="OLD Design System/Foundations/Typography" component={() => {}} group />
+
+# Font Stack
+
+We use two different font stacks at Kueski.
+The first one that is applied to Headers, Titles, Sub-titles, CTA's and actionable components,
+and the second one that is applied to captions and body text.
+
+## Font Family
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="2" $gap="spacing06" $symetric>
+    <Text $format="Body/Large/Bold">Variant</Text>
+    <Text $format="Body/Large/Bold">Value</Text>
+    {Object.entries(font.family).map(([name, value]) => (
+      <React.Fragment key={`family-${name}`}>
+        <Text>{name}</Text>
+        <Text>{value}</Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>
+
+## Font Size
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="2" $gap="spacing06" $symetric>
+    <Text $format="Body/Large/Bold">Variant</Text>
+    <Text $format="Body/Large/Bold">Value</Text>
+    {Object.entries(font.size).map(([name, value]) => (
+      <React.Fragment key={`family-${name}`}>
+        <Text>{name}</Text>
+        <Text>{value}</Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>
+
+## Font Weight
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="2" $gap="spacing06" $symetric>
+    <Text $format="Body/Large/Bold">Variant</Text>
+    <Text $format="Body/Large/Bold">Value</Text>
+    {Object.entries(font.weight).map(([name, value]) => (
+      <React.Fragment key={`family-${name}`}>
+        <Text>{name}</Text>
+        <Text>{value}</Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>
+
+## Letter Spacing
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="2" $gap="spacing06" $symetric>
+    <Text $format="Body/Large/Bold">Variant</Text>
+    <Text $format="Body/Large/Bold">Value</Text>
+    {Object.entries(font.tracking).map(([name, value]) => (
+      <React.Fragment key={`family-${name}`}>
+        <Text>{name}</Text>
+        <Text>{value}</Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>
+
+## Line Height
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="2" $gap="spacing06" $symetric>
+    <Text $format="Body/Large/Bold">Variant</Text>
+    <Text $format="Body/Large/Bold">Value</Text>
+    {Object.entries(font.lineHeight).map(([name, value]) => (
+      <React.Fragment key={`family-${name}`}>
+        <Text>{name}</Text>
+        <Text>{value}</Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>

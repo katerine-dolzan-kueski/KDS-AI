@@ -1,0 +1,19 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": ["scripts/**/*"],
+  "exclude": ["node_modules", "build", "dist", "*.mdx"],
+  "references": [
+    {
+      "path": "packages/react"
+    },
+    {
+      "path": "packages/react-legacy"
+    },
+    {
+      "path": "packages/utils"
+    },
+    {
+      "path": "cli"
+    }
+  ]
+}

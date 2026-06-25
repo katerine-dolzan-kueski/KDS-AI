@@ -1,0 +1,27 @@
+{
+  "name": "@kueski-dev/kds-legacy",
+  "sourceRoot": "packages/react-legacy/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/packages/react-legacy"],
+      "options": {
+        "command": "kds-utils build",
+        "cwd": "packages/react-legacy"
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": [
+          "pnpm publish --no-git-checks"
+        ],
+        "cwd": "packages/react-legacy",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["scope:react-legacy", "type:library"]
+}

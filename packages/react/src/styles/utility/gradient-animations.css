@@ -1,0 +1,35 @@
+@keyframes bg-slide {
+  from {
+    background-position: var(--from, 100% 0);
+  }
+  to {
+    background-position: var(--to, -100% 0);
+  }
+}
+
+@utility animate-bg {
+  background-size: 200% 200%;
+  background-repeat: repeat;
+  will-change: background-position;
+  animation: bg-slide 2s linear infinite;
+}
+
+@utility animate-bg-left {
+  --from: 100% 0;
+  --to: -100% 0;
+}
+
+@utility animate-bg-top {
+  --from: 0 100%;
+  --to: 0 -100%;
+}
+
+@utility animate-bg-right {
+  --from: -100% 0;
+  --to: 100% 0;
+}
+
+@utility animate-bg-bottom {
+  --from: 0 -100%;
+  --to: 0 100%;
+}

@@ -1,0 +1,138 @@
+---
+description: Restrictions for the react-legacy package of the Kueski Design System
+globs: ['packages/react-legacy/**/*']
+alwaysApply: true
+---
+
+# React Legacy Restrictions
+
+## ⚠️ IMPORTANT: DO NOT MODIFY
+
+The `@kueski-dev/kds/react-legacy` package is a **legacy package** that **MUST NOT be analyzed or modified**.
+
+### Strict Restrictions
+
+1. **DO NOT create new components** in this package
+2. **DO NOT modify existing components** in this package
+3. **DO NOT update dependencies** of this package
+4. **DO NOT refactor code** in this package
+5. **DO NOT add new functionality** to this package
+
+### Reasons for Restrictions
+
+- **Legacy Code**: This package contains legacy code that will be deprecated
+- **Styled Components**: Uses Styled Components (legacy technology)
+- **Compatibility**: Maintains compatibility with older versions
+- **Migration**: It's being migrated to the modern `react` package
+
+### What to Do Instead
+
+If you need to create or modify components:
+
+1. **Use the modern `react` package** in `packages/react/src/`
+2. **Follow modern standards** of the Kueski Design System
+3. **Use TypeScript** and **Tailwind CSS v4**
+4. **Implement modern accessibility**
+5. **Follow Atomic Design** principles
+
+### Legacy Package Structure
+
+```
+packages/react-legacy/
+├── src/
+│   ├── Components/          # Legacy components (DO NOT modify)
+│   ├── foundation/          # Legacy tokens (DO NOT modify)
+│   ├── hocs/               # Legacy HOCs (DO NOT modify)
+│   ├── hooks/              # Legacy hooks (DO NOT modify)
+│   ├── theme/              # Legacy theme (DO NOT modify)
+│   └── utils/              # Legacy utilities (DO NOT modify)
+├── package.json            # Legacy configuration
+└── vite.config.ts          # Legacy build
+```
+
+### Component Migration
+
+If you need functionality from a legacy component:
+
+1. **Analyze the legacy component** to understand its functionality
+2. **Create a new component** in `packages/react/src/components/`
+3. **Implement with modern technologies**:
+   - TypeScript
+   - Tailwind CSS v4
+   - Class Variance Authority (CVA)
+   - Radix UI
+   - Modern accessibility
+
+### Migration Example
+
+```typescript
+// ❌ DO NOT do - modify legacy component
+// packages/react-legacy/src/Components/Button/Button.tsx
+
+// ✅ DO - create modern component
+// packages/react/src/components/atoms/Button/Button.tsx
+import { cva } from 'class-variance-authority';
+import { ButtonHTMLAttributes, forwardRef } from 'react';
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ $variant = 'primary', $size = 'md', children, ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={buttonVariants({ $variant, $size })}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+);
+```
+
+### Legacy Package Maintenance
+
+The legacy package should only receive:
+
+1. **Critical bug fixes** (only if absolutely necessary)
+2. **Security updates** (dependencies)
+3. **Deprecation documentation**
+
+### Deprecation Documentation
+
+````typescript
+/**
+ * @deprecated This component is deprecated.
+ * Use the modern component in @kueski-dev/kds/react
+ *
+ * @example
+ * ```tsx
+ * // ❌ Deprecated
+ * import { Button } from '@kueski-dev/kds/react-legacy';
+ *
+ * // ✅ Modern
+ * import { Button } from '@kueski-dev/kds/react';
+ * ```
+ */
+export const LegacyButton = () => {
+  // Legacy component
+};
+````
+
+### Restrictions Checklist
+
+- [ ] DO NOT modify files in `packages/react-legacy/`
+- [ ] DO NOT create new components in the legacy package
+- [ ] DO NOT update dependencies of the legacy package
+- [ ] DO NOT refactor code in the legacy package
+- [ ] DO NOT add new functionality to the legacy package
+- [ ] Use the modern `react` package for new components
+- [ ] Follow modern Kueski Design System standards
+- [ ] Document deprecation when necessary
+
+### Contact
+
+If you need specific functionality from the legacy package, contact the development team to:
+
+1. **Evaluate migration** to the modern package
+2. **Create a modern component** equivalent
+3. **Plan deprecation** of the legacy component

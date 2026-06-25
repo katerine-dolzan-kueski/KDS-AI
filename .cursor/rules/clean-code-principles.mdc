@@ -1,0 +1,797 @@
+---
+description: Clean Code and SOLID principles for the Kueski Design System
+globs: ['**/*.ts', '**/*.tsx']
+alwaysApply: true
+---
+
+# Clean Code and SOLID Principles
+
+## React-Specific Clean Code Principles
+
+### 1. Functional Components with Arrow Functions
+
+Always use functional components with arrow functions:
+
+```typescript
+// ✅ Good - functional component with arrow function
+const Button = ({ $variant, $size, children, onClick }: ButtonProps) => {
+  return (
+    <button
+      className={buttonVariants({ $variant, $size })}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+};
+
+// ❌ Bad - class component
+class Button extends React.Component<ButtonProps> {
+  render() {
+    return <button>{this.props.children}</button>;
+  }
+}
+
+// ❌ Bad - function declaration
+function Button(props: ButtonProps) {
+  return <button>{props.children}</button>;
+}
+```
+
+### 2. Component Composition
+
+Use composition over inheritance:
+
+```typescript
+// ✅ Good - composition with multiple components
+const Card = ({ children, $variant, $size }: CardProps) => {
+  return (
+    <div className={cardVariants({ $variant, $size })}>
+      {children}
+    </div>
+  );
+};
+
+const CardHeader = ({ children, className }: CardHeaderProps) => {
+  return (
+    <div className={cn('card-header', className)}>
+      {children}
+    </div>
+  );
+};
+
+const CardBody = ({ children, className }: CardBodyProps) => {
+  return (
+    <div className={cn('card-body', className)}>
+      {children}
+    </div>
+  );
+};
+
+// Usage with composition
+const UserCard = ({ user }: UserCardProps) => {
+  return (
+    <Card $variant="elevated" $size="md">
+      <CardHeader>
+        <h3>{user.name}</h3>
+      </CardHeader>
+      <CardBody>
+        <p>{user.email}</p>
+        <Button $variant="primary" $size="sm">
+          View Profile
+        </Button>
+      </CardBody>
+    </Card>
+  );
+};
+```
+
+### 3. Custom Hooks for Logic Separation
+
+Extract logic into custom hooks:
+
+```typescript
+// ✅ Good - custom hook for logic separation
+const useFormValidation = (initialValues: FormValues) => {
+  const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [isValid, setIsValid] = useState(false);
+
+  const validateField = (name: string, value: string) => {
+    const fieldErrors = validateFieldValue(name, value);
+    setErrors(prev => ({ ...prev, [name]: fieldErrors }));
+    return fieldErrors.length === 0;
+  };
+
+  const updateField = (name: string, value: string) => {
+    setValues(prev => ({ ...prev, [name]: value }));
+    validateField(name, value);
+  };
+
+  useEffect(() => {
+    const hasErrors = Object.values(errors).some(error => error.length > 0);
+    setIsValid(!hasErrors);
+  }, [errors]);
+
+  return { values, errors, isValid, updateField };
+};
+
+// Component using the hook
+const ContactForm = () => {
+  const { values, errors, isValid, updateField } = useFormValidation({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (isValid) {
+      // Submit form
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Input
+        value={values.name}
+        onChange={(e) => updateField('name', e.target.value)}
+        error={errors.name?.[0]}
+      />
+      {/* More fields */}
+    </form>
+  );
+};
+```
+
+### 4. Props Interface Design
+
+Design clear and focused prop interfaces:
+
+```typescript
+// ✅ Good - focused interface with clear naming
+interface ButtonProps {
+  $variant?: 'primary' | 'secondary' | 'destructive';
+  $size?: 'sm' | 'md' | 'lg';
+  $loading?: boolean;
+  $fullWidth?: boolean;
+  children: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+}
+
+// ❌ Bad - unclear interface
+interface ButtonProps {
+  variant?: string;
+  size?: string;
+  loading?: boolean;
+  fullWidth?: boolean;
+  children: any;
+  onClick?: any;
+  className?: string;
+}
+```
+
+### 5. Event Handler Patterns
+
+Use consistent event handler patterns:
+
+```typescript
+// ✅ Good - consistent event handlers
+const SearchBox = ({ onSearch, placeholder }: SearchBoxProps) => {
+  const [query, setQuery] = useState('');
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSearch(query);
+  };
+
+  const handleClear = () => {
+    setQuery('');
+    onSearch('');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Input
+        value={query}
+        onChange={handleInputChange}
+        placeholder={placeholder}
+      />
+      <Button type="submit">Search</Button>
+      <Button type="button" onClick={handleClear}>Clear</Button>
+    </form>
+  );
+};
+```
+
+### 6. Component Memoization
+
+Use React.memo for performance optimization:
+
+```typescript
+// ✅ Good - memoized component
+const ExpensiveComponent = React.memo<ExpensiveComponentProps>(
+  ({ data, onUpdate }) => {
+    const processedData = useMemo(() => {
+      return data.map(item => ({
+        ...item,
+        processed: true
+      }));
+    }, [data]);
+
+    return (
+      <div>
+        {processedData.map(item => (
+          <Item key={item.id} data={item} onUpdate={onUpdate} />
+        ))}
+      </div>
+    );
+  }
+);
+
+// ❌ Bad - no memoization for expensive components
+const ExpensiveComponent = ({ data, onUpdate }) => {
+  // Expensive operations on every render
+  const processedData = data.map(item => ({ ...item, processed: true }));
+  return <div>{/* render */}</div>;
+};
+```
+
+## JavaScript Clean Code Principles
+
+### 1. Meaningful Names
+
+Use descriptive and unambiguous names:
+
+```typescript
+// ✅ Good - descriptive names
+const handleUserAuthentication = async (credentials: UserCredentials) => {
+  const isValid = validateCredentials(credentials);
+  if (!isValid) {
+    throw new AuthenticationError('Invalid credentials provided');
+  }
+  return await authenticateUser(credentials);
+};
+
+// ❌ Bad - unclear names
+const handleAuth = async (data) => {
+  // Mixed validation and authentication logic
+};
+```
+
+### 2. Small Functions
+
+Functions should be small, focused, and perform a single task:
+
+```typescript
+// ✅ Good - small and focused function
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+// ❌ Bad - large function with multiple responsibilities
+const processUserData = (userData) => {
+  // Validation + transformation + saving + notification
+};
+```
+
+### 3. Readability
+
+Write code that is easy to understand:
+
+```typescript
+// ✅ Good - clear logic
+const isUserEligible = (user: User) => {
+  const hasValidAge = user.age >= 18;
+  const hasValidEmail = validateEmail(user.email);
+  const isAccountActive = user.status === 'active';
+
+  return hasValidAge && hasValidEmail && isAccountActive;
+};
+```
+
+### 4. Comments (When Necessary)
+
+Comments should explain _why_ something is done, not _what_ is done:
+
+```typescript
+// ✅ Good - explains the why
+// Use debounce to avoid excessive API calls during typing
+const debouncedSearch = useDebounce(searchTerm, 300);
+
+// ❌ Bad - explains the obvious
+// Increment counter
+counter++;
+```
+
+### 5. Error Handling
+
+Implement robust error handling:
+
+```typescript
+// ✅ Good - error handling with meaningful messages
+const fetchUserData = async (userId: string) => {
+  try {
+    const response = await api.get(`/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    if (error.status === 404) {
+      throw new UserNotFoundError(`User with ID ${userId} not found`);
+    }
+    throw new ApiError('Failed to fetch user data', error);
+  }
+};
+```
+
+### 6. No Duplication (DRY)
+
+Avoid repeating code:
+
+```typescript
+// ✅ Good - extract common logic
+const formatCurrency = (amount: number, currency: string = 'USD') => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency,
+  }).format(amount);
+};
+
+// ❌ Bad - duplicated code
+const formatUSD = (amount) => `$${amount.toFixed(2)}`;
+const formatEUR = (amount) => `€${amount.toFixed(2)}`;
+```
+
+## SOLID Principles
+
+### 1. Single Responsibility Principle (SRP)
+
+A component or module should have a single responsibility:
+
+```typescript
+// ✅ Good - single responsibility components
+const UserValidator = ({ user }: { user: User }) => {
+  const errors = validateUser(user);
+  return (
+    <div>
+      {errors.map(error => (
+        <span key={error} className="error">{error}</span>
+      ))}
+    </div>
+  );
+};
+
+const UserForm = ({ onSubmit }: { onSubmit: (user: User) => void }) => {
+  const [user, setUser] = useState<User>({});
+
+  return (
+    <form onSubmit={() => onSubmit(user)}>
+      <Input
+        value={user.name}
+        onChange={(e) => setUser({...user, name: e.target.value})}
+      />
+      <Button type="submit">Save</Button>
+    </form>
+  );
+};
+
+// ❌ Bad - multiple responsibilities
+const UserManager = ({ user, onSubmit }: UserManagerProps) => {
+  const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const validateAndSave = async (userData: User) => {
+    // Validation logic
+    const validationErrors = validateUser(userData);
+    setErrors(validationErrors);
+
+    if (validationErrors.length === 0) {
+      // Save logic
+      setIsLoading(true);
+      await saveUser(userData);
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      {/* Form + Validation + Loading + Saving all in one component */}
+    </div>
+  );
+};
+```
+
+### 2. Open/Closed Principle (OCP)
+
+Open for extension, closed for modification:
+
+```typescript
+// ✅ Good - extensible component without modification
+interface ButtonProps {
+  $variant?: 'primary' | 'secondary' | 'destructive';
+  $size?: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+const Button = ({ $variant = 'primary', $size = 'md', children, onClick }: ButtonProps) => {
+  return (
+    <button
+      className={buttonVariants({ $variant, $size })}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+};
+
+// ✅ Good - extend without modifying base component
+const IconButton = ({ icon, ...props }: ButtonProps & { icon: React.ReactNode }) => {
+  return (
+    <Button {...props}>
+      {icon}
+      {props.children}
+    </Button>
+  );
+};
+
+const LoadingButton = ({ $loading, children, ...props }: ButtonProps & { $loading?: boolean }) => {
+  return (
+    <Button {...props} disabled={$loading}>
+      {$loading ? <Spinner /> : children}
+    </Button>
+  );
+};
+
+// ❌ Bad - modifying base component for new features
+const Button = ({ $variant, $size, children, onClick, $loading, icon }: ButtonProps & { $loading?: boolean; icon?: React.ReactNode }) => {
+  // Base component becomes complex with all possible features
+};
+```
+
+### 3. Liskov Substitution Principle (LSP)
+
+Components must be substitutable for their base types:
+
+```typescript
+// ✅ Good - substitutable components
+interface InputProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  error?: string;
+}
+
+const TextInput = ({ value, onChange, placeholder, error }: InputProps) => {
+  return (
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      className={cn('input', error && 'input-error')}
+    />
+  );
+};
+
+const EmailInput = ({ value, onChange, placeholder, error }: InputProps) => {
+  const [emailError, setEmailError] = useState<string>('');
+
+  const handleChange = (newValue: string) => {
+    onChange(newValue);
+    setEmailError(validateEmail(newValue) ? '' : 'Invalid email');
+  };
+
+  return (
+    <TextInput
+      value={value}
+      onChange={handleChange}
+      placeholder={placeholder}
+      error={error || emailError}
+    />
+  );
+};
+
+// Both components can be used interchangeably
+const Form = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  return (
+    <div>
+      <TextInput value={name} onChange={setName} placeholder="Name" />
+      <EmailInput value={email} onChange={setEmail} placeholder="Email" />
+    </div>
+  );
+};
+```
+
+### 4. Interface Segregation Principle (ISP)
+
+Components should not depend on props they don't use:
+
+```typescript
+// ✅ Good - segregated interfaces
+interface BaseInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
+
+interface ValidationProps {
+  error?: string;
+  required?: boolean;
+}
+
+interface StylingProps {
+  $size?: 'sm' | 'md' | 'lg';
+  $variant?: 'default' | 'filled' | 'outlined';
+}
+
+// Specific interfaces for different use cases
+interface TextInputProps extends BaseInputProps, ValidationProps, StylingProps {}
+
+interface PasswordInputProps extends BaseInputProps, ValidationProps {
+  showPassword?: boolean;
+  onToggleVisibility?: () => void;
+}
+
+// ❌ Bad - monolithic interface
+interface InputProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  error?: string;
+  required?: boolean;
+  $size?: 'sm' | 'md' | 'lg';
+  $variant?: 'default' | 'filled' | 'outlined';
+  showPassword?: boolean;
+  onToggleVisibility?: () => void;
+  // Many components don't need all these props
+}
+```
+
+### 5. Dependency Inversion Principle (DIP)
+
+Depend on abstractions, not concrete implementations:
+
+```typescript
+// ✅ Good - depends on abstraction
+interface DataService {
+  fetchData(id: string): Promise<Data>;
+  saveData(data: Data): Promise<void>;
+}
+
+const UserProfile = ({ userId, dataService }: { userId: string; dataService: DataService }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const userData = await dataService.fetchData(userId);
+        setUser(userData);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadUser();
+  }, [userId, dataService]);
+
+  if (loading) return <Spinner />;
+  if (!user) return <div>User not found</div>;
+
+  return <div>{user.name}</div>;
+};
+
+// Usage with different implementations
+const App = () => {
+  const apiService: DataService = {
+    fetchData: (id) => fetch(`/api/users/${id}`).then(r => r.json()),
+    saveData: (data) => fetch('/api/users', { method: 'POST', body: JSON.stringify(data) })
+  };
+
+  const mockService: DataService = {
+    fetchData: (id) => Promise.resolve({ id, name: 'Mock User' }),
+    saveData: (data) => Promise.resolve()
+  };
+
+  return (
+    <div>
+      <UserProfile userId="123" dataService={apiService} />
+      <UserProfile userId="456" dataService={mockService} />
+    </div>
+  );
+};
+
+// ❌ Bad - depends on concrete implementation
+const UserProfile = ({ userId }: { userId: string }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Direct dependency on fetch API
+    fetch(`/api/users/${userId}`)
+      .then(r => r.json())
+      .then(setUser);
+  }, [userId]);
+
+  return <div>{user?.name}</div>;
+};
+```
+
+## React Best Practices Summary
+
+### 1. Component Design Patterns
+
+```typescript
+// ✅ Good - compound component pattern
+const Modal = ({ children, isOpen, onClose }: ModalProps) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const ModalHeader = ({ children }: { children: React.ReactNode }) => (
+  <div className="modal-header">{children}</div>
+);
+
+const ModalBody = ({ children }: { children: React.ReactNode }) => (
+  <div className="modal-body">{children}</div>
+);
+
+const ModalFooter = ({ children }: { children: React.ReactNode }) => (
+  <div className="modal-footer">{children}</div>
+);
+
+// Usage
+const UserModal = ({ user, isOpen, onClose }: UserModalProps) => (
+  <Modal isOpen={isOpen} onClose={onClose}>
+    <ModalHeader>
+      <h2>{user.name}</h2>
+    </ModalHeader>
+    <ModalBody>
+      <p>{user.email}</p>
+    </ModalBody>
+    <ModalFooter>
+      <Button onClick={onClose}>Close</Button>
+    </ModalFooter>
+  </Modal>
+);
+```
+
+### 2. Custom Hooks for Reusable Logic
+
+```typescript
+// ✅ Good - focused custom hook
+const useLocalStorage = <T>(key: string, initialValue: T) => {
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      return initialValue;
+    }
+  });
+
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      setStoredValue(valueToStore);
+      window.localStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+    }
+  };
+
+  return [storedValue, setValue] as const;
+};
+
+// Usage
+const UserPreferences = () => {
+  const [theme, setTheme] = useLocalStorage('theme', 'light');
+  const [language, setLanguage] = useLocalStorage('language', 'en');
+
+  return (
+    <div>
+      <Button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+        Toggle Theme
+      </Button>
+      <Button onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}>
+        Toggle Language
+      </Button>
+    </div>
+  );
+};
+```
+
+### 3. Performance Optimization
+
+```typescript
+// ✅ Good - optimized component
+const ExpensiveList = React.memo<ExpensiveListProps>(
+  ({ items, onItemClick }) => {
+    const handleItemClick = useCallback((id: string) => {
+      onItemClick(id);
+    }, [onItemClick]);
+
+    const processedItems = useMemo(() => {
+      return items.map(item => ({
+        ...item,
+        processed: true,
+        timestamp: Date.now()
+      }));
+    }, [items]);
+
+    return (
+      <div>
+        {processedItems.map(item => (
+          <ExpensiveItem
+            key={item.id}
+            item={item}
+            onClick={handleItemClick}
+          />
+        ))}
+      </div>
+    );
+  }
+);
+
+// ❌ Bad - no optimization
+const ExpensiveList = ({ items, onItemClick }) => {
+  return (
+    <div>
+      {items.map(item => (
+        <ExpensiveItem
+          key={item.id}
+          item={item}
+          onClick={(id) => onItemClick(id)} // New function on every render
+        />
+      ))}
+    </div>
+  );
+};
+```
+
+## Practical Application
+
+### In React Components
+
+```typescript
+// ✅ Good - component with single responsibility
+const Button = ({ $variant, $size, children, onClick }: ButtonProps) => {
+  return (
+    <button
+      className={buttonVariants({ $variant, $size })}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+};
+
+// ✅ Good - hook with single responsibility
+const useButtonState = (initialState: boolean) => {
+  const [isPressed, setIsPressed] = useState(initialState);
+
+  const handlePress = useCallback(() => {
+    setIsPressed(true);
+  }, []);
+
+  const handleRelease = useCallback(() => {
+    setIsPressed(false);
+  }, []);
+
+  return { isPressed, handlePress, handleRelease };
+};
+```

@@ -1,0 +1,231 @@
+/* OpenType features for "Body Text" */
+@utility typo-base-feature-body-text {
+  font-family: InterVariable, Inter, sans-serif;
+  font-feature-settings:
+    'calt' 1,
+    'cv02' 1,
+    'cv03' 1,
+    'cv04' 1,
+    'cv05' 1,
+    'cv09' 1,
+    'cv11' 1;
+}
+
+/* OpenType features for "Data Text" */
+@utility typo-base-feature-data-text {
+  font-family: InterVariable, Inter, sans-serif;
+  font-feature-settings:
+    'tnum' 1,
+    'cv02' 1,
+    'cv03' 1,
+    'cv04' 1;
+}
+
+/* Headline 1 */
+@utility typo-headline-1 {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-headline-1);
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-headline-1);
+  letter-spacing: var(--tracking-h1);
+}
+
+/* Headline 2 */
+@utility typo-headline-2 {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-headline-2);
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-headline-2);
+  letter-spacing: var(--tracking-h2);
+}
+
+/* Headline 3 */
+@utility typo-headline-3 {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-headline-3);
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-headline-3);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Body 1 Strong */
+@utility typo-body-1-strong {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-body-1);
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-body-1);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Body 1 Emphasized */
+@utility typo-body-1-emphasized {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-body-1);
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-body-1);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Body 1 */
+@utility typo-body-1 {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-body-1);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body-1);
+  letter-spacing: var(--tracking-none, 0px);
+}
+
+/* Body 2 Strong */
+@utility typo-body-2-strong {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-body-2);
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-body-2);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Body 2 Emphasized */
+@utility typo-body-2-emphasized {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-body-2);
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-body-2);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Body 2 */
+@utility typo-body-2 {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-body-2);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body-2);
+  letter-spacing: var(--tracking-none, 0px);
+}
+
+/* Meta Emphasized */
+@utility typo-meta-emphasized {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-meta);
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-meta);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Meta */
+@utility typo-meta {
+  font-size: var(--text-meta);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-meta);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Mini emphasized */
+@utility typo-mini-emphasized {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-mini);
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-meta);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Mini */
+@utility typo-mini {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-mini);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-meta);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Amount 1 */
+@utility typo-amount-1 {
+  @apply typo-base-feature-data-text;
+  font-size: var(--text-amount);
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-amount);
+  letter-spacing: var(--tracking-h1);
+}
+
+/* Passcode */
+@utility typo-passcode {
+  @apply typo-base-feature-body-text;
+  font-size: var(--text-headline-2);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-headline-2);
+  letter-spacing: var(--tracking-h2);
+}
+
+/* Numbers 1 Emphasized */
+@utility typo-numbers-1-emphasized {
+  @apply typo-base-feature-data-text;
+  font-size: var(--text-body-1);
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-body-1);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Numbers 1 */
+@utility typo-numbers-1 {
+  @apply typo-base-feature-data-text;
+  font-size: var(--text-body-1);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body-1);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Numbers 2 Emphasized */
+@utility typo-numbers-2-emphasized {
+  @apply typo-base-feature-data-text;
+  font-size: var(--text-body-2);
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-body-2);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Numbers 2 */
+@utility typo-numbers-2 {
+  @apply typo-base-feature-data-text;
+  font-size: var(--text-body-2);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-body-2);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Numbers Meta Emphasized */
+@utility typo-numbers-meta-emphasized {
+  @apply typo-base-feature-data-text;
+  font-size: var(--text-meta);
+  font-style: normal;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--leading-meta);
+  letter-spacing: var(--tracking-none);
+}
+
+/* Numbers Meta */
+@utility typo-numbers-meta {
+  @apply typo-base-feature-data-text;
+  font-size: var(--text-meta);
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--leading-meta);
+  letter-spacing: var(--tracking-none);
+}

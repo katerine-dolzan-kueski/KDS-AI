@@ -1,0 +1,25 @@
+packages:
+  - packages/*
+  - cli/*
+  - docs/storybook
+
+engineStrict: true
+
+onlyBuiltDependencies:
+  - nx
+  - '@babel/runtime'
+  - '@types/react'
+  - '@types/react-dom'
+  - '@types/node'
+  - '@typescript-eslint/eslint-plugin'
+  - '@typescript-eslint/parser'
+  - '@typescript-eslint/type-utils'
+  - '@typescript-eslint/utils'
+  - '@vitejs/plugin-react'
+  - '@vitest/coverage-v8'
+  - '@vitest/ui'
+  - typescript
+  - vite
+  - vitest
+  - rollup-plugin-visualizer
+  - vite-plugin-dts

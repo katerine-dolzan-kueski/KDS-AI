@@ -1,0 +1,150 @@
+---
+name: Kueski
+env:
+  ENV_FILE: .github/variables/.env
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.repository }}-${{ github.event }}-${{ github.workflow }}-
+    ${{ github.head_ref || github.ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  change-management:
+    uses: kueski-dev/cicd-gha-workflows/.github/workflows/job-change-management.yml@v2
+    with:
+      GH_RUNNER: staging-shared
+    secrets: inherit
+
+  set_cluster:
+    uses: kueski-dev/cicd-gha-workflows/.github/workflows/job-get-env.yml@v2
+    with:
+      STAGING_CLUSTER: staging-shared
+      PRODUCTION_CLUSTER: production-shared
+    secrets: inherit
+
+  version:
+    uses: ./.github/workflows/job-version.yml
+    secrets: inherit
+    needs:
+      - change-management
+      - set_cluster
+    with:
+      ENV_NAME: ${{ needs.set_cluster.outputs.runner }}
+
+  linter:
+    uses: ./.github/workflows/job-linter.yml
+    secrets: inherit
+    if: ${{ always() && !failure() && !cancelled() }}
+    needs:
+      - change-management
+      - set_cluster
+      - version
+
+  # test:
+  #   uses: ./.github/workflows/job-test.yml
+  #   secrets: inherit
+  #   needs:
+  #     - change-management
+  #     - set_cluster
+
+  # quality:
+  #   uses: kueski-dev/cicd-gha-workflows/.github/workflows/job-quality.yml@v2
+  #   secrets: inherit
+  #   with:
+  #     CONTINUE_ON_ERROR: false
+  #     GH_RUNNER: staging-shared
+  #   needs:
+  #     - test
+
+  Snyk:
+    uses: kueski-dev/cicd-gha-workflows/.github/workflows/job-snyk.yml@v2
+    secrets: inherit
+    if: ${{ always() && !failure() && !cancelled() }}
+    with:
+      GH_RUNNER: staging-shared
+    needs:
+      - version
+      - change-management
+      - set_cluster
+
+  backstage-validator:
+    uses: kueski-dev/cicd-gha-workflows/.github/workflows/job-backstage-compliance.yml@v2
+    secrets: inherit
+    if: ${{ always() && !failure() && !cancelled() }}
+    needs:
+      - version
+      - change-management
+      - set_cluster
+
+  owner-validator:
+    uses: kueski-dev/cicd-gha-workflows/.github/workflows/job-owner-validator.yml@v2
+    secrets: inherit
+    if: ${{ always() && !failure() && !cancelled() }}
+    needs:
+      - version
+      - change-management
+      - set_cluster
+
+  publish:
+    uses: ./.github/workflows/job-publish.yml
+    secrets: inherit
+    if: ${{ always() && !failure() && !cancelled() }}
+    with:
+      ENV_NAME: ${{ needs.set_cluster.outputs.runner }}
+    needs:
+      - linter
+      - set_cluster
+
+  deploy:
+    uses: ./.github/workflows/job-deploy.yml
+    secrets: inherit
+    if: ${{ always() && !failure() && !cancelled() }}
+    with:
+      STAGING_CLUSTER: staging-shared
+    needs:
+      - publish
+      - set_cluster
+
+  github_release:
+    name: Github Release
+    runs-on: ubuntu-latest
+    if: ${{ needs.publish.outputs.outcome == 'published' && needs.set_cluster.outputs.runner == 'production' }}
+    needs:
+      - set_cluster
+      - publish
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup JS
+        uses: ./.github/composite/setup-js
+      - name: Release
+        id: release
+        run: node .github/scripts/github.release.js --commit ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+      # - name: Download Artifacts
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: build
+      #     path: build/
+      # - name: Zip Artifacts
+      #   run: zip -r ${{ env.ARTIFACTS_FILE }} build
+      # - name: Upload Release Artifacts
+      #   run: gh release upload $RELEASE_TAG ${{ env.ARTIFACTS_FILE }}
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     RELEASE_TAG: ${{ steps.release.outputs.GENERATED_RELEASE_TAG }}
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: deployDocument
+      #     path: deployDocument.md
+      #     retention-days: 10

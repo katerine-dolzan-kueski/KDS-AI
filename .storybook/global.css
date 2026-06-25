@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+@import './../packages/react/src/styles/index.css';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+html,
+body {
+  max-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+}

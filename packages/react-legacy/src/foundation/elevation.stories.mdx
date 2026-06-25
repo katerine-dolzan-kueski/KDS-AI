@@ -1,0 +1,39 @@
+import { Meta } from '@storybook/addon-docs';
+
+import { elevation } from './index';
+import { Grid, Text, Card } from '../Components';
+import { DesignSystemGlobals } from '../hocs/withDesignSystem';
+import { ElevatedCard } from '../utils/kds.components';
+
+<Meta title="OLD Design System/Foundations/Elevation" component={() => {}} group />
+
+# Elevation
+
+Elevation is the relative distance between two surfaces along the z-axis.
+
+<Grid $gap="spacing06">
+  <DesignSystemGlobals />
+
+  <Card>
+    <Grid $cols="6" $gap="spacing06" $symetric>
+      {Object.keys(elevation.normal).map((size) => (
+        <ElevatedCard $size={size}>
+          <Text $align="center" $format="Label/Medium/Regular">
+            {size}
+          </Text>
+        </ElevatedCard>
+      ))}
+    </Grid>
+  </Card>
+  <Card $background="background">
+    <Grid $cols="6" $gap="spacing06" $symetric>
+      {Object.keys(elevation.inverted).map((size) => (
+        <ElevatedCard $size={size} $type="inverted">
+          <Text $align="center" $format="Label/Medium/Regular">
+            {size}
+          </Text>
+        </ElevatedCard>
+      ))}
+    </Grid>
+  </Card>
+</Grid>

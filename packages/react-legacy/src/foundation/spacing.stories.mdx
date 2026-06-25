@@ -1,0 +1,63 @@
+import React from 'react';
+
+import { Meta } from '@storybook/addon-docs';
+
+import { spacing, layout } from './index';
+import { Grid, Text, Card } from '../Components';
+import { DesignSystemGlobals } from '../hocs/withDesignSystem';
+import { Square } from '../utils/kds.components';
+
+<Meta title="OLD Design System/Foundations/Spacing" component={() => {}} group />
+
+# Scale
+
+Our Design System has two spacing scales; one for general spacing within components and the other for layout spacing.
+Both are designed to complement the existing components and typogrpahy throughout the system.
+The two scales have certain overlapping values that serve two different roles, so be mindful when picking a spacing token.
+
+## Spacing
+
+Used for smaller, more refined spacing needs, specifically within the context of a component (i.e. the space between a label and a text input).
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="3" $gap="spacing06" $symetric>
+    <Text $format="Body/Large/Bold">Token</Text>
+    <Text $format="Body/Large/Bold">rem</Text>
+    <Text $format="Body/Large/Bold">Example</Text>
+    {spacing.map((size, i) => (
+      <React.Fragment key={`spacing-${size}`}>
+        <Text>Size {i}</Text>
+        <Text>{size}</Text>
+        <Text>
+          <Square $size={size} />
+        </Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>
+
+## Layout
+
+The layout scale is used for arranging components and other UI parts into a full page layout.
+It has larger increments that are used to control the density of a design.
+Use the smaller layouts to create more dense compositions and direct relationships between elements in an interface.
+Use the larger ones to increase the amount of white space and to disassociate sections.
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="3" $gap="spacing06" $symetric>
+    <Text $format="Body/Large/Bold">Token</Text>
+    <Text $format="Body/Large/Bold">rem</Text>
+    <Text $format="Body/Large/Bold">Example</Text>
+    {layout.map((size, i) => (
+      <React.Fragment key={`spacing-${size}`}>
+        <Text>Size {i}</Text>
+        <Text>{size}</Text>
+        <Text>
+          <Square $size={size} />
+        </Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>

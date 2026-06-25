@@ -1,0 +1,409 @@
+---
+description: Component standards for the Kueski Design System
+globs: ['packages/react/src/components/**/*.tsx', 'packages/react/src/components/**/*.ts']
+alwaysApply: true
+---
+
+# Component Standards
+
+## Required File Structure
+
+Each component must have these files:
+
+- `ComponentName.tsx` - Main implementation
+- `ComponentName.types.ts` - Type definitions
+- `ComponentName.styles.ts` - Styles with CVA
+- `ComponentName.test.tsx` - Unit tests
+- `ComponentName.stories.tsx` - Storybook stories
+- `index.ts` - Exports
+
+## File Generation Rules
+
+**CRITICAL**: Do NOT generate example files (`.example.tsx`, `.example.ts`, etc.).
+
+- **Use Storybook stories instead**: All examples and demonstrations should be in `ComponentName.stories.tsx`
+- **Stories are the documentation**: Storybook stories serve as both examples and interactive documentation
+- **No separate example files**: Avoid creating `ComponentName.example.tsx` or similar files
+- **Keep examples in stories**: All usage examples, variants, and demonstrations belong in the stories file
+
+## Naming Conventions
+
+- **PascalCase** for component names: `Button`, `Input`, `Modal`
+- **camelCase** for props: `$isLoading`, `$fullWidth`, `$ariaLabel`
+- **CRITICAL**: All custom props MUST use the `$` prefix to avoid conflicts with native HTML attributes
+
+## Component Hierarchy (Atomic Design)
+
+- **Atoms**: Basic components, no dependencies, highly reusable
+- **Molecules**: Combine 2-3 atoms for specific functionality
+- **Organisms**: Complex components that combine multiple molecules and atoms
+- **Patterns**: Reusable patterns that combine multiple organisms
+
+## Class Variance Authority (CVA) Usage
+
+All components MUST use CVA for type-safe variant management with Tailwind CSS v4 and design tokens:
+
+```typescript
+import { cva } from 'class-variance-authority';
+
+export const componentVariants = cva(
+  // Base styles using design tokens
+  [
+    'typo-body-2-emphasized whitespace-nowrap rounded-x2',
+    'flex items-center justify-center w-fit',
+    'disabled:pointer-events-none disabled:cursor-not-allowed',
+    'relative overflow-hidden focus-visible:!outline-[2px] focus-visible:!outline-offset-2 focus-visible:!outline-stroke-brand',
+  ],
+  {
+    variants: {
+      $variant: {
+        primary: [
+          'bg-background-brand !text-text-and-icons-always-white',
+          'border-background-brand',
+          'hover:bg-linear-brand active:bg-linear-pressed-brand focus-visible:bg-linear-brand',
+          'disabled:disabled-button-brand',
+        ],
+        secondary: [
+          'bg-background-secondary text-text-and-icons-primary',
+          'border-stroke-secondary',
+          'hover:bg-background-tertiary active:bg-background-tertiary focus-visible:bg-background-tertiary',
+        ],
+        destructive: [
+          'bg-background-danger !text-text-and-icons-always-white',
+          'border-background-danger',
+          'hover:bg-linear-destructive active:bg-linear-pressed-destructive focus-visible:bg-linear-destructive',
+          'disabled:disabled-button-destructive',
+        ],
+      },
+      $size: {
+        sm: 'px-x3 py-x2 text-typo-body-3 min-h-[32px]',
+        md: 'px-x4 py-x3 text-typo-body-2 min-h-[40px]',
+        lg: 'px-x6 py-x4 text-typo-body-1 min-h-[48px]',
+      },
+    },
+    defaultVariants: {
+      $variant: 'primary',
+      $size: 'md',
+    },
+  },
+);
+```
+
+## Design Tokens (PRIORITY)
+
+**CRITICAL**: ALWAYS use design tokens from `/packages/react/src/styles/` instead of hardcoded values. This is the highest priority for maintaining consistency and brand identity.
+
+### Token Structure in packages/react/styles/
+
+```
+packages/react/src/styles/
+├── tokens/                   # Design tokens
+│   ├── colors.css           # Color tokens
+│   ├── spacings.css         # Spacing tokens
+│   ├── font-sizes.css       # Typography tokens
+│   ├── radius.css           # Border radius tokens
+│   └── shadows.css          # Shadow tokens
+├── utility/                 # Utility classes
+│   ├── typography.css       # Typography utilities
+│   ├── elevation.css        # Shadow utilities
+│   └── button.css           # Component utilities
+└── fonts/                   # Font files
+    └── inter/               # Inter font family
+```
+
+### Color Tokens (PRIORITY)
+
+**ALWAYS** use predefined color tokens from the design system:
+
+```typescript
+// ✅ Correct - using design system colors
+'bg-background-brand text-text-and-icons-always-white';
+'bg-background-danger text-text-and-icons-always-white';
+'bg-background-success text-text-and-icons-always-white';
+'text-text-and-icons-primary';
+'text-text-and-icons-secondary';
+'border-stroke-brand';
+'border-stroke-secondary';
+
+// ❌ Wrong - hardcoded colors
+'bg-blue-500 text-white';
+'bg-red-500 text-white';
+'bg-green-500 text-white';
+'text-gray-900';
+'text-gray-600';
+'border-blue-500';
+```
+
+### Spacing Tokens (PRIORITY)
+
+**ALWAYS** use spacing tokens for consistent spacing:
+
+```typescript
+// ✅ Correct - using spacing tokens
+'px-x4 py-x3'; // 16px horizontal, 12px vertical
+'mx-x2 my-x1'; // 8px horizontal, 4px vertical
+'gap-x3'; // 12px gap
+'p-x4 m-x2'; // 16px padding, 8px margin
+
+// ❌ Wrong - hardcoded spacing
+'px-4 py-3'; // Use px-x4 py-x3 instead
+'mx-2 my-1'; // Use mx-x2 my-x1 instead
+'gap-3'; // Use gap-x3 instead
+'p-4 m-2'; // Use p-x4 m-x2 instead
+```
+
+### Typography Tokens (PRIORITY)
+
+**ALWAYS** use typography utilities from the design system:
+
+```typescript
+// ✅ Correct - using typography utilities
+'typo-headline-1'; // Headline 1 with proper font features
+'typo-headline-2'; // Headline 2 with proper font features
+'typo-headline-3'; // Headline 3 with proper font features
+'typo-body-1'; // Body 1 text
+'typo-body-2'; // Body 2 text
+'typo-body-2-emphasized'; // Body 2 with emphasis
+'typo-meta'; // Meta text
+'typo-amount'; // Amount/currency text
+
+// ❌ Wrong - manual typography
+'text-2xl font-bold'; // Use typo-headline-1 instead
+'text-xl font-semibold'; // Use typo-headline-2 instead
+'text-lg font-medium'; // Use typo-headline-3 instead
+'text-base'; // Use typo-body-1 instead
+'text-sm font-medium'; // Use typo-body-2-emphasized instead
+```
+
+### Radius Tokens (PRIORITY)
+
+**ALWAYS** use radius tokens for consistent border radius:
+
+```typescript
+// ✅ Correct - using radius tokens
+'rounded-x2'; // 8px border radius
+'rounded-x4'; // 16px border radius
+'rounded-t-x2'; // 8px top border radius
+
+// ❌ Wrong - hardcoded radius
+'rounded-md'; // Use rounded-x2 instead
+'rounded-lg'; // Use rounded-x4 instead
+'rounded-t-md'; // Use rounded-t-x2 instead
+```
+
+### Shadow Tokens (PRIORITY)
+
+**ALWAYS** use shadow tokens for consistent elevation:
+
+```typescript
+// ✅ Correct - using shadow tokens
+'shadow-s3'; // Very light shadow
+'shadow-s8'; // Medium shadow
+'shadow-s15'; // Strong shadow
+
+// ❌ Wrong - hardcoded shadows
+'shadow-sm'; // Use shadow-s3 instead
+'shadow-md'; // Use shadow-s8 instead
+'shadow-lg'; // Use shadow-s15 instead
+```
+
+### Font Tokens (PRIORITY)
+
+**ALWAYS** use font utilities from the design system:
+
+```typescript
+// ✅ Correct - using font utilities
+'font-inter'; // Inter font family
+'font-weight-bold'; // Bold weight
+'font-weight-medium'; // Medium weight
+'font-weight-regular'; // Regular weight
+
+// ❌ Wrong - hardcoded fonts
+'font-sans'; // Use font-inter instead
+'font-bold'; // Use font-weight-bold instead
+'font-medium'; // Use font-weight-medium instead
+```
+
+### Utility Classes (PRIORITY)
+
+**ALWAYS** use utility classes from `/packages/react/src/styles/utility/`:
+
+```typescript
+// ✅ Correct - using utility classes
+'elevation-s3'; // Light elevation
+'elevation-s8'; // Medium elevation
+'elevation-s15'; // Strong elevation
+'button-primary'; // Primary button styles
+'button-secondary'; // Secondary button styles
+
+// ❌ Wrong - manual utilities
+'shadow-sm'; // Use elevation-s3 instead
+'shadow-md'; // Use elevation-s8 instead
+'shadow-lg'; // Use elevation-s15 instead
+```
+
+### Component Implementation
+
+```typescript
+// ✅ Good - using all design tokens correctly
+const Button = ({ $variant, $size, children }: ButtonProps) => {
+  return (
+    <button
+      className={cn(
+        // Typography from design system
+        'typo-body-2-emphasized',
+        // Spacing from design system
+        'px-x4 py-x3',
+        // Radius from design system
+        'rounded-x2',
+        // Colors from design system
+        $variant === 'primary'
+          ? 'bg-background-brand text-text-and-icons-always-white'
+          : 'bg-background-secondary text-text-and-icons-primary',
+        // Shadows from design system
+        'shadow-s3'
+      )}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+## Accessibility
+
+### WCAG 2.1 AA Compliance
+
+- Each component must be WCAG 2.1 AA compliant
+- Use semantic HTML elements
+- Implement appropriate ARIA attributes
+- Support keyboard navigation
+- Support screen readers
+
+### Color Contrast Guidelines (PRIORITY)
+
+**CRITICAL**: Do NOT automatically change colors for contrast compliance. Instead:
+
+1. **Use design tokens ONLY**: Always use predefined color tokens from `/packages/react/src/styles/tokens/colors.css`
+2. **Pre-approved combinations**: Use only color combinations that have been pre-tested for WCAG 2.1 AA compliance
+3. **Design system validation**: Ensure all color combinations in the design system meet contrast requirements
+4. **Manual override only**: If contrast issues arise, work with the design team to create new approved color combinations
+
+```typescript
+// ✅ Good - using approved design tokens from packages/react/src/styles/
+const Button = ({ $variant }: ButtonProps) => {
+  return (
+    <button
+      className={cn(
+        // Using design system color tokens (PRIORITY)
+        'bg-background-brand text-text-and-icons-always-white', // Pre-approved combination
+        'hover:bg-linear-brand focus-visible:bg-linear-brand',
+        // Using design system focus tokens
+        'focus-visible:!outline-[2px] focus-visible:!outline-offset-2 focus-visible:!outline-stroke-brand'
+      )}
+    >
+      {children}
+    </button>
+  );
+};
+
+// ❌ Bad - automatic color changes or hardcoded colors
+const Button = ({ $variant, $contrastMode }: ButtonProps) => {
+  const backgroundColor = $contrastMode === 'high' ? '#000000' : '#0069f1'; // Don't do this
+  return <button style={{ backgroundColor }}>{children}</button>;
+};
+
+// ❌ Bad - hardcoded colors instead of design tokens
+const Button = ({ $variant }: ButtonProps) => {
+  return (
+    <button className="bg-blue-500 text-white"> {/* Don't do this */}
+      {children}
+    </button>
+  );
+};
+```
+
+### Proactive Contrast Management (PRIORITY)
+
+Instead of reactive color changes, implement proactive solutions using design tokens:
+
+```typescript
+// ✅ Good - using semantic color tokens from design system that are pre-tested
+const Alert = ({ $variant, children }: AlertProps) => {
+  return (
+    <div
+      className={cn(
+        // Using design system spacing and radius tokens
+        'p-x4 rounded-x2 border',
+        {
+          // Using design system color tokens (PRIORITY)
+          'bg-background-success text-text-and-icons-always-white border-stroke-success': $variant === 'success',
+          'bg-background-danger text-text-and-icons-always-white border-stroke-danger': $variant === 'error',
+          'bg-background-warning text-text-and-icons-primary border-stroke-warning': $variant === 'warning',
+        }
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
+// ✅ Good - using focus states with design tokens that meet contrast requirements
+const Input = ({ $error, ...props }: InputProps) => {
+  return (
+    <input
+      className={cn(
+        // Using design system spacing and radius tokens
+        'px-x4 py-x3 rounded-x2 border',
+        // Using design system focus tokens (PRIORITY)
+        'focus-visible:!outline-[2px] focus-visible:!outline-offset-2 focus-visible:!outline-stroke-brand',
+        $error
+          ? 'border-stroke-danger focus-visible:!outline-stroke-danger'
+          : 'border-stroke-secondary focus-visible:!outline-stroke-brand'
+      )}
+      {...props}
+    />
+  );
+};
+
+// ✅ Good - using design system typography tokens for accessibility
+const Label = ({ children, $required }: LabelProps) => {
+  return (
+    <label
+      className={cn(
+        // Using design system typography tokens (PRIORITY)
+        'typo-body-2-emphasized text-text-and-icons-primary',
+        // Using design system spacing tokens
+        'block mb-x2'
+      )}
+    >
+      {children}
+      {$required && (
+        <span className="text-text-and-icons-danger ml-x1" aria-label="required">
+          *
+        </span>
+      )}
+    </label>
+  );
+};
+```
+
+### Design System Color Validation (PRIORITY)
+
+1. **Pre-validate all combinations**: Ensure all color combinations in `/packages/react/src/styles/tokens/colors.css` meet WCAG 2.1 AA requirements
+2. **Document approved combinations**: Maintain a list of approved color combinations from the design system
+3. **Automated testing**: Use tools like `@storybook/addon-a11y` to validate contrast ratios of design tokens
+4. **Design review**: Include accessibility review in the design process for all new design tokens
+5. **Token validation**: Validate all new color tokens against WCAG 2.1 AA before adding to the design system
+
+### Accessibility Testing (PRIORITY)
+
+- Test with screen readers (NVDA, JAWS, VoiceOver)
+- Test keyboard navigation (Tab, Enter, Escape, Arrow keys)
+- Test with high contrast mode
+- Validate ARIA attributes
+- Test with zoom up to 200%
+- Use automated tools like `axe-core` for contrast validation
+- **Test design tokens**: Validate all color combinations from `/packages/react/src/styles/tokens/colors.css`
+- **Token accessibility**: Ensure all design tokens meet WCAG 2.1 AA requirements
+- **Component testing**: Test components using only design system tokens for accessibility compliance

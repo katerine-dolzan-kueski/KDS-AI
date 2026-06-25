@@ -1,0 +1,28 @@
+import { Meta } from '@storybook/addon-docs';
+
+import { radius } from './index';
+import { Grid, Text, Card } from '../Components';
+import { DesignSystemGlobals } from '../hocs/withDesignSystem';
+import { RadiusCard } from '../utils/kds.components';
+
+<Meta title="OLD Design System/Foundations/Radius" component={() => {}} group />
+
+# Shape scale
+
+The scale is a range of seven corner shape styles defining the amount of cut or roundedness: None, extra small, small, medium, large, extra large, and full.
+
+<Grid $gap="spacing06">
+  <DesignSystemGlobals />
+
+  <Card $background="background">
+    <Grid $cols="7" $gap="spacing06" $symetric>
+      {Object.keys(radius).map((size) => (
+        <RadiusCard $size={radius[size]} $type="inverted">
+          <Text $align="center" $format="Label/Medium/Regular">
+            {size}
+          </Text>
+        </RadiusCard>
+      ))}
+    </Grid>
+  </Card>
+</Grid>

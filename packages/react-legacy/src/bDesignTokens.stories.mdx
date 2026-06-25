@@ -1,0 +1,179 @@
+import { Meta } from "@storybook/addon-docs";
+
+<Meta title="OLD Design System/B - Design Tokens" component={() => {}} group />
+
+# Kueski Design Tokens
+
+Design tokens represent the small, repeated design decisions that make up a design system's visual style. Tokens replace static values, such as
+hex codes for color, with self-explanatory names.
+
+It's important to differentiate Design Tokens from the Branding. The brand includes an entire set of colors/fonts/items we can use in different
+scenarios. A Design Token is whenever we assign a purpose to a specific item.
+
+## How do we use the Design Tokens?
+
+### Inside `styled-components`
+
+They are preloaded in the Default Theme, so they are already available for all the styled components in the `theme` prop:
+
+```jsx
+export const BottomModal = styled.div`
+  ${({ theme }) => css`
+    background-color: ${theme.color.backgroundAlter};
+    border-radius: ${theme.radius.xl} ${theme.radius.xl} 0 0;
+    bottom: 0;
+    box-shadow: ${theme.elevation.buttonTabBar};
+    left: 0;
+    padding: ${theme.spacing.spacing06} ${theme.spacing.spacing06} ${theme
+        .spacing.spacing07};
+    position: fixed;
+    width: 100%;
+  `}
+`;
+```
+
+The `theme` is fully typed so we have the autocomplete to help us.
+
+### Outside `styled-components`
+
+You can import whatever you need from `@kueski-dev/kds/theme`:
+
+```jsx
+import {
+  type AuroraTheme,
+  breakpoint,
+  color,
+  elevation,
+  font,
+  radius,
+  spacing,
+} from "./theme";
+```
+
+## Typography Design Tokens
+
+There's one catch with the `Typography` Design Tokens.
+
+Design team uses a notation like this to define Fonts:
+
+`/* Typography/Text/Display/Medium/Semi Bold */`
+
+It would be weird if we translate that to a json path:
+
+`theme.font.text.display.medium.semiBold`
+
+So there's a helper funciton that parses the tokens in the Design Team's format and translate it to CSS props:
+
+`parseTypography(TypographyToken)`
+
+Practical example:
+
+```ts
+export const MyComponent = styled.p`
+  margin: 0;
+  padding: 0;
+
+  // The "Typography/" is optional, will work the same without it
+  ${parseTypography(`Typography/Numbers/Body/Medium/Regular`)}
+`;
+```
+
+## Text & Header Components
+
+There's predefined components that already accepts partial tokens to avoid those long token names: `Text` and `Header` components.
+
+- `Text` renders tokens that starts with `Body` & `Label` (text content)
+- `Header` renders tokens that starts with `Title`, `Headline` and `Display` (titles)
+
+Those components allow us to use partial tokens in the props, for example:
+
+```tsx
+import type { HeaderDesignToken } from "@kueski-dev/kds/hocs/withResponsive";
+
+export const SomeComponent = () => (
+  <>
+    {/* Partial token: we are skipping the "Typography/Text/" part */}
+    <Header $format="Title/Large/Bold">Detalles de la compra</Header>
+
+    {/* Numeric version of the title */}
+    <Header $format="Title/Large/Bold" $number>
+      Detalles de la compra
+    </Header>
+
+    {/* You can use a full Typography token and it will take preference over $number prop. */}
+    <Header
+      $format={"Typography/Numbers/Headline/Small/Bold" as HeaderDesignToken}
+    >
+      Detalles de la compra
+    </Header>
+
+    {/* The format is responsive so we can define a different token for each device size */}
+    <Header $format={["Title/Large/Bold", "bigTablet:Headline/Large/Bold"]}>
+      Detalles de la compra
+    </Header>
+
+    {/* Text works exactly the same*/}
+    <Text $format={["Body/Medium/Regular", "bigTablet:Body/Large/Regular"]}>
+      Monto total:
+    </Text>
+    <Text
+      $format={["Body/Medium/Regular", "bigTablet:Body/Large/Regular"]}
+      $number
+    >
+      $409.99
+    </Text>
+  </>
+);
+```
+
+### Why not using a single Typography component?
+
+#### Maintainability
+
+It doesn't make much sense when we use the same component (`<Typography />`) for everything, having
+more specialized components makes your code more readable and maintainable.
+
+#### An extra layer against unintended behaviors
+
+Typescript will complain if you use a Header token on a `<Text/>` component, which is probably a human
+mistake.
+
+Also, responsiveness shouldn't morph a `Text` into a `Header` (or back).
+
+#### Semantic HTML
+
+Lastly, `Text` component will always render with a `<p />` HTML tag by default.
+
+`Header` on the other hand, will attempt to choose the right tag to render based on the **Design Token**:
+
+```tsx
+export const SomeComponent = () => (
+  <>
+    {/* Rendered as <h3 /> */}
+    <Header $format="Title/Large/Bold">Detalles de la compra</Header>
+
+    {/* Rendered as <h2 /> */}
+    <Header $format="Headline/Large/Regular">Detalles</Header>
+
+    {/* Rendered as <h1 /> */}
+    <Header $format="Display/Large/Regular">Movimientos</Header>
+  </>
+);
+```
+
+You can always use `as` prop to override the render tag:
+
+```tsx
+export const SomeComponent = () => (
+  <>
+    {/* Rendered as <h1 /> */}
+    <Header $format="Title/Large/Bold" as="h1">Detalles de la compra</Header>
+
+    {/* Rendered as <span /> */}
+    <Text $format="Headline/Large/Regular" as="span">Detalles</Header>
+
+    {/* Rendered as <div /> */}
+    <Header $format="Display/Large/Regular" as="div">Movimientos</Header>
+  </>
+);
+```

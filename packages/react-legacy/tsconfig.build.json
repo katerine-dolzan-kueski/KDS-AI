@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "noEmit": false,
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "src/test/**/*",
+    "node_modules",
+    "dist",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.stories.ts",
+    "src/**/*.stories.tsx",
+    "src/**/*.stories.js",
+    "src/**/*.stories.jsx",
+    "src/**/*.stories.cjs",
+    "src/**/*.stories.mjs",
+    "src/**/*.stories.mts",
+    "vite.config.ts",
+    "vitest.config.ts"
+  ],
+}

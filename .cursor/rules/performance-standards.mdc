@@ -1,0 +1,374 @@
+---
+description: Performance standards for the Kueski Design System
+globs: ['packages/react/src/**/*.tsx', 'packages/react/src/**/*.ts']
+alwaysApply: true
+---
+
+# Performance Standards
+
+## Bundle Optimization
+
+Keep bundle size minimal:
+
+### 1. Tree Shaking
+
+Use named exports for tree shaking:
+
+```typescript
+// ✅ Good - tree shaking friendly
+export { Button } from './Button';
+export { Input } from './Input';
+export { Modal } from './Modal';
+
+// ❌ Bad - not tree shaking friendly
+export default { Button, Input, Modal };
+```
+
+### 2. Lazy Loading
+
+Implement lazy loading for heavy components:
+
+```typescript
+// ✅ Good - lazy loading
+const HeavyComponent = lazy(() => import('./HeavyComponent'));
+
+const App = () => (
+  <Suspense fallback={<Spinner />}>
+    <HeavyComponent />
+  </Suspense>
+);
+```
+
+### 3. Dynamic Imports
+
+Use dynamic imports for non-critical code:
+
+```typescript
+// ✅ Good - dynamic import
+const loadChart = async () => {
+  const { Chart } = await import('./Chart');
+  return Chart;
+};
+```
+
+## Rendering Optimization
+
+### 1. React.memo
+
+Use React.memo for expensive components:
+
+```typescript
+// ✅ Good - memo for expensive components
+export const ExpensiveComponent = React.memo<ExpensiveComponentProps>(
+  ({ data, onUpdate }) => {
+    // Component implementation
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison if needed
+    return prevProps.data.id === nextProps.data.id;
+  },
+);
+```
+
+### 2. useCallback
+
+Use useCallback for event handlers:
+
+```typescript
+// ✅ Good - useCallback for handlers
+const Button = ({ onClick, children }: ButtonProps) => {
+  const handleClick = useCallback((event: React.MouseEvent) => {
+    onClick?.(event);
+  }, [onClick]);
+
+  return <button onClick={handleClick}>{children}</button>;
+};
+```
+
+### 3. useMemo
+
+Use useMemo for expensive calculations:
+
+```typescript
+// ✅ Good - useMemo for expensive calculations
+const DataTable = ({ data, filters }: DataTableProps) => {
+  const filteredData = useMemo(() => {
+    return data.filter(item =>
+      filters.every(filter => filter.predicate(item))
+    );
+  }, [data, filters]);
+
+  return <table>{/* render filtered data */}</table>;
+};
+```
+
+### 4. Avoid Unnecessary Re-renders
+
+Optimize props to avoid re-renders:
+
+```typescript
+// ✅ Good - stable props
+const ParentComponent = () => {
+  const [count, setCount] = useState(0);
+
+  // Create stable object
+  const config = useMemo(() => ({
+    theme: 'dark',
+    size: 'large'
+  }), []);
+
+  return <ChildComponent config={config} />;
+};
+
+// ❌ Bad - object recreated on each render
+const ParentComponent = () => {
+  const [count, setCount] = useState(0);
+
+  return <ChildComponent config={{ theme: 'dark', size: 'large' }} />;
+};
+```
+
+## Image Optimization
+
+### 1. Lazy Loading Images
+
+```typescript
+const LazyImage = ({ src, alt, ...props }: ImageProps) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (imgRef.current) {
+      observer.observe(imgRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={imgRef} className="image-container">
+      {isInView && (
+        <img
+          src={src}
+          alt={alt}
+          onLoad={() => setIsLoaded(true)}
+          className={isLoaded ? 'loaded' : 'loading'}
+          {...props}
+        />
+      )}
+    </div>
+  );
+};
+```
+
+### 2. SVG Optimization
+
+```typescript
+// ✅ Good - optimized SVG
+const Icon = ({ name, size = 24 }: IconProps) => {
+  const iconPath = useMemo(() => getIconPath(name), [name]);
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d={iconPath} />
+    </svg>
+  );
+};
+```
+
+## State Optimization
+
+### 1. Local vs Global State
+
+Use local state when possible:
+
+```typescript
+// ✅ Good - local state
+const Button = ({ $loading: initialLoading = false }: ButtonProps) => {
+  const [loading, setLoading] = useState(initialLoading);
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      await performAction();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return <button disabled={loading} onClick={handleClick}>Click</button>;
+};
+```
+
+### 2. Context Optimization
+
+Optimize Context to avoid re-renders:
+
+```typescript
+// ✅ Good - optimized Context
+const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+const ThemeProvider = ({ children }: ThemeProviderProps) => {
+  const [theme, setTheme] = useState('light');
+
+  const value = useMemo(() => ({
+    theme,
+    setTheme,
+    isDark: theme === 'dark'
+  }), [theme]);
+
+  return (
+    <ThemeContext.Provider value={value}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+```
+
+## CSS Optimization
+
+### 1. Design Tokens Performance (PRIORITY)
+
+Use design tokens from `/packages/react/src/styles/` for optimal performance:
+
+```typescript
+// ✅ Good - using design tokens for stable styles
+const Button = ({ $variant, $size, children }: ButtonProps) => {
+  return (
+    <button
+      className={cn(
+        // Using design system tokens (PRIORITY)
+        'typo-body-2-emphasized whitespace-nowrap rounded-x2',
+        'flex items-center justify-center w-fit',
+        'disabled:pointer-events-none disabled:cursor-not-allowed',
+        // Variants using design tokens
+        buttonVariants({ $variant, $size })
+      )}
+    >
+      {children}
+    </button>
+  );
+};
+
+// ❌ Bad - expensive dynamic styles
+const Button = ({ $variant }: ButtonProps) => {
+  return (
+    <button
+      className={cn(
+        // Don't use hardcoded values
+        'text-sm font-medium rounded-md px-4 py-2',
+        $variant === 'primary' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-900'
+      )}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+### 2. Critical CSS with Design Tokens (PRIORITY)
+
+Prioritize critical CSS using design tokens from `/packages/react/src/styles/`:
+
+```typescript
+// ✅ Good - critical CSS first with design tokens
+const Button = ({ $variant, $size, children }: ButtonProps) => {
+  return (
+    <button
+      className={cn(
+        // Critical base styles using design tokens (PRIORITY)
+        'typo-body-2-emphasized whitespace-nowrap rounded-x2',
+        'flex items-center justify-center w-fit',
+        'disabled:pointer-events-none disabled:cursor-not-allowed',
+        // Focus states using design tokens
+        'focus-visible:!outline-[2px] focus-visible:!outline-offset-2 focus-visible:!outline-stroke-brand',
+        // Variants using design tokens
+        buttonVariants({ $variant, $size })
+      )}
+    >
+      {children}
+    </button>
+  );
+};
+```
+
+## Monitoring and Profiling
+
+### 1. Performance Monitoring
+
+```typescript
+// ✅ Good - performance monitoring
+const usePerformanceMonitor = (componentName: string) => {
+  useEffect(() => {
+    const startTime = performance.now();
+
+    return () => {
+      const endTime = performance.now();
+      console.log(`${componentName} render time: ${endTime - startTime}ms`);
+    };
+  });
+};
+```
+
+### 2. Bundle Analysis
+
+Use the existing analysis tools in the project:
+
+```bash
+# Analyze bundle size (available in packages/react)
+pnpm analyze
+
+# Build with analysis (available in packages/react)
+pnpm run analyze
+
+# Run analysis for all packages
+pnpm run analyze
+```
+
+## Performance Checklist
+
+### Bundle Optimization
+
+- [ ] Bundle size < 50KB gzipped (use `pnpm analyze` to check)
+- [ ] Tree shaking working (use named exports)
+- [ ] No unused dependencies
+- [ ] Design tokens used instead of hardcoded values
+
+### Rendering Performance
+
+- [ ] React.memo used for expensive components
+- [ ] useCallback used for event handlers
+- [ ] useMemo used for expensive calculations
+- [ ] No unnecessary re-renders
+- [ ] Stable props passed to children
+
+### CSS Performance
+
+- [ ] Design tokens used from `/packages/react/src/styles/`
+- [ ] No hardcoded colors, spacing, or typography
+- [ ] Critical CSS prioritized
+- [ ] No expensive dynamic styles
+
+### Testing Performance
+
+- [ ] Use `pnpm test:coverage` to check test coverage
+- [ ] Use `pnpm test:run` for performance testing
+- [ ] No memory leaks in tests
+- [ ] Components render efficiently

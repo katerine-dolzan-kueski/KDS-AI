@@ -1,0 +1,47 @@
+{
+  "name": "@kueski-dev/kds-utils",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "scripts and configs to be used across Kueski Design System.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kueski-dev/kueski-design-system.git",
+    "directory": "packages/utils"
+  },
+  "exports": {
+    "./babel-config": "./.babelrc.js"
+  },
+  "bin": {
+    "kds-utils": "./bin/kds-utils.mjs"
+  },
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "clean": "node ../../scripts/clean.js build && node ../../scripts/clean.js dist",
+    "check:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pnpm/find-workspace-dir": "^1000.1.3",
+    "@types/node": "^24.5.0",
+    "@types/yargs": "^17.0.33",
+    "rollup-plugin-visualizer": "^6.0.5",
+    "tailwindcss": "^4.1.18",
+    "tsx": "^4.20.5",
+    "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^16.14.0",
+    "@types/react-dom": "^16.9.0",
+    "@vitejs/plugin-react": "^5.0.2",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "typescript": "^5.6.3",
+    "vite": "^7.1.12",
+    "vite-plugin-dts": "^4.5.4"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "src"
+  ]
+}

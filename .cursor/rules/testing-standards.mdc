@@ -1,0 +1,92 @@
+---
+description: Testing standards for the Kueski Design System
+globs: ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx']
+alwaysApply: true
+---
+
+# Testing Standards
+
+## Unit Tests
+
+Each component must have comprehensive unit tests:
+
+```typescript
+describe('Button', () => {
+  it('should render with default props', () => {
+    render(<Button>Test</Button>);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+
+  it('should handle click events', () => {
+    const handleClick = vi.fn();
+    render(<Button onClick={handleClick}>Test</Button>);
+    fireEvent.click(screen.getByRole('button'));
+    expect(handleClick).toHaveBeenCalled();
+  });
+
+  it('should show loading state', () => {
+    render(<Button $loading>Loading</Button>);
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
+});
+```
+
+## Integration Tests
+
+Test component interactions:
+
+```typescript
+describe('Button Integration', () => {
+  it('should work with form submission', () => {
+    const handleSubmit = vi.fn();
+    render(
+      <form onSubmit={handleSubmit}>
+        <Button type="submit">Submit</Button>
+      </form>
+    );
+    fireEvent.click(screen.getByRole('button'));
+    expect(handleSubmit).toHaveBeenCalled();
+  });
+});
+```
+
+## Accessibility Tests
+
+Test accessibility functionality:
+
+```typescript
+describe('Button Accessibility', () => {
+  it('should be focusable', () => {
+    render(<Button>Test</Button>);
+    const button = screen.getByRole('button');
+    button.focus();
+    expect(button).toHaveFocus();
+  });
+
+  it('should support keyboard navigation', () => {
+    render(<Button>Test</Button>);
+    const button = screen.getByRole('button');
+    fireEvent.keyDown(button, { key: 'Enter' });
+    // Test keyboard interaction
+  });
+
+  it('should have proper ARIA attributes', () => {
+    render(<Button $ariaLabel="Custom label">Test</Button>);
+    expect(screen.getByLabelText('Custom label')).toBeInTheDocument();
+  });
+});
+```
+
+## Test Coverage
+
+- Minimum 80% code coverage
+- Test all variants and props
+- Test error states and edge cases
+- Test user interactions
+
+## Testing Tools
+
+- **Vitest** for unit tests
+- **Testing Library** for component testing
+- **Jest DOM** for additional matchers
+- **User Event** for user simulations

@@ -1,0 +1,24 @@
+---
+name: Reusable job for front end linting
+
+on:
+  workflow_call:
+
+jobs:
+  linter:
+    name: Linter
+    runs-on:
+      - self-hosted
+      - staging
+      - staging-pay
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JS
+        uses: ./.github/composite/setup-js
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Run TS validation
+        run: pnpm check:types

@@ -1,0 +1,40 @@
+---
+name: Reusable job for version bump
+
+on:
+  workflow_call:
+    inputs:
+      ENV_NAME:
+        required: true
+        type: string
+        default: staging
+
+jobs:
+  version:
+    name: Version Bump
+    runs-on: ubuntu-latest
+    if: ${{ inputs.ENV_NAME != 'production' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Setup Committer Bot Identity
+      #   run: |
+      #     git config --global user.name 'Version Bumper'
+      #     git config --global user.email 'no-reply@kueski.com'
+      - name: Bump
+        run: node .github/scripts/github.bumpVersion.js
+        id: bump
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BASE: ${{ github.base_ref }}
+        shell: bash
+      - name: Create annotation for incorrect version
+        if: ${{ steps.bump.outputs.expectedVersion }}
+        env:
+          VERSION: ${{ steps.bump.outputs.expectedVersion }}
+        run: |
+          echo "::error file=package.json,line=2::Expected version: $VERSION"
+          exit 1

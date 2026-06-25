@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KDS Component Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ─── KDS Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --color-background-brand: #0069f1;
+  --color-background-brand-subtle: #e7f3ff;
+  --color-background-danger: #d82938;
+  --color-background-danger-subtle: #ffedec;
+  --color-background-invert-primary: #141c22;
+  --color-background-invert-secondary: #262f37;
+  --color-background-invert-tertiary: #384550;
+  --color-background-invert-translucent: #0000004d;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f4f8fb;
+  --color-background-success: #008246;
+  --color-background-success-subtle: #e8f5ec;
+  --color-background-tertiary: #ecf2f7;
+  --color-background-transparent: #ffffff00;
+  --color-background-upsell: #6e5be6;
+  --color-background-upsell-subtle: #f0f0ff;
+  --color-background-warning: #ab5d00;
+  --color-background-warning-subtle: #fff0da;
+  --color-states-disabled: #ffffff66;
+  --color-states-hover: #141c221a;
+  --color-states-pressed: #141c2233;
+  --color-stroke-brand: #0069f1;
+  --color-stroke-error: #d82938;
+  --color-stroke-invert: #ffffff;
+  --color-stroke-primary: #141c22;
+  --color-stroke-secondary: #384550;
+  --color-stroke-secondary-a50: #38455080;
+  --color-stroke-success: #008246;
+  --color-stroke-tertiary: #66727d;
+  --color-stroke-tertiary-a50: #66727d80;
+  --color-stroke-upsell: #6e5be6;
+  --color-stroke-warning: #ab5d00;
+  --color-text-and-icons-always-white: #ffffff;
+  --color-text-and-icons-brand: #0069f1;
+  --color-text-and-icons-brand-on-subtle: #0051cb;
+  --color-text-and-icons-danger: #d82938;
+  --color-text-and-icons-danger-on-subtle: #ae1f2c;
+  --color-text-and-icons-invert-primary: #ffffff;
+  --color-text-and-icons-primary: #141c22;
+  --color-text-and-icons-secondary: #384550;
+  --color-text-and-icons-success: #008246;
+  --color-text-and-icons-success-on-subtle: #006834;
+  --color-text-and-icons-tertiary: #66727d;
+  --color-text-and-icons-tertiary-a50: #66727d80;
+  --color-text-and-icons-upsell: #6e5be6;
+  --color-text-and-icons-upsell-on-subtle: #5845c2;
+  --color-text-and-icons-warning: #ab5d00;
+  --color-text-and-icons-warning-on-subtle: #9f3804;
+  --radius-none: 0rem; --radius-x1: 0.25rem; --radius-x2: 0.5rem;
+  --radius-x3: 0.75rem; --radius-x4: 1rem; --radius-x5: 1.25rem;
+  --radius-x6: 1.5rem; --radius-max: 624.9375rem;
+  --spacing-x1: 0.25rem; --spacing-x2: 0.5rem; --spacing-x3: 0.75rem;
+  --spacing-x4: 1rem; --spacing-x5: 1.25rem; --spacing-x6: 1.5rem;
+  --spacing-x7: 1.75rem; --spacing-x8: 2rem;
+  --border-thin: 0.5px; --border-regular: 1px; --border-thick: 2px;
+}
+[data-theme="dark"] {
+  --color-background-brand: #2988ff;
+  --color-background-brand-subtle: #002774;
+  --color-background-danger: #eb5859;
+  --color-background-danger-subtle: #5e0c13;
+  --color-background-invert-primary: #ffffff;
+  --color-background-invert-secondary: #ecf2f7;
+  --color-background-invert-tertiary: #cfd8df;
+  --color-background-primary: #141c22;
+  --color-background-secondary: #262f37;
+  --color-background-success: #209d5e;
+  --color-background-success-subtle: #003616;
+  --color-background-tertiary: #384550;
+  --color-background-upsell: #8577ff;
+  --color-background-upsell-subtle: #2e1f6f;
+  --color-background-warning: #cd7400;
+  --color-background-warning-subtle: #4a2400;
+  --color-states-hover: #ffffff1a;
+  --color-states-pressed: #ffffff33;
+  --color-stroke-brand: #2988ff;
+  --color-stroke-error: #eb5859;
+  --color-stroke-invert: #141c22;
+  --color-stroke-secondary: #b2bdc5;
+  --color-stroke-secondary-a50: #b2bdc580;
+  --color-stroke-success: #209d5e;
+  --color-stroke-tertiary: #99a5ae;
+  --color-stroke-tertiary-a50: #99a5ae80;
+  --color-stroke-upsell: #8577ff;
+  --color-stroke-warning: #cd7400;
+  --color-text-and-icons-brand: #2988ff;
+  --color-text-and-icons-brand-on-subtle: #59a6ff;
+  --color-text-and-icons-danger: #eb5859;
+  --color-text-and-icons-danger-on-subtle: #f4827e;
+  --color-text-and-icons-invert-primary: #141c22;
+  --color-text-and-icons-primary: #ecf2f7;
+  --color-text-and-icons-secondary: #b2bdc5;
+  --color-text-and-icons-success: #209d5e;
+  --color-text-and-icons-success-on-subtle: #53b57c;
+  --color-text-and-icons-tertiary: #99a5ae;
+  --color-text-and-icons-tertiary-a50: #99a5ae80;
+  --color-text-and-icons-upsell: #8577ff;
+  --color-text-and-icons-upsell-on-subtle: #9f97ff;
+  --color-text-and-icons-warning: #cd7400;
+  --color-text-and-icons-warning-on-subtle: #ee8b00;
+}
+
+/* ─── Shell ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--color-background-secondary); color: var(--color-text-and-icons-primary); }
+body { display: flex; overflow: hidden; }
+
+/* Sidebar */
+.sidebar {
+  width: 240px; min-width: 240px; height: 100vh; overflow-y: auto;
+  background: var(--color-background-primary);
+  border-right: 1px solid var(--color-stroke-tertiary-a50);
+  display: flex; flex-direction: column;
+}
+.sidebar-header {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid var(--color-stroke-tertiary-a50);
+}
+.sidebar-logo { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.sidebar-logo-mark {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--color-background-brand);
+  display: flex; align-items: center; justify-content: center;
+}
+.sidebar-logo-mark svg { width: 16px; height: 16px; fill: white; }
+.sidebar-title { font-size: 14px; font-weight: 700; color: var(--color-text-and-icons-primary); }
+.sidebar-version { font-size: 11px; color: var(--color-text-and-icons-tertiary); }
+.sidebar-section { padding: 16px 8px 4px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-and-icons-tertiary); padding-left: 12px; }
+.sidebar-nav { list-style: none; padding: 0 8px; }
+.sidebar-nav li a {
+  display: flex; align-items: center; gap: 8px; padding: 7px 8px;
+  border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 500;
+  color: var(--color-text-and-icons-secondary); cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.sidebar-nav li a:hover { background: var(--color-background-tertiary); color: var(--color-text-and-icons-primary); }
+.sidebar-nav li a.active { background: var(--color-background-brand-subtle); color: var(--color-text-and-icons-brand-on-subtle); font-weight: 600; }
+.sidebar-nav li a .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--color-background-success); flex-shrink: 0; }
+.sidebar-footer { margin-top: auto; padding: 12px 16px; border-top: 1px solid var(--color-stroke-tertiary-a50); }
+.theme-toggle { display: flex; align-items: center; gap: 8px; background: var(--color-background-tertiary); border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--color-text-and-icons-secondary); width: 100%; }
+.theme-toggle:hover { background: var(--color-background-secondary); }
+
+/* Main */
+.main { flex: 1; overflow-y: auto; }
+.page { max-width: 900px; margin: 0 auto; padding: 40px 40px 80px; }
+.page-header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--color-stroke-tertiary-a50); }
+.page-title { font-size: 28px; font-weight: 700; color: var(--color-text-and-icons-primary); margin-bottom: 6px; }
+.page-desc { font-size: 14px; color: var(--color-text-and-icons-secondary); line-height: 1.6; max-width: 640px; }
+.page-meta { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.meta-pill { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 100px; background: var(--color-background-tertiary); color: var(--color-text-and-icons-secondary); }
+.figma-link { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 100px; background: var(--color-background-brand-subtle); color: var(--color-text-and-icons-brand-on-subtle); text-decoration: none; }
+.figma-link:hover { opacity: 0.8; }
+
+/* Section */
+.section { margin-bottom: 40px; }
+.section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-and-icons-tertiary); margin-bottom: 14px; }
+
+/* Preview card */
+.preview-card { background: var(--color-background-primary); border: 1px solid var(--color-stroke-tertiary-a50); border-radius: 12px; overflow: hidden; }
+.preview-stage { padding: 40px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center; min-height: 120px; }
+.preview-stage.dark-bg { background: var(--color-background-invert-primary); }
+.preview-stage.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; align-items: start; }
+.preview-controls { border-top: 1px solid var(--color-stroke-tertiary-a50); padding: 14px 20px; display: flex; gap: 24px; flex-wrap: wrap; background: var(--color-background-secondary); }
+.control-group { display: flex; flex-direction: column; gap: 4px; }
+.control-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-and-icons-tertiary); }
+.control-group select { font-family: inherit; font-size: 12px; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--color-stroke-tertiary-a50); background: var(--color-background-primary); color: var(--color-text-and-icons-primary); cursor: pointer; }
+.control-group input[type=checkbox] { margin-top: 4px; cursor: pointer; }
+
+/* Props table */
+.props-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.props-table th { text-align: left; padding: 8px 12px; background: var(--color-background-tertiary); color: var(--color-text-and-icons-secondary); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.props-table th:first-child { border-radius: 8px 0 0 0; }
+.props-table th:last-child { border-radius: 0 8px 0 0; }
+.props-table td { padding: 10px 12px; border-bottom: 1px solid var(--color-stroke-tertiary-a50); color: var(--color-text-and-icons-secondary); vertical-align: top; }
+.props-table tr:last-child td { border-bottom: none; }
+.props-table tr:hover td { background: var(--color-background-secondary); }
+.prop-name { font-family: 'Courier New', monospace; font-weight: 600; color: var(--color-text-and-icons-brand-on-subtle); font-size: 12px; }
+.prop-type { font-family: 'Courier New', monospace; font-size: 11px; color: var(--color-text-and-icons-warning-on-subtle); }
+.prop-default { font-family: 'Courier New', monospace; font-size: 11px; color: var(--color-text-and-icons-tertiary); }
+
+/* Token table */
+.token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.token-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--color-background-primary); border: 1px solid var(--color-stroke-tertiary-a50); border-radius: 8px; }
+.token-swatch { width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0; border: 1px solid var(--color-stroke-tertiary-a50); }
+.token-info { min-width: 0; }
+.token-name { font-family: 'Courier New', monospace; font-size: 11px; color: var(--color-text-and-icons-secondary); word-break: break-all; }
+.token-value { font-size: 10px; color: var(--color-text-and-icons-tertiary); font-family: 'Courier New', monospace; }
+
+/* Full token reference */
+.token-section-title { font-size: 15px; font-weight: 600; margin: 24px 0 12px; color: var(--color-text-and-icons-primary); }
+.color-swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.color-swatch { border-radius: 8px; overflow: hidden; border: 1px solid var(--color-stroke-tertiary-a50); }
+.color-swatch-block { height: 56px; }
+.color-swatch-meta { padding: 6px 8px; background: var(--color-background-primary); }
+.color-swatch-label { font-size: 10px; font-weight: 600; color: var(--color-text-and-icons-primary); word-break: break-word; line-height: 1.3; }
+.color-swatch-hex { font-size: 10px; color: var(--color-text-and-icons-tertiary); font-family: 'Courier New', monospace; }
+.spacing-row { display: flex; align-items: center; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--color-stroke-tertiary-a50); }
+.spacing-bar { height: 12px; background: var(--color-background-brand); border-radius: 2px; flex-shrink: 0; }
+.spacing-label { font-size: 12px; font-family: 'Courier New', monospace; color: var(--color-text-and-icons-secondary); }
+.spacing-value { font-size: 11px; color: var(--color-text-and-icons-tertiary); margin-left: auto; font-family: 'Courier New', monospace; }
+
+/* ─── Component Styles ──────────────────────────────────────────────────── */
+
+/* Button */
+.kds-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px;
+  border: none; cursor: pointer; border-radius: var(--radius-x2);
+  padding: var(--spacing-x3) var(--spacing-x4); gap: 4px;
+  transition: filter 0.15s, opacity 0.15s; white-space: nowrap;
+  text-decoration: none; line-height: 1;
+}
+.kds-btn:hover { filter: brightness(0.92); }
+.kds-btn:active { filter: brightness(0.85); }
+.kds-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.kds-btn.sm { padding: var(--spacing-x2) var(--spacing-x3); font-size: 13px; }
+.kds-btn.lg { padding: var(--spacing-x3) var(--spacing-x5); font-size: 16px; font-weight: 700; border-radius: var(--radius-x3); height: 48px; }
+.kds-btn.primary { background: var(--color-background-brand); color: var(--color-text-and-icons-always-white); }
+.kds-btn.secondary { background: var(--color-background-primary); color: var(--color-text-and-icons-secondary); outline: 2px solid var(--color-stroke-tertiary); outline-offset: -2px; }
+.kds-btn.destructive { background: var(--color-background-danger); color: var(--color-text-and-icons-always-white); }
+.kds-btn.warning { background: var(--color-background-warning); color: var(--color-text-and-icons-always-white); }
+.kds-btn.success { background: var(--color-background-success); color: var(--color-text-and-icons-always-white); }
+.kds-btn.upsell { background: var(--color-background-upsell); color: var(--color-text-and-icons-always-white); }
+.kds-btn.ghost-primary { background: transparent; color: var(--color-text-and-icons-brand); }
+.kds-btn.ghost-primary:hover { background: var(--color-background-tertiary); filter: none; }
+.kds-btn.ghost-destructive { background: transparent; color: var(--color-text-and-icons-danger); }
+.kds-btn.ghost-destructive:hover { background: var(--color-background-danger-subtle); filter: none; }
+.kds-btn.icon-mode { padding: var(--spacing-x3); }
+.kds-btn.icon-mode.sm { padding: var(--spacing-x2); }
+
+/* Badge */
+.kds-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-max); font-family: 'Inter', sans-serif;
+  font-weight: 600; white-space: nowrap; line-height: 1; user-select: none;
+}
+.kds-badge.sm { height: var(--spacing-x4); min-width: var(--spacing-x4); padding: 0 var(--spacing-x1); font-size: 10px; }
+.kds-badge.md { height: var(--spacing-x5); min-width: var(--spacing-x5); padding: 0 var(--spacing-x2); font-size: 11px; }
+.kds-badge.dot { padding: 0; border-radius: 50%; }
+.kds-badge.dot.sm { width: var(--spacing-x2); height: var(--spacing-x2); min-width: 0; }
+.kds-badge.dot.md { width: var(--spacing-x3); height: var(--spacing-x3); min-width: 0; }
+/* brand */
+.kds-badge.brand.subtle { background: var(--color-background-brand-subtle); color: var(--color-text-and-icons-brand-on-subtle); }
+.kds-badge.brand.default { background: var(--color-background-brand); color: var(--color-text-and-icons-always-white); }
+.kds-badge.brand.strong { background: var(--color-background-brand); color: var(--color-text-and-icons-always-white); outline: 2px solid var(--color-stroke-brand); outline-offset: -2px; }
+/* success */
+.kds-badge.success.subtle { background: var(--color-background-success-subtle); color: var(--color-text-and-icons-success-on-subtle); }
+.kds-badge.success.default { background: var(--color-background-success); color: var(--color-text-and-icons-always-white); }
+.kds-badge.success.strong { background: var(--color-background-success); color: var(--color-text-and-icons-always-white); outline: 2px solid var(--color-stroke-success); outline-offset: -2px; }
+/* warning */
+.kds-badge.warning.subtle { background: var(--color-background-warning-subtle); color: var(--color-text-and-icons-warning-on-subtle); }
+.kds-badge.warning.default { background: var(--color-background-warning); color: var(--color-text-and-icons-always-white); }
+.kds-badge.warning.strong { background: var(--color-background-warning); color: var(--color-text-and-icons-always-white); outline: 2px solid var(--color-stroke-warning); outline-offset: -2px; }
+/* danger */
+.kds-badge.danger.subtle { background: var(--color-background-danger-subtle); color: var(--color-text-and-icons-danger-on-subtle); }
+.kds-badge.danger.default { background: var(--color-background-danger); color: var(--color-text-and-icons-always-white); }
+.kds-badge.danger.strong { background: var(--color-background-danger); color: var(--color-text-and-icons-always-white); outline: 2px solid var(--color-stroke-error); outline-offset: -2px; }
+/* upsell */
+.kds-badge.upsell.subtle { background: var(--color-background-upsell-subtle); color: var(--color-text-and-icons-upsell-on-subtle); }
+.kds-badge.upsell.default { background: var(--color-background-upsell); color: var(--color-text-and-icons-always-white); }
+.kds-badge.upsell.strong { background: var(--color-background-upsell); color: var(--color-text-and-icons-always-white); outline: 2px solid var(--color-stroke-upsell); outline-offset: -2px; }
+/* neutral */
+.kds-badge.neutral.subtle { background: var(--color-background-secondary); color: var(--color-text-and-icons-secondary); }
+.kds-badge.neutral.default { background: var(--color-background-invert-tertiary); color: var(--color-text-and-icons-always-white); }
+.kds-badge.neutral.strong { background: var(--color-background-invert-primary); color: var(--color-text-and-icons-always-white); outline: 2px solid var(--color-stroke-secondary); outline-offset: -2px; }
+
+/* Chip */
+.kds-chip {
+  display: inline-flex; align-items: center; gap: var(--spacing-x1);
+  font-family: 'Inter', sans-serif; white-space: nowrap; user-select: none; line-height: 1;
+}
+.kds-chip.sm { font-size: 11px; font-weight: 600; border-radius: var(--radius-x2); padding: 2px var(--spacing-x2); }
+.kds-chip.md { font-size: 13px; font-weight: 600; border-radius: var(--radius-x3); padding: var(--spacing-x1) var(--spacing-x3); }
+.kds-chip.filter { border-radius: var(--radius-max); cursor: pointer; border: none; font-family: inherit; transition: background 0.15s; }
+.kds-chip.filter.sm { padding: var(--spacing-x1) var(--spacing-x2); }
+.kds-chip.filter.md { padding: var(--spacing-x2) var(--spacing-x3); }
+/* chip status variants */
+.kds-chip.neutral.subtle { background: var(--color-background-tertiary); color: var(--color-text-and-icons-secondary); }
+.kds-chip.neutral.outline { background: var(--color-background-tertiary); color: var(--color-text-and-icons-secondary); border: solid var(--border-thin) var(--color-stroke-secondary); }
+.kds-chip.neutral.strong { background: var(--color-background-invert-secondary); color: var(--color-text-and-icons-always-white); }
+.kds-chip.brand.subtle { background: var(--color-background-brand-subtle); color: var(--color-text-and-icons-brand-on-subtle); }
+.kds-chip.brand.outline { background: var(--color-background-brand-subtle); color: var(--color-text-and-icons-brand-on-subtle); border: solid var(--border-thin) var(--color-stroke-brand); }
+.kds-chip.brand.strong { background: var(--color-background-brand); color: var(--color-text-and-icons-always-white); }
+.kds-chip.success.subtle { background: var(--color-background-success-subtle); color: var(--color-text-and-icons-success-on-subtle); }
+.kds-chip.success.strong { background: var(--color-background-success); color: var(--color-text-and-icons-always-white); }
+.kds-chip.warning.subtle { background: var(--color-background-warning-subtle); color: var(--color-text-and-icons-warning-on-subtle); }
+.kds-chip.warning.strong { background: var(--color-background-warning); color: var(--color-text-and-icons-always-white); }
+.kds-chip.danger.subtle { background: var(--color-background-danger-subtle); color: var(--color-text-and-icons-danger-on-subtle); }
+.kds-chip.danger.strong { background: var(--color-background-danger); color: var(--color-text-and-icons-always-white); }
+.kds-chip.upsell.subtle { background: var(--color-background-upsell-subtle); color: var(--color-text-and-icons-upsell-on-subtle); }
+.kds-chip.upsell.strong { background: var(--color-background-upsell); color: var(--color-text-and-icons-always-white); }
+/* filter chip */
+.kds-chip.filter-unselected { background: var(--color-background-tertiary); color: var(--color-text-and-icons-secondary); }
+.kds-chip.filter-selected { background: var(--color-background-invert-secondary); color: var(--color-text-and-icons-always-white); }
+.kds-chip.filter-outline-unselected { background: var(--color-background-primary); color: var(--color-text-and-icons-secondary); border: solid var(--border-thin) var(--color-stroke-secondary); }
+.kds-chip.filter-outline-selected { background: var(--color-background-secondary); color: var(--color-text-and-icons-secondary); border: solid var(--border-regular) var(--color-stroke-brand); }
+.kds-chip.filter:hover { filter: brightness(0.95); }
+
+/* Avatar */
+.kds-avatar {
+  width: var(--spacing-x6); height: var(--spacing-x6); border-radius: var(--radius-max);
+  overflow: hidden; display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0; position: relative;
+}
+.kds-avatar.icon-bg { background: var(--color-background-tertiary); }
+.kds-avatar.logo-bg { background: var(--color-background-invert-secondary); }
+.kds-avatar.border-default { outline: var(--border-thin) solid var(--color-stroke-secondary); }
+.kds-avatar.border-brand { outline: var(--border-thin) solid var(--color-stroke-brand); }
+.kds-avatar svg { width: 32px; height: 32px; }
+.kds-avatar.icon-bg svg { color: var(--color-text-and-icons-secondary); }
+.kds-avatar.logo-bg svg { color: var(--color-text-and-icons-always-white); }
+.kds-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Card */
+.kds-card {
+  display: flex; flex-direction: column; gap: var(--spacing-x4);
+  border-radius: var(--radius-x3); padding: var(--spacing-x5);
+  width: 280px;
+}
+.kds-card.primary { background: var(--color-background-primary); border: var(--border-thin) solid var(--color-stroke-tertiary); }
+.kds-card.secondary { background: var(--color-background-secondary); }
+.kds-card-title { font-size: 15px; font-weight: 600; color: var(--color-text-and-icons-primary); }
+.kds-card-body { font-size: 13px; color: var(--color-text-and-icons-secondary); line-height: 1.5; }
+.kds-card-divider { height: 1px; background: var(--color-stroke-tertiary); border: none; margin: 0; }
+.kds-card-footer { font-size: 12px; color: var(--color-text-and-icons-tertiary); }
+
+/* CarouselStepper */
+.kds-stepper { display: flex; align-items: center; gap: var(--spacing-x1); }
+.kds-stepper.wide { width: 100%; }
+.kds-step-dot {
+  border-radius: var(--radius-max); transition: all 0.3s;
+  height: 6px;
+}
+.kds-step-dot.inactive { width: 6px; background: var(--color-text-and-icons-tertiary); opacity: 0.5; }
+.kds-step-dot.active { width: 24px; background: var(--color-text-and-icons-brand); opacity: 1; }
+.kds-step-dot.completed { width: 6px; background: var(--color-text-and-icons-brand); opacity: 1; }
+.kds-step-bar { flex: 1; height: 4px; border-radius: var(--radius-max); transition: all 0.3s; }
+.kds-step-bar.inactive { background: var(--color-text-and-icons-always-white); opacity: 0.5; }
+.kds-step-bar.completed { background: var(--color-text-and-icons-always-white); opacity: 1; }
+.kds-step-bar.active { background: var(--color-text-and-icons-always-white); opacity: 0.5; position: relative; overflow: hidden; }
+.kds-step-bar.active::after { content: ''; position: absolute; inset: 0; width: 50%; background: var(--color-text-and-icons-always-white); opacity: 1; border-radius: var(--radius-max); }
+
+/* Checkbox */
+.kds-checkbox-wrapper { display: flex; align-items: center; gap: var(--spacing-x2); cursor: pointer; width: fit-content; }
+.kds-checkbox-wrapper.disabled { opacity: 0.4; cursor: not-allowed; }
+.kds-checkbox-hit { width: 36px; height: 36px; padding: var(--spacing-x1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.kds-checkbox-box {
+  width: 18px; height: 18px; border-radius: var(--radius-x1); position: relative;
+  border: var(--border-thick) solid var(--color-stroke-secondary);
+  transition: background 0.2s, border-color 0.2s;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent;
+}
+.kds-checkbox-box.checked { background: var(--color-background-brand); border-color: var(--color-background-brand); }
+.kds-checkbox-box.indeterminate { background: var(--color-background-brand); border-color: var(--color-background-brand); }
+.kds-checkbox-box.error { border-color: var(--color-stroke-error); }
+.kds-checkbox-box.error.checked { background: var(--color-background-danger); border-color: var(--color-background-danger); }
+.kds-checkbox-box.error.indeterminate { background: var(--color-background-danger); border-color: var(--color-background-danger); }
+.kds-checkbox-box svg { width: 12px; height: 12px; color: white; }
+.kds-checkbox-label { font-size: 14px; color: var(--color-text-and-icons-primary); user-select: none; }
+.kds-checkbox-wrapper:hover .kds-checkbox-box:not(.checked):not(.indeterminate) { background: var(--color-states-hover); }
+
+/* Divider */
+.kds-divider { width: 100%; border: none; background: var(--color-text-and-icons-tertiary-a50); display: block; }
+.kds-divider.thin { height: var(--border-thin); }
+.kds-divider.regular { height: var(--border-regular); }
+.kds-divider.thick { height: var(--border-thick); }
+
+/* ─── Variants grid labels ─────────────────────────────────────────────── */
+.variant-group { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.variant-label { font-size: 10px; color: var(--color-text-and-icons-tertiary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.variant-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* Misc */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ─── Sidebar ──────────────────────────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark">
+        <svg viewBox="0 0 16 16"><path d="M8 2L14 5.5V10.5L8 14L2 10.5V5.5L8 2Z"/></svg>
+      </div>
+      <div>
+        <div class="sidebar-title">KDS</div>
+        <div class="sidebar-version">v1.0 · 8 atoms</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">Atoms</div>
+  <ul class="sidebar-nav" id="nav">
+    <li><a href="#button" onclick="navigate('button', this)"><span class="dot"></span>Button</a></li>
+    <li><a href="#badge" onclick="navigate('badge', this)"><span class="dot"></span>Badge</a></li>
+    <li><a href="#chip" onclick="navigate('chip', this)"><span class="dot"></span>Chip</a></li>
+    <li><a href="#avatar" onclick="navigate('avatar', this)"><span class="dot"></span>Avatar</a></li>
+    <li><a href="#card" onclick="navigate('card', this)"><span class="dot"></span>Card</a></li>
+    <li><a href="#carouselstepper" onclick="navigate('carouselstepper', this)"><span class="dot"></span>CarouselStepper</a></li>
+    <li><a href="#checkbox" onclick="navigate('checkbox', this)"><span class="dot"></span>Checkbox</a></li>
+    <li><a href="#divider" onclick="navigate('divider', this)"><span class="dot"></span>Divider</a></li>
+  </ul>
+
+  <div class="sidebar-section">Reference</div>
+  <ul class="sidebar-nav">
+    <li><a href="#tokens" onclick="navigate('tokens', this)">🎨 Token Reference</a></li>
+  </ul>
+
+  <div class="sidebar-footer">
+    <button class="theme-toggle" onclick="toggleTheme()">
+      <span id="theme-icon">🌙</span>
+      <span id="theme-label">Dark mode</span>
+    </button>
+  </div>
+</aside>
+
+<!-- ─── Main ─────────────────────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- ── Button ──────────────────────────────────────────────────────────── -->
+  <div class="page" id="page-button">
+    <div class="page-header">
+      <div class="page-title">Button</div>
+      <div class="page-desc">The primary action element. Supports 12 visual variants, 4 sizes, and 4 interaction modes including icon-only and link.</div>
+      <div class="page-meta">
+        <span class="meta-pill">Atom</span>
+        <span class="meta-pill">Stable</span>
+        <span class="meta-pill">@kueski/react → atoms/Button</span>
+        <a class="figma-link" href="https://www.figma.com/design/8dFZ2WMLcxXGqj0g5R6VYy" target="_blank">↗ Figma</a>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Preview</div>
+      <div class="preview-card">
+        <div class="preview-stage" id="btn-stage">
+          <button class="kds-btn primary md" id="btn-preview">Get started</button>
+        </div>
+        <div class="preview-controls">
+          <div class="control-group">
+            <span class="control-label">Variant</span>
+            <select onchange="updateButton()" id="btn-variant">
+              <option>primary</option><option>secondary</option><option>destructive</option>
+              <option>warning</option><option>success</option><option>upsell</option>
+              <option>ghost-primary</option><option>ghost-destructive</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <span class="control-label">Size</span>
+            <select onchange="updateButton()" id="btn-size">
+              <option value="sm">sm</option><option value="md" selected>md</option><option value="lg">lg</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <span class="control-label">Mode</span>
+            <select onchange="updateButton()" id="btn-mode">
+              <option>default</option><option>icon</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <span class="control-label">Disabled</span>
+            <input type="checkbox" id="btn-disabled" onchange="updateButton()"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">All Variants</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="flex-wrap:wrap; gap:10px; justify-content:flex-start; padding:24px;">
+          <div class="variant-group">
+            <span class="variant-label">Filled</span>
+            <div class="variant-row">
+              <button class="kds-btn primary">Primary</button>
+              <button class="kds-btn destructive">Destructive</button>
+              <button class="kds-btn warning">Warning</button>
+              <button class="kds-btn success">Success</button>
+              <button class="kds-btn upsell">Upsell</button>
+            </div>
+          </div>
+          <div class="variant-group" style="margin-top:12px">
+            <span class="variant-label">Outlined / Ghost</span>
+            <div class="variant-row">
+              <button class="kds-btn secondary">Secondary</button>
+              <button class="kds-btn ghost-primary">Ghost Primary</button>
+              <button class="kds-btn ghost-destructive">Ghost Destructive</button>
+            </div>
+          </div>
+          <div class="variant-group" style="margin-top:12px">
+            <span class="variant-label">Sizes</span>
+            <div class="variant-row">
+              <button class="kds-btn primary sm">Small</button>
+              <button class="kds-btn primary">Medium</button>
+              <button class="kds-btn primary lg">Large</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Props</div>
+      <div class="preview-card">
+        <table class="props-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="prop-name">$variant</td><td class="prop-type">'primary' | 'secondary' | 'destructive' | 'warning' | 'success' | 'upsell' | 'ghost-primary' | 'ghost-destructive' | ...</td><td class="prop-default">'primary'</td><td>Visual style variant</td></tr>
+            <tr><td class="prop-name">$size</td><td class="prop-type">'sm' | 'md' | 'lg'</td><td class="prop-default">'md'</td><td>Controls padding and font size</td></tr>
+            <tr><td class="prop-name">$mode</td><td class="prop-type">'default' | 'icon' | 'alternative' | 'link'</td><td class="prop-default">'default'</td><td>Layout and interaction mode</td></tr>
+            <tr><td class="prop-name">$loading</td><td class="prop-type">boolean</td><td class="prop-default">false</td><td>Shows spinner and disables button</td></tr>
+            <tr><td class="prop-name">$fullWidth</td><td class="prop-type">boolean</td><td class="prop-default">false</td><td>Stretches to 100% container width</td></tr>
+            <tr><td class="prop-name">$loadingText</td><td class="prop-type">string</td><td class="prop-default">—</td><td>Text shown during loading state</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Badge ──────────────────────────────────────────────────────────── -->
+  <div class="page hidden" id="page-badge">
+    <div class="page-header">
+      <div class="page-title">Badge</div>
+      <div class="page-desc">A compact status indicator. Supports 6 semantic variants × 3 emphasis levels × 3 types (label, count, dot) × 2 sizes.</div>
+      <div class="page-meta">
+        <span class="meta-pill">Atom</span><span class="meta-pill">Stable</span>
+        <span class="meta-pill">@kueski/react → atoms/Badge</span>
+        <a class="figma-link" href="https://www.figma.com/design/8dFZ2WMLcxXGqj0g5R6VYy" target="_blank">↗ Figma</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Preview</div>
+      <div class="preview-card">
+        <div class="preview-stage" id="badge-stage">
+          <span class="kds-badge brand default md">Badge</span>
+        </div>
+        <div class="preview-controls">
+          <div class="control-group"><span class="control-label">Variant</span>
+            <select onchange="updateBadge()" id="badge-variant">
+              <option>brand</option><option>success</option><option>warning</option><option>danger</option><option>upsell</option><option>neutral</option>
+            </select>
+          </div>
+          <div class="control-group"><span class="control-label">Emphasis</span>
+            <select onchange="updateBadge()" id="badge-emphasis">
+              <option>default</option><option>subtle</option><option>strong</option>
+            </select>
+          </div>
+          <div class="control-group"><span class="control-label">Type</span>
+            <select onchange="updateBadge()" id="badge-type">
+              <option>label</option><option>count</option><option>dot</option>
+            </select>
+          </div>
+          <div class="control-group"><span class="control-label">Size</span>
+            <select onchange="updateBadge()" id="badge-size">
+              <option>md</option><option>sm</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">All Variants</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="flex-direction:column; align-items:flex-start; gap:16px; padding:24px;">
+          <div class="variant-group"><span class="variant-label">Subtle emphasis</span>
+            <div class="variant-row">
+              <span class="kds-badge brand subtle md">Brand</span>
+              <span class="kds-badge success subtle md">Success</span>
+              <span class="kds-badge warning subtle md">Warning</span>
+              <span class="kds-badge danger subtle md">Danger</span>
+              <span class="kds-badge upsell subtle md">Upsell</span>
+              <span class="kds-badge neutral subtle md">Neutral</span>
+            </div>
+          </div>
+          <div class="variant-group"><span class="variant-label">Default emphasis</span>
+            <div class="variant-row">
+              <span class="kds-badge brand default md">Brand</span>
+              <span class="kds-badge success default md">Success</span>
+              <span class="kds-badge warning default md">Warning</span>
+              <span class="kds-badge danger default md">Danger</span>
+              <span class="kds-badge upsell default md">Upsell</span>
+              <span class="kds-badge neutral default md">Neutral</span>
+            </div>
+          </div>
+          <div class="variant-group"><span class="variant-label">Dot type</span>
+            <div class="variant-row">
+              <span class="kds-badge brand default dot md"></span>
+              <span class="kds-badge success default dot md"></span>
+              <span class="kds-badge warning default dot md"></span>
+              <span class="kds-badge danger default dot md"></span>
+              <span class="kds-badge upsell default dot md"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Props</div>
+      <div class="preview-card">
+        <table class="props-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="prop-name">variant</td><td class="prop-type">'brand' | 'success' | 'warning' | 'danger' | 'upsell' | 'neutral'</td><td class="prop-default">'brand'</td><td>Semantic colour variant</td></tr>
+            <tr><td class="prop-name">emphasis</td><td class="prop-type">'subtle' | 'default' | 'strong'</td><td class="prop-default">'default'</td><td>Colour intensity — subtle uses background-subtle tokens</td></tr>
+            <tr><td class="prop-name">type</td><td class="prop-type">'label' | 'count' | 'dot'</td><td class="prop-default">'label'</td><td>Dot has no label and renders as a circle</td></tr>
+            <tr><td class="prop-name">size</td><td class="prop-type">'sm' | 'md'</td><td class="prop-default">'md'</td><td>Controls height and font size</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Chip ───────────────────────────────────────────────────────────── -->
+  <div class="page hidden" id="page-chip">
+    <div class="page-header">
+      <div class="page-title">Chip</div>
+      <div class="page-desc">A compact label or filter element. Status chips are static; filter chips are interactive with a selected state.</div>
+      <div class="page-meta">
+        <span class="meta-pill">Atom</span><span class="meta-pill">Stable</span>
+        <span class="meta-pill">@kueski/react → atoms/Chip</span>
+        <a class="figma-link" href="https://www.figma.com/design/8dFZ2WMLcxXGqj0g5R6VYy" target="_blank">↗ Figma</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Preview</div>
+      <div class="preview-card">
+        <div class="preview-stage" id="chip-stage">
+          <span class="kds-chip neutral subtle sm">Status</span>
+        </div>
+        <div class="preview-controls">
+          <div class="control-group"><span class="control-label">Type</span>
+            <select onchange="updateChip()" id="chip-type"><option>status</option><option>filter</option></select>
+          </div>
+          <div class="control-group"><span class="control-label">Variant</span>
+            <select onchange="updateChip()" id="chip-variant">
+              <option>neutral</option><option>brand</option><option>success</option><option>warning</option><option>danger</option><option>upsell</option>
+            </select>
+          </div>
+          <div class="control-group"><span class="control-label">Emphasis</span>
+            <select onchange="updateChip()" id="chip-emphasis"><option>subtle</option><option>outline</option><option>strong</option></select>
+          </div>
+          <div class="control-group"><span class="control-label">Size</span>
+            <select onchange="updateChip()" id="chip-size"><option>sm</option><option>md</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Status Chips — All Variants</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="flex-direction:column; align-items:flex-start; gap:14px; padding:24px;">
+          <div class="variant-group"><span class="variant-label">Subtle</span>
+            <div class="variant-row">
+              <span class="kds-chip neutral subtle sm">Neutral</span>
+              <span class="kds-chip brand subtle sm">Brand</span>
+              <span class="kds-chip success subtle sm">Success</span>
+              <span class="kds-chip warning subtle sm">Warning</span>
+              <span class="kds-chip danger subtle sm">Danger</span>
+              <span class="kds-chip upsell subtle sm">Upsell</span>
+            </div>
+          </div>
+          <div class="variant-group"><span class="variant-label">Strong</span>
+            <div class="variant-row">
+              <span class="kds-chip neutral strong sm">Neutral</span>
+              <span class="kds-chip brand strong sm">Brand</span>
+              <span class="kds-chip success strong sm">Success</span>
+              <span class="kds-chip warning strong sm">Warning</span>
+              <span class="kds-chip danger strong sm">Danger</span>
+              <span class="kds-chip upsell strong sm">Upsell</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Filter Chips</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="gap:8px; padding:24px; flex-direction:column; align-items:flex-start;">
+          <div class="variant-group"><span class="variant-label">Subtle emphasis</span>
+            <div class="variant-row">
+              <button class="kds-chip filter filter-unselected sm" onclick="toggleFilter(this)">All</button>
+              <button class="kds-chip filter filter-selected sm" onclick="toggleFilter(this)">Active</button>
+              <button class="kds-chip filter filter-unselected sm" onclick="toggleFilter(this)">Pending</button>
+              <button class="kds-chip filter filter-unselected sm" onclick="toggleFilter(this)">Closed</button>
+            </div>
+          </div>
+          <div class="variant-group"><span class="variant-label">Outline emphasis</span>
+            <div class="variant-row">
+              <button class="kds-chip filter filter-outline-unselected sm" onclick="toggleFilterOutline(this)">All</button>
+              <button class="kds-chip filter filter-outline-selected sm" onclick="toggleFilterOutline(this)">Active</button>
+              <button class="kds-chip filter filter-outline-unselected sm" onclick="toggleFilterOutline(this)">Pending</button>
+              <button class="kds-chip filter filter-outline-unselected sm" onclick="toggleFilterOutline(this)">Closed</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Props</div>
+      <div class="preview-card">
+        <table class="props-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="prop-name">$type</td><td class="prop-type">'status' | 'filter'</td><td class="prop-default">'status'</td><td>Status is non-interactive; filter is clickable</td></tr>
+            <tr><td class="prop-name">$variant</td><td class="prop-type">'neutral' | 'brand' | 'success' | 'warning' | 'danger' | 'upsell'</td><td class="prop-default">'neutral'</td><td>Semantic colour (only applies to status type)</td></tr>
+            <tr><td class="prop-name">$emphasis</td><td class="prop-type">'subtle' | 'outline' | 'strong'</td><td class="prop-default">'subtle'</td><td>Colour intensity</td></tr>
+            <tr><td class="prop-name">$size</td><td class="prop-type">'sm' | 'md'</td><td class="prop-default">'sm'</td><td>Controls padding and font size</td></tr>
+            <tr><td class="prop-name">$selected</td><td class="prop-type">boolean</td><td class="prop-default">false</td><td>Selected state (filter type only)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Avatar ─────────────────────────────────────────────────────────── -->
+  <div class="page hidden" id="page-avatar">
+    <div class="page-header">
+      <div class="page-title">Avatar</div>
+      <div class="page-desc">A circular container for a user photo, icon, or logo. Fixed 48×48px. Optionally shows a border ring.</div>
+      <div class="page-meta">
+        <span class="meta-pill">Atom</span><span class="meta-pill">Stable</span>
+        <span class="meta-pill">@kueski/react → atoms/Avatar</span>
+        <a class="figma-link" href="https://www.figma.com/design/8dFZ2WMLcxXGqj0g5R6VYy" target="_blank">↗ Figma</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Preview</div>
+      <div class="preview-card">
+        <div class="preview-stage" id="avatar-stage">
+          <div class="kds-avatar icon-bg" id="avatar-preview">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </div>
+        </div>
+        <div class="preview-controls">
+          <div class="control-group"><span class="control-label">Visual</span>
+            <select onchange="updateAvatar()" id="avatar-visual">
+              <option value="icon">Icon</option><option value="photo">Photo</option><option value="logo">Logo</option>
+            </select>
+          </div>
+          <div class="control-group"><span class="control-label">Border</span>
+            <select onchange="updateAvatar()" id="avatar-border">
+              <option value="none">None</option><option value="default">Default</option><option value="brand">Brand</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Variants</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="gap:20px; padding:32px;">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <div class="kds-avatar icon-bg">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            </div>
+            <span style="font-size:11px; color:var(--color-text-and-icons-tertiary)">icon</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <div class="kds-avatar icon-bg" style="background: var(--color-background-tertiary);">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-text-and-icons-secondary)"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 3a3 3 0 110 6 3 3 0 010-6zm0 14.2a7.2 7.2 0 01-6-3.22c.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08a7.2 7.2 0 01-6 3.22z"/></svg>
+            </div>
+            <span style="font-size:11px; color:var(--color-text-and-icons-tertiary)">photo placeholder</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <div class="kds-avatar logo-bg">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="color:white; width:28px; height:28px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <span style="font-size:11px; color:var(--color-text-and-icons-tertiary)">logo</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <div class="kds-avatar icon-bg border-default">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            </div>
+            <span style="font-size:11px; color:var(--color-text-and-icons-tertiary)">+ border default</span>
+          </div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <div class="kds-avatar icon-bg border-brand">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            </div>
+            <span style="font-size:11px; color:var(--color-text-and-icons-tertiary)">+ border brand</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Props</div>
+      <div class="preview-card">
+        <table class="props-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="prop-name">$visual</td><td class="prop-type">'icon' | 'photo' | 'logo'</td><td class="prop-default">'icon'</td><td>Determines background colour and icon tint</td></tr>
+            <tr><td class="prop-name">$showBorder</td><td class="prop-type">boolean</td><td class="prop-default">false</td><td>Renders a thin ring around the circle</td></tr>
+            <tr><td class="prop-name">$borderColor</td><td class="prop-type">'default' | 'brand'</td><td class="prop-default">'default'</td><td>Ring colour — uses stroke tokens</td></tr>
+            <tr><td class="prop-name">children</td><td class="prop-type">ReactNode</td><td class="prop-default">—</td><td>Photo img tag, icon component, or logo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Card ───────────────────────────────────────────────────────────── -->
+  <div class="page hidden" id="page-card">
+    <div class="page-header">
+      <div class="page-title">Card</div>
+      <div class="page-desc">A container with consistent padding and radius. Slots: header, divider, content, footer. Two types: primary (white with border) and secondary (tinted).</div>
+      <div class="page-meta">
+        <span class="meta-pill">Atom</span><span class="meta-pill">Stable</span>
+        <span class="meta-pill">@kueski/react → atoms/Card</span>
+        <a class="figma-link" href="https://www.figma.com/design/8dFZ2WMLcxXGqj0g5R6VYy" target="_blank">↗ Figma</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Primary vs Secondary</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="gap:24px; padding:32px; flex-wrap:wrap; align-items:flex-start;">
+          <div class="kds-card primary">
+            <div class="kds-card-title">Primary card</div>
+            <hr class="kds-card-divider"/>
+            <div class="kds-card-body">This is card body content. Cards can hold any layout inside — text, lists, actions.</div>
+            <hr class="kds-card-divider"/>
+            <div class="kds-card-footer">Footer · Updated just now</div>
+          </div>
+          <div class="kds-card secondary">
+            <div class="kds-card-title">Secondary card</div>
+            <hr class="kds-card-divider"/>
+            <div class="kds-card-body">Secondary cards use the secondary background token and have no visible border.</div>
+            <hr class="kds-card-divider"/>
+            <div class="kds-card-footer">Footer · Updated just now</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Props</div>
+      <div class="preview-card">
+        <table class="props-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="prop-name">$type</td><td class="prop-type">'primary' | 'secondary'</td><td class="prop-default">'primary'</td><td>Primary has white bg + border; secondary has tinted bg</td></tr>
+            <tr><td class="prop-name">children</td><td class="prop-type">ReactNode</td><td class="prop-default">—</td><td>Any combination of CardHeader, CardContent, CardFooter, CardDivider</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CarouselStepper ────────────────────────────────────────────────── -->
+  <div class="page hidden" id="page-carouselstepper">
+    <div class="page-header">
+      <div class="page-title">CarouselStepper</div>
+      <div class="page-desc">A progress indicator for step-by-step flows and carousels. Two sizes: short (dots) and wide (bars). Two modes: manual (user-controlled) and progress (auto-fill).</div>
+      <div class="page-meta">
+        <span class="meta-pill">Atom</span><span class="meta-pill">Stable</span>
+        <span class="meta-pill">@kueski/react → atoms/CarouselStepper</span>
+        <a class="figma-link" href="https://www.figma.com/design/8dFZ2WMLcxXGqj0g5R6VYy" target="_blank">↗ Figma</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Short · Manual</div>
+      <div class="preview-card">
+        <div class="preview-stage">
+          <div class="kds-stepper" id="stepper-short">
+            <div class="kds-step-dot completed"></div>
+            <div class="kds-step-dot active"></div>
+            <div class="kds-step-dot inactive"></div>
+            <div class="kds-step-dot inactive"></div>
+          </div>
+        </div>
+        <div class="preview-controls">
+          <div class="control-group"><span class="control-label">Active step (0-based)</span>
+            <select onchange="updateStepper()" id="stepper-active">
+              <option value="0">0</option><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option>
+            </select>
+          </div>
+          <div class="control-group"><span class="control-label">Total steps</span>
+            <select onchange="updateStepper()" id="stepper-total">
+              <option value="3">3</option><option value="4" selected>4</option><option value="5">5</option><option value="6">6</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Wide · Progress</div>
+      <div class="preview-card">
+        <div class="preview-stage dark-bg" style="padding: 40px 60px;">
+          <div class="kds-stepper wide">
+            <div class="kds-step-bar completed"></div>
+            <div class="kds-step-bar active"></div>
+            <div class="kds-step-bar inactive"></div>
+            <div class="kds-step-bar inactive"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Props</div>
+      <div class="preview-card">
+        <table class="props-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="prop-name">$size</td><td class="prop-type">'short' | 'wide'</td><td class="prop-default">'short'</td><td>Short = dot indicators; Wide = bar indicators, full width</td></tr>
+            <tr><td class="prop-name">$mode</td><td class="prop-type">'manual' | 'progress'</td><td class="prop-default">'manual'</td><td>Manual = dots change on click; Progress = animated fill</td></tr>
+            <tr><td class="prop-name">$totalSteps</td><td class="prop-type">number</td><td class="prop-default">—</td><td>Total number of steps</td></tr>
+            <tr><td class="prop-name">$activeStep</td><td class="prop-type">number</td><td class="prop-default">0</td><td>Zero-indexed current step</td></tr>
+            <tr><td class="prop-name">$onStepChange</td><td class="prop-type">(step: number) => void</td><td class="prop-default">—</td><td>Callback when user changes step (manual mode)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Checkbox ───────────────────────────────────────────────────────── -->
+  <div class="page hidden" id="page-checkbox">
+    <div class="page-header">
+      <div class="page-title">Checkbox</div>
+      <div class="page-desc">A selection control supporting checked, unchecked, and indeterminate states. Uses Radix UI internally. Outer hit area is 36×36px; visual box is 18×18px.</div>
+      <div class="page-meta">
+        <span class="meta-pill">Atom</span><span class="meta-pill">Stable</span>
+        <span class="meta-pill">@kueski/react → atoms/Checkbox</span>
+        <a class="figma-link" href="https://www.figma.com/design/8dFZ2WMLcxXGqj0g5R6VYy" target="_blank">↗ Figma</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Preview</div>
+      <div class="preview-card">
+        <div class="preview-stage">
+          <label class="kds-checkbox-wrapper" id="cb-preview" onclick="toggleCheckbox(this, 'cb-box')">
+            <div class="kds-checkbox-hit">
+              <div class="kds-checkbox-box" id="cb-box"></div>
+            </div>
+            <span class="kds-checkbox-label" id="cb-label">Label text</span>
+          </label>
+        </div>
+        <div class="preview-controls">
+          <div class="control-group"><span class="control-label">State</span>
+            <select onchange="updateCheckbox()" id="cb-state">
+              <option>unchecked</option><option>checked</option><option>indeterminate</option>
+            </select>
+          </div>
+          <div class="control-group"><span class="control-label">Error</span>
+            <input type="checkbox" id="cb-error" onchange="updateCheckbox()"/>
+          </div>
+          <div class="control-group"><span class="control-label">Disabled</span>
+            <input type="checkbox" id="cb-disabled" onchange="updateCheckbox()"/>
+          </div>
+          <div class="control-group"><span class="control-label">Show label</span>
+            <input type="checkbox" id="cb-showlabel" checked onchange="updateCheckbox()"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">All States</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="flex-direction:column; align-items:flex-start; gap:16px; padding:32px;">
+          <div class="variant-row" style="gap:24px; flex-wrap:wrap;">
+            <label class="kds-checkbox-wrapper" onclick="toggleCheckbox(this, 'cb1')">
+              <div class="kds-checkbox-hit"><div class="kds-checkbox-box" id="cb1"></div></div>
+              <span class="kds-checkbox-label">Unchecked</span>
+            </label>
+            <label class="kds-checkbox-wrapper" onclick="toggleCheckbox(this, 'cb2')">
+              <div class="kds-checkbox-hit"><div class="kds-checkbox-box checked" id="cb2"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+              <span class="kds-checkbox-label">Checked</span>
+            </label>
+            <label class="kds-checkbox-wrapper">
+              <div class="kds-checkbox-hit"><div class="kds-checkbox-box indeterminate"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="6" x2="10" y2="6"/></svg></div></div>
+              <span class="kds-checkbox-label">Indeterminate</span>
+            </label>
+            <label class="kds-checkbox-wrapper">
+              <div class="kds-checkbox-hit"><div class="kds-checkbox-box error"></div></div>
+              <span class="kds-checkbox-label">Error</span>
+            </label>
+            <label class="kds-checkbox-wrapper">
+              <div class="kds-checkbox-hit"><div class="kds-checkbox-box error checked"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+              <span class="kds-checkbox-label">Error checked</span>
+            </label>
+            <label class="kds-checkbox-wrapper disabled">
+              <div class="kds-checkbox-hit"><div class="kds-checkbox-box checked"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+              <span class="kds-checkbox-label">Disabled</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Props</div>
+      <div class="preview-card">
+        <table class="props-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="prop-name">$checked</td><td class="prop-type">boolean | 'indeterminate'</td><td class="prop-default">—</td><td>Controlled checked state</td></tr>
+            <tr><td class="prop-name">$onCheckedChange</td><td class="prop-type">(checked: boolean | 'indeterminate') => void</td><td class="prop-default">—</td><td>Called when value changes</td></tr>
+            <tr><td class="prop-name">$error</td><td class="prop-type">boolean</td><td class="prop-default">false</td><td>Error state — switches fill to danger tokens</td></tr>
+            <tr><td class="prop-name">disabled</td><td class="prop-type">boolean</td><td class="prop-default">false</td><td>Reduces opacity to 40%, disables interaction</td></tr>
+            <tr><td class="prop-name">children</td><td class="prop-type">ReactNode</td><td class="prop-default">—</td><td>Optional label rendered next to the box</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Divider ────────────────────────────────────────────────────────── -->
+  <div class="page hidden" id="page-divider">
+    <div class="page-header">
+      <div class="page-title">Divider</div>
+      <div class="page-desc">A horizontal rule that separates content sections. Stretches to 100% of its container. Three thickness options via border-size tokens.</div>
+      <div class="page-meta">
+        <span class="meta-pill">Atom</span><span class="meta-pill">Stable</span>
+        <span class="meta-pill">@kueski/react → atoms/Divider</span>
+        <a class="figma-link" href="https://www.figma.com/design/8dFZ2WMLcxXGqj0g5R6VYy" target="_blank">↗ Figma</a>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Thicknesses</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="flex-direction:column; gap:24px; padding:32px; align-items:stretch;">
+          <div>
+            <div style="font-size:11px; color:var(--color-text-and-icons-tertiary); margin-bottom:8px; font-weight:600;">thin · 0.5dp · default</div>
+            <hr class="kds-divider thin"/>
+          </div>
+          <div>
+            <div style="font-size:11px; color:var(--color-text-and-icons-tertiary); margin-bottom:8px; font-weight:600;">regular · 1dp</div>
+            <hr class="kds-divider regular"/>
+          </div>
+          <div>
+            <div style="font-size:11px; color:var(--color-text-and-icons-tertiary); margin-bottom:8px; font-weight:600;">thick · 2dp</div>
+            <hr class="kds-divider thick"/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">In context</div>
+      <div class="preview-card">
+        <div class="preview-stage" style="padding:32px;">
+          <div class="kds-card primary" style="width:100%; max-width:400px;">
+            <div class="kds-card-title">Card with dividers</div>
+            <hr class="kds-divider thin"/>
+            <div class="kds-card-body">Content section A · Uses the Divider component at thin thickness to separate sections inside a Card.</div>
+            <hr class="kds-divider thin"/>
+            <div class="kds-card-footer">Footer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Props</div>
+      <div class="preview-card">
+        <table class="props-table">
+          <thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td class="prop-name">$thickness</td><td class="prop-type">'thin' | 'regular' | 'thick'</td><td class="prop-default">'thin'</td><td>Maps to --border-thin / --border-regular / --border-thick</td></tr>
+            <tr><td class="prop-name">className</td><td class="prop-type">string</td><td class="prop-default">—</td><td>Appended to root element</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Token Reference ────────────────────────────────────────────────── -->
+  <div class="page hidden" id="page-tokens">
+    <div class="page-header">
+      <div class="page-title">Token Reference</div>
+      <div class="page-desc">All KDS Foundations tokens defined in <code>packages/react/src/styles/tokens/</code>. These CSS custom properties are the only values permitted in component code — no raw hex, px, or rgba.</div>
+    </div>
+
+    <div class="section">
+      <div class="token-section-title">Colors · Background</div>
+      <div class="color-swatch-grid" id="swatch-bg"></div>
+      <div class="token-section-title">Colors · Text &amp; Icons</div>
+      <div class="color-swatch-grid" id="swatch-text"></div>
+      <div class="token-section-title">Colors · Stroke</div>
+      <div class="color-swatch-grid" id="swatch-stroke"></div>
+      <div class="token-section-title">Colors · States</div>
+      <div class="color-swatch-grid" id="swatch-states"></div>
+
+      <div class="token-section-title">Spacing</div>
+      <div id="spacing-list"></div>
+
+      <div class="token-section-title">Border Radius</div>
+      <div id="radius-list"></div>
+
+      <div class="token-section-title">Border Width</div>
+      <div id="border-list"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ─── Navigation ─────────────────────────────────────────────────────────────
+function navigate(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+  document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.remove('hidden');
+  if (el) el.classList.add('active');
+  event.preventDefault();
+}
+
+// Activate first on load
+document.querySelector('.sidebar-nav a').click();
+
+// ─── Theme ──────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀️';
+  document.getElementById('theme-label').textContent = isDark ? 'Dark mode' : 'Light mode';
+}
+
+// ─── Button controls ────────────────────────────────────────────────────────
+function updateButton() {
+  const btn = document.getElementById('btn-preview');
+  const variant = document.getElementById('btn-variant').value;
+  const size = document.getElementById('btn-size').value;
+  const mode = document.getElementById('btn-mode').value;
+  const disabled = document.getElementById('btn-disabled').checked;
+  btn.className = `kds-btn ${variant} ${size}` + (mode === 'icon' ? ' icon-mode' : '');
+  btn.disabled = disabled;
+  btn.textContent = mode === 'icon' ? '★' : 'Get started';
+  const stage = document.getElementById('btn-stage');
+  stage.className = 'preview-stage' + (variant === 'invert-primary' || variant === 'translucent' ? ' dark-bg' : '');
+}
+
+// ─── Badge controls ─────────────────────────────────────────────────────────
+function updateBadge() {
+  const stage = document.getElementById('badge-stage');
+  const variant = document.getElementById('badge-variant').value;
+  const emphasis = document.getElementById('badge-emphasis').value;
+  const type = document.getElementById('badge-type').value;
+  const size = document.getElementById('badge-size').value;
+  stage.innerHTML = type === 'dot'
+    ? `<span class="kds-badge ${variant} ${emphasis} dot ${size}"></span>`
+    : `<span class="kds-badge ${variant} ${emphasis} ${size}">${type === 'count' ? '42' : 'Badge'}</span>`;
+}
+
+// ─── Chip controls ──────────────────────────────────────────────────────────
+function updateChip() {
+  const stage = document.getElementById('chip-stage');
+  const type = document.getElementById('chip-type').value;
+  const variant = document.getElementById('chip-variant').value;
+  const emphasis = document.getElementById('chip-emphasis').value;
+  const size = document.getElementById('chip-size').value;
+  if (type === 'filter') {
+    const cls = emphasis === 'outline' ? 'filter-outline-unselected' : 'filter-unselected';
+    stage.innerHTML = `<button class="kds-chip filter ${cls} ${size}" onclick="toggleFilter(this)">Filter</button>`;
+  } else {
+    stage.innerHTML = `<span class="kds-chip ${variant} ${emphasis} ${size}">Status</span>`;
+  }
+}
+function toggleFilter(el) {
+  el.classList.toggle('filter-unselected');
+  el.classList.toggle('filter-selected');
+}
+function toggleFilterOutline(el) {
+  el.classList.toggle('filter-outline-unselected');
+  el.classList.toggle('filter-outline-selected');
+}
+
+// ─── Avatar controls ────────────────────────────────────────────────────────
+function updateAvatar() {
+  const av = document.getElementById('avatar-preview');
+  const visual = document.getElementById('avatar-visual').value;
+  const border = document.getElementById('avatar-border').value;
+  const bgClass = visual === 'logo' ? 'logo-bg' : 'icon-bg';
+  const borderClass = border === 'default' ? 'border-default' : border === 'brand' ? 'border-brand' : '';
+  av.className = `kds-avatar ${bgClass} ${borderClass}`.trim();
+  const icons = {
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>`,
+    photo: `<svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--color-text-and-icons-secondary)"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 3a3 3 0 110 6 3 3 0 010-6zm0 14.2a7.2 7.2 0 01-6-3.22c.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08a7.2 7.2 0 01-6 3.22z"/></svg>`,
+    logo: `<svg viewBox="0 0 24 24" fill="currentColor" style="color:white; width:28px; height:28px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+  };
+  av.innerHTML = icons[visual];
+}
+
+// ─── Stepper controls ────────────────────────────────────────────────────────
+function updateStepper() {
+  const active = parseInt(document.getElementById('stepper-active').value);
+  const total = parseInt(document.getElementById('stepper-total').value);
+  const container = document.getElementById('stepper-short');
+  container.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const div = document.createElement('div');
+    div.className = 'kds-step-dot ' + (i < active ? 'completed' : i === active ? 'active' : 'inactive');
+    container.appendChild(div);
+  }
+}
+
+// ─── Checkbox controls ───────────────────────────────────────────────────────
+function toggleCheckbox(wrapper, boxId) {
+  if (wrapper.classList.contains('disabled')) return;
+  const box = document.getElementById(boxId);
+  if (!box) return;
+  const isChecked = box.classList.contains('checked');
+  if (isChecked) {
+    box.classList.remove('checked');
+    box.innerHTML = '';
+  } else {
+    box.classList.add('checked');
+    box.innerHTML = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg>`;
+  }
+}
+function updateCheckbox() {
+  const box = document.getElementById('cb-box');
+  const state = document.getElementById('cb-state').value;
+  const error = document.getElementById('cb-error').checked;
+  const disabled = document.getElementById('cb-disabled').checked;
+  const showLabel = document.getElementById('cb-showlabel').checked;
+  const wrapper = document.getElementById('cb-preview');
+  const label = document.getElementById('cb-label');
+  box.className = 'kds-checkbox-box';
+  if (error) box.classList.add('error');
+  if (state === 'checked') { box.classList.add('checked'); box.innerHTML = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg>`; }
+  else if (state === 'indeterminate') { box.classList.add('indeterminate'); box.innerHTML = `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="6" x2="10" y2="6"/></svg>`; }
+  else { box.innerHTML = ''; }
+  wrapper.classList.toggle('disabled', disabled);
+  label.style.display = showLabel ? '' : 'none';
+}
+
+// ─── Token Reference ────────────────────────────────────────────────────────
+const colorTokens = {
+  bg: {
+    'background/primary': '#ffffff', 'background/secondary': '#f4f8fb',
+    'background/tertiary': '#ecf2f7', 'background/brand': '#0069f1',
+    'background/brand-subtle': '#e7f3ff', 'background/success': '#008246',
+    'background/success-subtle': '#e8f5ec', 'background/danger': '#d82938',
+    'background/danger-subtle': '#ffedec', 'background/warning': '#ab5d00',
+    'background/warning-subtle': '#fff0da', 'background/upsell': '#6e5be6',
+    'background/upsell-subtle': '#f0f0ff', 'background/invert-primary': '#141c22',
+    'background/invert-secondary': '#262f37', 'background/invert-tertiary': '#384550',
+  },
+  text: {
+    'text/primary': '#141c22', 'text/secondary': '#384550',
+    'text/tertiary': '#66727d', 'text/brand': '#0069f1',
+    'text/always-white': '#ffffff', 'text/invert-primary': '#ffffff',
+    'text/success': '#008246', 'text/danger': '#d82938',
+    'text/warning': '#ab5d00', 'text/upsell': '#6e5be6',
+    'text/brand-on-subtle': '#0051cb', 'text/success-on-subtle': '#006834',
+    'text/danger-on-subtle': '#ae1f2c', 'text/upsell-on-subtle': '#5845c2',
+    'text/warning-on-subtle': '#9f3804', 'text/tertiary-a50': '#66727d80',
+  },
+  stroke: {
+    'stroke/primary': '#141c22', 'stroke/secondary': '#384550',
+    'stroke/tertiary': '#66727d', 'stroke/brand': '#0069f1',
+    'stroke/success': '#008246', 'stroke/error': '#d82938',
+    'stroke/warning': '#ab5d00', 'stroke/upsell': '#6e5be6',
+    'stroke/invert': '#ffffff', 'stroke/tertiary-a50': '#66727d80',
+    'stroke/secondary-a50': '#38455080',
+  },
+  states: {
+    'states/hover': '#141c221a', 'states/pressed': '#141c2233',
+    'states/disabled': '#ffffff66',
+  },
+};
+
+function buildSwatches(tokenObj, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  Object.entries(tokenObj).forEach(([name, value]) => {
+    container.innerHTML += `
+      <div class="color-swatch">
+        <div class="color-swatch-block" style="background:${value}; border-bottom: 1px solid var(--color-stroke-tertiary-a50);"></div>
+        <div class="color-swatch-meta">
+          <div class="color-swatch-label">${name}</div>
+          <div class="color-swatch-hex">${value}</div>
+        </div>
+      </div>`;
+  });
+}
+
+function buildSpacing() {
+  const tokens = [
+    ['x1', '4px', 16], ['x2', '8px', 32], ['x3', '12px', 48],
+    ['x4', '16px', 64], ['x5', '20px', 80], ['x6', '24px', 96],
+    ['x7', '28px', 112], ['x8', '32px', 128],
+  ];
+  const el = document.getElementById('spacing-list');
+  tokens.forEach(([name, value, px]) => {
+    el.innerHTML += `<div class="spacing-row"><div class="spacing-bar" style="width:${px/2}px;"></div><span class="spacing-label">--spacing-${name}</span><span class="spacing-value">${value}</span></div>`;
+  });
+}
+
+function buildRadius() {
+  const tokens = [
+    ['none', '0px'], ['x1', '4px'], ['x2', '8px'], ['x3', '12px'],
+    ['x4', '16px'], ['x5', '20px'], ['x6', '24px'], ['max', '~9999px'],
+  ];
+  const el = document.getElementById('radius-list');
+  tokens.forEach(([name, value]) => {
+    el.innerHTML += `<div class="spacing-row"><span class="spacing-label">--radius-${name}</span><span class="spacing-value">${value}</span></div>`;
+  });
+}
+
+function buildBorder() {
+  const tokens = [['thin', '0.5px'], ['regular', '1px'], ['thick', '2px']];
+  const el = document.getElementById('border-list');
+  tokens.forEach(([name, value]) => {
+    el.innerHTML += `<div class="spacing-row"><div class="spacing-bar" style="height:${name === 'thin' ? 1 : name === 'regular' ? 2 : 3}px; width:60px;"></div><span class="spacing-label">--border-${name}</span><span class="spacing-value">${value}</span></div>`;
+  });
+}
+
+buildSwatches(colorTokens.bg, 'swatch-bg');
+buildSwatches(colorTokens.text, 'swatch-text');
+buildSwatches(colorTokens.stroke, 'swatch-stroke');
+buildSwatches(colorTokens.states, 'swatch-states');
+buildSpacing();
+buildRadius();
+buildBorder();
+</script>
+</body>
+</html>

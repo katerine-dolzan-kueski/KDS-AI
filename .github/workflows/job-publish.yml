@@ -1,0 +1,43 @@
+---
+name: Publish Package
+
+on:
+  workflow_call:
+    inputs:
+      ENV_NAME:
+        required: false
+        type: string
+        default: staging
+    outputs:
+      outcome:
+        value: ${{ jobs.publish-package.outputs.outcome }}
+
+jobs:
+  publish-package:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.ENV_NAME == 'production' }}
+    outputs:
+      outcome: ${{ steps.publish.outputs.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup JS
+        uses: ./.github/composite/setup-js
+
+      - name: Publish packages
+        id: publish
+        run: |
+          {
+            pnpm run publish:all &&
+            echo "outcome=published" >> $GITHUB_OUTPUT
+          } || {
+            echo "outcome=skipped" >> $GITHUB_OUTPUT
+          }
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Set final outcome
+        id: final-outcome
+        run: |
+          # The outcome is already set in the publish step
+          echo "Publication completed with status: ${{ steps.publish.outputs.outcome }}"

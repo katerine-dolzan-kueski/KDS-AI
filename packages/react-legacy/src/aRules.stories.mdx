@@ -1,0 +1,97 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="OLD Design System/A - Rules" component={() => {}} group />
+
+# Kueski Component Catalog Rules
+
+A Component Catalog is always growing, with new component additions, upgrades, and maybe even new tokens. We must define some ground rules to extend the catalog to prevent chaos.
+
+As a baseline that intends to be expanded in the future, we can start with:
+
+## Tech Stack
+
+The Component Catalog contains the core components, in most cases, the smallest pieces we use to assemble more complex components and pages.
+
+`styled-components` is the base technology to handle styling and responsiveness.
+
+**TBD** Headless components for more complex components (modals, autocomplete, toast, etc…)
+
+## Typescript
+
+Plain javascript (or jsx) is strictly banned. These components are planned to be extensively reused so they need to be as robust as possible. Thats’s exactly what Typescript has to offer. Everything must be typed as strictly as possible, leaving as little room for error as possible.
+
+## Typescript IntelliSense
+
+All the props that accepts Design Tokens should be properly typed to leverage IntelliSense’s auto-complete features:
+
+## `styled-components`
+
+Whenever possible, we should export plain styled components.
+
+If something needs some logic or interaction rules, we should create/export the styled component first, and then create another component with any required interaction defined that implements the styled component.
+
+## Responsiveness by nature
+
+All components must be responsive and responsiveness must be handled by CSS media queries. No javascript/typescript is allowed.
+
+In some cases, we have to take this a step further and allow custom responsive behavior, the PoC already includes a tailwind-like approach to allow responsive configuration by allowing the breakpoint prefix.
+
+Sample:
+
+```jsx
+export const MyComponent = () => (<>
+  {/* Some text that displays as header in every resolution */}
+  <Heading $format="Title/Medium/Bold">Always a header 1</Copy>
+  {/* Some text that displays as header1 in mobile and header2 in tablet or more */}
+  <Heading $format={['Title/Medium/Bold', 'tablet:Title/Large/Bold']}>Responsive header</Copy>
+  {/* Mobile first */}
+  <Heading $format={[
+    'Title/Regular/Bold',
+    'tablet:Title/Large/Bold',
+    'laptop:Headline/Medium/Bold',
+    'desktop:Headline/Large/Bold'
+  ]}>Very responsive header</Copy>
+</>)
+```
+
+## Custom Props for styled-components
+
+Any custom prop we add to a styled component must be prefixed by $, this is to [avoid custom props leaking to the DOM](https://github.com/radix-ui/primitives/issues/1201).
+
+Example:
+
+```tsx
+// Definition
+export const MyComponent = styled.div<{ $foo: string }>`
+  display: ${({ $foo }) => $foo};
+`;
+
+// Usage
+export const SomeOtherComponent = () => <MyComponent $foo="block" />;
+```
+
+## Fully documented
+
+All components in the Catalog must be documented on storybook and always be up to the date, whenever a component is modified is critical to update the story as they are the building blocks for the rest of the Components
+
+## Visual Testing (WIP)
+
+As these components will be the main core of our application, we need to define a Visual Testing strategy to ensure we don’t break anything whenever we extend a component there.
+
+## Tokens
+
+To ensure we are aligning to the :Kueskip: Kueski branding, everything should be strictly based on the Design Tokens here, no color, spacing, size, font, border radius or shadow can be added that is not included on the token library.
+
+We should never use Design Foundations directly. We should always use Design Tokens.
+
+How do we use the Design Tokens?
+
+## Encapsulation
+
+Never import anything outside of the module folder. This ensures portability, so we can easily adapt to any future reestructure.
+
+## Mobile First
+
+Our components must prioritize the mobile version and then apply any change needed on for larger displays.
+
+Breakpoint Design Tokens already implements this principle.

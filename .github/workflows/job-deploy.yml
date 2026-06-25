@@ -1,0 +1,51 @@
+---
+name: Reusable job for deploy
+
+on:
+  workflow_call:
+    inputs:
+      STAGING_CLUSTER:
+        required: true
+        type: string
+
+jobs:
+  build_and_deploy:
+    runs-on:
+      - ${{ inputs.STAGING_CLUSTER }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: kueski-dev/devops-action-vars@v1
+        with:
+          path: ./.github/variables/.env
+
+      - name: Setup JS
+        uses: ./.github/composite/setup-js
+
+      - name: Print commit hash used as version
+        run: /usr/bin/git log -1 --format='%H'
+
+      - name: Build project
+        run: pnpm build-storybook
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-region: "us-east-1"
+
+      - name: Setup awscli
+        run: pip install awscli
+
+      - name: Deploy to S3
+        run: aws s3 sync ./storybook-static s3://staging-$SERVICE_NAME --delete
+
+      - name: Invalidate Staging CloudFront Cache (staging)
+        run: aws cloudfront create-invalidation --distribution-id E1DAHB569ZQZGQ --paths "/*"
+
+  iac:
+    uses: kueski-dev/cicd-gha-workflows/.github/workflows/job-tf.yml@v2
+    secrets: inherit
+    with:
+      ENV_NAME: staging
+      STAGING_CLUSTER: ${{ inputs.STAGING_CLUSTER }}
+      PRODUCTION_CLUSTER: ${{ inputs.STAGING_CLUSTER }}

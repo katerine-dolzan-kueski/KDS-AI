@@ -1,0 +1,371 @@
+import React from "react";
+import { Meta } from "@storybook/addon-docs";
+
+import { theme } from "./theme";
+import { Grid } from "./Components/Grid";
+import { Text } from "./Components/Text";
+import { Card } from "./Components/Card";
+import { DesignSystemGlobals } from "./hocs/withDesignSystem";
+import { responsivePropsConfig } from "./hocs/withResponsive";
+
+<Meta title="OLD Design System/C - Responsiveness" component={() => {}} group />
+
+# Kueski Component Catalog Responsiveness
+
+Responsiveness has always been an issue as there's several ways to tackle this (SCSS, javascript, styledComponents, responsive discrimination components...).
+
+In order to achieve this topic, the proposal of the Component Catalog is handling this from props... responsive props.
+
+**Responsive Props** approach is inspired in **Tailwind**, with a little twist:
+
+## Tailwind Approach
+
+Before deep-diving into our approach, let's quickly review the inspiration.
+
+### Core Concept
+
+**Tailwind** resolves responsiveness by adding breakpoint prefixes to clases. In Example:
+
+```html
+<img class="w-16 md:w-32 lg:w-48" src="..." />
+```
+
+**What does this mean?**
+
+- `w-16` sets a width of 16px to all breakpoints
+- `md:w-32` overrides the width on medium-sized devices and up
+- `lg:w-48` overrides the width on large-sized devices and up
+
+This Mobile-First, fully configurable approach may be just what we need.
+
+### Downside
+
+The only downside is we loose Typescript validation and autocomplete functionalities. So you have to memorize all clases and breakpoints.
+
+## KDS Approach
+
+Ok, now, how do we leverage the advantages of this approach and tackle the downsides at the same time?
+
+### Core Concept
+
+Instead of using clases (or a plain string attribute) to handle responsiveness, the proposal is using pre-defined, extensible,
+**Responsive Props** that accept a `string` (fixed value) or an `Array` (multiple responsive values).
+
+Example:
+
+```jsx
+  // Fixed prop
+  <Label $color="warning" />
+
+  // Responsive prop
+  <Label $color={['warning', 'tablet:danger', 'desktop:success']} />
+```
+
+**What does this mean?**
+
+- `warning` sets **yellow** color for all breakpoints
+- `tablet:danger` overrides a **red** color on medium-sized devices and up
+- `desktop:success` overrides a **green** color on large-sized devices and up
+
+**Both fixed and responsive props can be fully typed, enabling Typescript validation and IntelliSense autocomplete feature**
+
+### Breakpoint Prefixes
+
+So, what prefixes can we use?
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="2" $gap="spacing03">
+    <Text $format="Body/Large/Bold">Prefix</Text>
+    <Text $format="Body/Large/Bold">Value</Text>
+    <Text>(no prefix)</Text>
+    <Text>Fixed value for all devices</Text>
+    {Object.entries(theme.breakpoint).map(([size, value]) => (
+      <React.Fragment key={size}>
+        <Text>
+          <code>{size}:</code>
+        </Text>
+        <Text>
+          <code>{value}</code>
+        </Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>
+
+Any responsive prop will support any of those prefixes, or as many as required.
+
+## Responsive Props
+
+The **Catalog Component** contains several responsive props ready to be added to any (Styled) Component:
+
+<Card $air="spacing06">
+  <DesignSystemGlobals />
+  <Grid $cols="2" $gap="spacing03">
+    <Text $format="Body/Large/Bold">Prop</Text>
+    <Text $format="Body/Large/Bold">Description</Text>
+    {Object.entries(responsivePropsConfig).map(([prop, config]) => (
+      <React.Fragment key={prop}>
+        <Text>
+          <code>{prop}</code>
+        </Text>
+        <Text>{config.description}</Text>
+      </React.Fragment>
+    ))}
+  </Grid>
+</Card>
+
+### How to add a Responsive Prop to my component
+
+The **Catalog Component** includes a HoC to extend any component with **Responsive Props**. `withResponsive` allows you
+to extend any Component with any **Responsive Prop**, you just have to set a default value for any prop you want to add:
+
+Example:
+
+Let's say we have some regular Styled Component:
+
+```tsx
+import styled from "styled-components";
+
+import { elevation } from "./theme/elevation";
+import { radius } from "./theme/radius";
+
+// Any component with some CSS rules
+export const CardBase = styled.div`
+  border-radius: ${radius.lg};
+  box-shadow: ${elevation.card};
+  overflow: hidden;
+`;
+```
+
+Then, we can extend it with **Responsive Props**:
+
+```tsx
+import { CardBase } from "./CardBase";
+import { withResponsive } from "./hocs/withResponsive";
+
+// We are adding 3 responsive props to this Component
+export const Card = withResponsive(
+  {
+    $air: "0",
+    $background: "backgroundAlter",
+    $padding: "spacing06",
+  } as const,
+  CardBase
+);
+```
+
+And finally, we can leverage the newly defined props:
+
+```tsx
+import { Card } from "./Card";
+
+export const OtherComponent = () => (
+  <>
+    {/* All props are optional by default, that why we set a default value when adding them */}
+    <Card>Some content</Card>
+
+    {/* This will have the same result as before */}
+    <Card $air="0" $background="backgroundAlter" $padding="spacing06">
+      Some content
+    </Card>
+
+    {/* Most of Responsive Props are tied to Design Tokens, this will throw a TS error: */}
+    <Card $air="50px" $background="red" $padding="10px">
+      Some content
+    </Card>
+
+    {/* Ok, now we can add multiple responsive values to each prop: */}
+    <Card
+      $air={["spacing02", "laptop:spacing04"]}
+      $background={["backgroundAlter", "laptop:background"]}
+      $padding={["spacing04", "laptop:spacing06"]}
+    >
+      Some content
+    </Card>
+  </>
+);
+```
+
+### Defining new Responsive Props
+
+Let's say you want to define a new **Responsive Prop** for setting the color on SVGs elements, named `$fill`.
+
+There's 2 steps you should follow in order to create this new token:
+
+1. Define the prop `type`.
+2. Add the **Responsive Prop** configuration.
+
+First, you have to define what kind of tokens (enums, string literals, strings, etc..) your prop will accept.
+
+**Try to be as strict as possible**
+
+```ts
+// file: app/@kueski-dev/kds/hocs/withResponsive/withResponsive.models.ts
+
+// We want the $fill prop to allow only KDSColor tokens. But it can be any string type
+type ResponsivePropMap = {
+  $air: KDSSpacing;
+  /* ... */
+  $fill: KDSColor; // Our shining new Responsive Prop Type
+};
+```
+
+Second, you set the prop configuration:
+
+```ts
+// file: app/@kueski-dev/kds/hocs/withResponsive/withResponsive.ts
+
+// And now the configuration
+export const responsivePropsConfig: ResponsivePropsDiccionary = {
+  $air: {
+    description: "Adds margin at the top and bottom of the Component",
+    prop: "margin",
+    themeProp: "spacing",
+  },
+  /* ... */
+  $fill: {
+    description: "Sets the fill color for an SVG element", // For documentation purposes only
+    prop: "fill", // CSS property we will be defining with this prop
+    themeProp: "color", // The source dictionary for our tokens
+  },
+};
+```
+
+Done!
+
+Now we can extend any component with our shinny new **Responsive Prop**:
+
+```tsx
+import { SomeSVGComponent } from "./SomeSVGComponent";
+import { withResponsive } from "./hocs/withResponsive";
+
+// We are adding 3 responsive props to this Component
+export const ResponsiveSVG = withResponsive(
+  {
+    $fill: "iconPrimary",
+  } as const,
+  SomeSVGComponent
+);
+```
+
+And use it:
+
+```tsx
+import { ResponsiveSVG } from "./ResponsiveSVG";
+
+export const OtherComponent = () => (
+  <>
+    {/* 'iconPrimary' by default */}
+    <ResponsiveSVG />
+
+    {/* This will have the same result as before */}
+    <ResponsiveSVG $fill="iconPrimary" />
+
+    {/* And we can go as crazy as we want */}
+    <ResponsiveSVG
+      $fill={[
+        "iconPrimary",
+        "tablet:iconSecondary",
+        "laptop:iconDisabled",
+        "desktop:iconInteraction",
+      ]}
+    />
+  </>
+);
+```
+
+## What if my Responsive Prop is tied to more than one CSS style?
+
+On your Responsive Prop Configuration, there's an optional `config` property you can use to generate more complex CSS Rules. We are
+not limited to a single style.
+
+For example, the `$air` prop sets 2 CSS styles: `margin-top` and `margin-bottom`. To achieve this, we define a `formatter` as part of
+the `config` element. When defined, the `formatter` method will be used to generate the CSS code instead of the predefined behavior.
+
+**Note: Even if the value is a Design Token, the `formatter` method gets the final parsed value**
+
+```ts
+// file: app/hocs/withResponsive/withResponsive.ts
+
+// And now the configuration
+export const responsivePropsConfig: ResponsivePropsDiccionary = {
+  $air: {
+    config: {
+      formatter: (value) => `margin-top: ${value}; margin-bottom: ${value};`,
+    },
+    description: "Adds margin at the top and bottom of the Component",
+    prop: "",
+    themeProp: "spacing",
+  },
+};
+```
+
+## Non-shareable Responsive Props
+
+Let's say we want some **Responsive Prop** that shouldn't be shared, that must be unique for a component.
+This is also posible by using the core components of `withResponsive` HoC:
+
+- `parseResponsiveProp()` function
+- `KDSResponsiveProp` generic type.
+
+Let's say we want to build a responsive `$on` prop, so we can define `display: initial` on some devices and
+`display:none` on others. A simple "hide from mobile/desktop" component.
+
+We need to follow the same 2 steps as when we are adding a new Responsive Prop to `withResponsive`, but this
+time, everyhting is right inside your Styled Component:
+
+1. Define the prop `type`.
+2. Add the **Responsive Prop** configuration.
+
+```tsx
+import { parseResponsiveProp } from './hocs/withResponsive/withResponsive.utils';
+import { KDSResponsiveProp } from './theme/breakpoint';
+import styled, { css } from 'styled-components';
+
+// We define our prop type, in this case, we only allow 'none', 'block' or 'inline' strings
+type CSSDisplayType = 'none' | 'block' | 'inline';
+
+// We use KDSResponsiveProp to append all the breakpoint prefixes to the type
+// Now our string literal should be something like this:
+// 'none' | 'block' | 'inline' | 'phone:none' | 'phone:block' | 'phone:inline' | 'tablet:none' ...
+// It will also allow an array of those values.
+type ResponsiveDisplayType = KDSResponsiveProp<CSSDisplayType>;
+
+// Now we define our Component Responsive prop.
+// Typescript part is done so far.
+interface DisplayProps {
+  $on?: ResponsiveDisplayType;
+}
+
+// Just add the props to your styled component and the prop is ready to be used
+export const Display = styled.div<DisplayProps>`
+  display: initial;
+  ${/* parseResponsiveProp will generate the CSS code */}
+  ${({ $on = 'block' }) => parseResponsiveProp($on, 'display')};
+`;
+```
+
+`parseResponsiveProp` will generate all the required CSS code for you, we just need to define the
+**Responsive Prop** Config there:
+
+```ts
+type parseResponsiveProp = (
+  oneOrMany: string | string[],  // The responsive prop value.
+  prop: string,                  // CSS Prop name.
+  themeProp?: keyof AuroraTheme, // The Design Token set we are using from the theme, if needed.
+  config?: ResponsiveConfig,     // Additional config, a formatter method for example.
+): string;                       // Returns the generated CSS code.
+```
+
+Done!
+
+Your component is ready to use:
+
+```jsx
+export const SomeComponent = () => (
+  <Display $on={["none", "bigTablet:block"]}>
+    <p>Will only be displayed on Big Tablets and up</p>
+  </Display>
+);
+```

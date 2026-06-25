@@ -1,0 +1,36 @@
+import { Meta } from '@storybook/addon-docs';
+
+import { DesignSystemGlobals } from '../hocs/withDesignSystem';
+import { color, gradient } from './index';
+import { Grid } from '../Components';
+import { ColorCard } from '../utils/kds.components';
+
+<Meta title="OLD Design System/Foundations/Color" component={() => {}} group />
+
+# Colors
+
+A system of additional colors from the primary, secondary and semantic colors.
+
+## Extended Color Palette
+
+<Grid $cols="9" $gap="spacing05" $symetric>
+  <DesignSystemGlobals />
+  {Object.entries(color).flatMap(([name, colors]) =>
+    !(colors instanceof Object) ? (
+      <ColorCard color={colors} title={name} />
+    ) : (
+      Object.entries(colors).map(([variant, colorValue]) => (
+        <ColorCard color={colorValue} title={`${name}-${variant}`} />
+      ))
+    ),
+  )}
+</Grid>
+
+## Gradients
+
+<Grid $cols="2" $gap="spacing05" $symetric>
+  <DesignSystemGlobals />
+  {Object.entries(gradient).flatMap(([name, colors]) => (
+    <ColorCard color={colors} title={name} />
+  ))}
+</Grid>

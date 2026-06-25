@@ -1,0 +1,58 @@
+import { useState } from "react";
+
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
+
+import { elevation } from "./elevation";
+import { Grid, Text, Card } from "../Components";
+import { DesignSystemGlobals } from "../hocs/withDesignSystem";
+import { ElevatedCard } from "../utils/kds.components";
+
+<Meta title="OLD Design System/Theme/Elevation" component={() => {}} group />
+
+# Elevation
+
+## Design Tokens
+
+<Card>
+  <DesignSystemGlobals />
+  <Grid $cols="4" $gap="spacing03">
+    <Text $format="Body/Large/Bold">Token</Text>
+    <Text $format="Body/Large/Bold">Usage</Text>
+    <Text $format="Body/Large/Bold">Purpose</Text>
+    <Text $format="Body/Large/Bold">Value</Text>
+    <Text>buttonNormal</Text>
+    <Text>
+      <code>theme.elevation.buttonNormal</code>
+    </Text>
+    <Text>Default shadow effect in primary buttons</Text>
+    <Text as="div">
+      <ElevatedCard $size="md">md</ElevatedCard>
+    </Text>
+    <Text>buttonHover</Text>
+    <Text>
+      <code>theme.elevation.buttonHover</code>
+    </Text>
+    <Text>Default shadow effect in primary buttons when hover</Text>
+    <Text as="div">
+      <ElevatedCard $size="lg">lg</ElevatedCard>
+    </Text>
+    <Text>buttonTabBar</Text>
+    <Text>
+      <code>theme.elevation.buttonTabBar</code>
+    </Text>
+    <Text>Default shadow effect on the bottom tab bar</Text>
+    <Text as="div">
+      <ElevatedCard $size="lg" $type="inverted">
+        -(lg)
+      </ElevatedCard>
+    </Text>
+    <Text>card</Text>
+    <Text>
+      <code>theme.elevation.card</code>
+    </Text>
+    <Text>Default shadow effect on cards</Text>
+    <Text as="div">
+      <ElevatedCard $size="base">base</ElevatedCard>
+    </Text>
+  </Grid>
+</Card>

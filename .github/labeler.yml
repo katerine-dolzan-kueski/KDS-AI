@@ -1,0 +1,24 @@
+---
+repo:
+  - "*"
+ruby:
+  - "**/*.rb"
+javascript:
+  - "**/*.js"
+typescript:
+  - "**/*.ts"
+  - "**/*.tsx"
+css:
+  - "**/*.css"
+html:
+  - "**/*.html"
+terraform:
+  - "**/*.tf"
+json:
+  - "**/*.json"
+markdown:
+  - "**/*.MD"
+github:
+  - ".github/*"
+critical:
+  - "(critical|urgent)"

@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true
+  },
+  "include": [".eslintrc.js", "*.config.js", "*.config.mjs", "*.config.ts"],
+  "exclude": ["node_modules", "dist", "build"]
+}

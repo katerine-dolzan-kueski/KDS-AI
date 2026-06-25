@@ -1,0 +1,10 @@
+@theme {
+  --text-amount: 4rem;
+  --text-body-1: 1rem;
+  --text-body-2: 0.875rem;
+  --text-headline-1: 2rem;
+  --text-headline-2: 1.5rem;
+  --text-headline-3: 1.25rem;
+  --text-meta: 0.75rem;
+  --text-mini: 0.6875rem;
+}

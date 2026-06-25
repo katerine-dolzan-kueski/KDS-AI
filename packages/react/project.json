@@ -1,0 +1,25 @@
+{
+  "name": "@kueski-dev/kds-react",
+  "sourceRoot": "packages/react/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist"],
+      "options": {
+        "command": "kds-utils build",
+        "cwd": "packages/react"
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": ["pnpm publish --no-git-checks"],
+        "cwd": "packages/react",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["scope:react", "type:library"]
+}

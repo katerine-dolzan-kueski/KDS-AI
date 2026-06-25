@@ -1,0 +1,55 @@
+@utility top-light-elevation-1 {
+  box-shadow: 0 1px 2px 0 hsl(0 0% 0% / 3%);
+}
+
+@utility top-light-elevation-2 {
+  box-shadow:
+    0 2px 4px 0 hsl(0 0% 0% / 6%),
+    0 3px 6px 0 hsl(0 0% 0% / 3%);
+}
+
+@utility top-light-elevation-3 {
+  box-shadow:
+    0 3px 6px 0 hsl(0 0% 0% / 10%),
+    0 5px 10px 0 hsl(0 0% 0% / 5%);
+}
+
+@utility top-light-elevation-4 {
+  box-shadow:
+    0 4px 8px 0 hsl(0 0% 0% / 15%),
+    0 6px 12px 0 hsl(0 0% 0% / 8%);
+}
+
+@utility top-light-elevation-5 {
+  box-shadow:
+    0 5px 10px 0 hsl(0 0% 0% / 20%),
+    0 8px 16px 0 hsl(0 0% 0% / 10%);
+}
+
+@utility bottom-light-elevation-1 {
+  box-shadow: 0 -1px 2px 0 hsl(0 0% 0% / 3%);
+}
+
+@utility bottom-light-elevation-2 {
+  box-shadow:
+    0 -2px 4px 0 hsl(0 0% 0% / 6%),
+    0 -3px 6px 0 hsl(0 0% 0% / 3%);
+}
+
+@utility bottom-light-elevation-3 {
+  box-shadow:
+    0 -3px 6px 0 hsl(0 0% 0% / 10%),
+    0 -5px 10px 0 hsl(0 0% 0% / 5%);
+}
+
+@utility bottom-light-elevation-4 {
+  box-shadow:
+    0 -4px 8px 0 hsl(0 0% 0% / 15%),
+    0 -6px 12px 0 hsl(0 0% 0% / 8%);
+}
+
+@utility bottom-light-elevation-5 {
+  box-shadow:
+    0 -5px 10px 0 hsl(0 0% 0% / 20%),
+    0 -8px 16px 0 hsl(0 0% 0% / 10%);
+}

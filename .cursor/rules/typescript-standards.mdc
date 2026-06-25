@@ -1,0 +1,91 @@
+---
+description: TypeScript standards for the Kueski Design System
+globs: ['**/*.ts', '**/*.tsx']
+alwaysApply: true
+---
+
+# TypeScript Standards
+
+## Interface Definition
+
+All interfaces must extend appropriate HTML attributes and use VariantProps:
+
+```typescript
+export interface ButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  /** Custom CSS class name */
+  className?: string;
+  /** Button size variant */
+  $size?: ButtonSize;
+  /** Show loading state with spinner */
+  $loading?: boolean;
+  /** Loading text to display when loading is true */
+  $loadingText?: string;
+  /** Make the button full width */
+  $fullWidth?: boolean;
+  /** Render as a different element when true */
+  $asChild?: boolean;
+  /** Element type to render when asChild is true */
+  $as?: ElementType;
+}
+```
+
+## Type Exports
+
+Export all types for external usage:
+
+```typescript
+export type ButtonVariant = 'primary' | 'secondary' | 'destructive';
+export type ButtonSize = 'sm' | 'md' | 'lg';
+export type ButtonMode = 'default' | 'icon' | 'alternative';
+```
+
+## Props with $ Prefix
+
+All custom props MUST use the `$` prefix:
+
+```typescript
+interface ComponentProps {
+  $variant?: ComponentVariant; // ✅ Correct
+  $size?: ComponentSize; // ✅ Correct
+  $loading?: boolean; // ✅ Correct
+  className?: string; // ✅ Correct
+  variant?: string; // ❌ Wrong - conflicts with HTML
+  size?: string; // ❌ Wrong - conflicts with HTML
+}
+```
+
+## Generic Types
+
+Use generic types for polymorphic components:
+
+```typescript
+interface PolymorphicProps<T extends ElementType = 'div'> {
+  $as?: T;
+  children?: React.ReactNode;
+}
+
+type ComponentProps<T extends ElementType = 'div'> = PolymorphicProps<T> &
+  Omit<React.ComponentPropsWithoutRef<T>, keyof PolymorphicProps<T>>;
+```
+
+## JSDoc Comments
+
+Document all public interfaces:
+
+````typescript
+/**
+ * Button component for user interactions
+ *
+ * @example
+ * ```tsx
+ * <Button $variant="primary" $size="md">
+ *   Click me
+ * </Button>
+ * ```
+ */
+export const Button = ({ ... }) => {
+  // Component implementation
+};
+````

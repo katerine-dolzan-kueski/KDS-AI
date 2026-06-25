@@ -1,0 +1,10 @@
+@theme {
+  --leading-amount: 4.75rem;
+  --leading-body-1: 1.5rem;
+  --leading-body-2: 1.25rem;
+  --leading-headline-1: 2.5rem;
+  --leading-headline-2: 2rem;
+  --leading-headline-3: 1.75rem;
+  --leading-meta: 1rem;
+  --leading-mini: 1rem;
+}

@@ -1,0 +1,302 @@
+---
+description: Design tokens standards for the Kueski Design System
+globs:
+  [
+    'packages/react/src/**/*.tsx',
+    'packages/react/src/**/*.ts',
+    'packages/react/src/styles/**/*.css',
+  ]
+alwaysApply: true
+---
+
+# Design Tokens Standards
+
+## Token Structure
+
+The Kueski Design System uses a comprehensive token system located in `/packages/react/src/styles/tokens/`:
+
+### Token Categories
+
+- **Colors** (`colors.css`): Brand, semantic, and utility colors
+- **Spacing** (`spacings.css`): Consistent spacing scale
+- **Typography** (`font-sizes.css`, `font-weights.css`, `line-heights.css`): Text sizing and weights
+- **Radius** (`radius.css`): Border radius values
+- **Shadows** (`colors.css`): Elevation and shadow tokens
+- **Gradients** (`gradients.css`): Linear gradient definitions
+
+## Color Tokens
+
+### Brand Colors
+
+```css
+--color-background-brand: #0069f1;
+--color-background-brand-subtle: #e7f3ff;
+--color-stroke-brand: #0069f1;
+```
+
+### Semantic Colors
+
+```css
+--color-background-danger: #d82938;
+--color-background-success: #008246;
+--color-background-warning: #ab5d00;
+--color-background-upsell: #6e5be6;
+```
+
+### Text Colors
+
+```css
+--color-text-and-icons-primary: #141c22;
+--color-text-and-icons-secondary: #384550;
+--color-text-and-icons-always-white: #ffffff;
+```
+
+### Usage in Components
+
+```typescript
+// ✅ Correct - using color tokens
+'bg-background-brand text-text-and-icons-always-white';
+'bg-background-danger text-text-and-icons-always-white';
+'text-text-and-icons-primary';
+
+// ❌ Wrong - hardcoded colors
+'bg-blue-500 text-white';
+'bg-red-500 text-white';
+'text-gray-900';
+```
+
+## Spacing Tokens
+
+### Spacing Scale
+
+```css
+--spacing-x1: 0.25rem; /* 4px */
+--spacing-x2: 0.5rem; /* 8px */
+--spacing-x3: 0.75rem; /* 12px */
+--spacing-x4: 1rem; /* 16px */
+--spacing-x5: 1.25rem; /* 20px */
+--spacing-x6: 1.5rem; /* 24px */
+--spacing-x7: 1.75rem; /* 28px */
+--spacing-x8: 2rem; /* 32px */
+```
+
+### Usage in Components
+
+```typescript
+// ✅ Correct - using spacing tokens
+'px-x4 py-x3'; // 16px horizontal, 12px vertical
+'mx-x2 my-x1'; // 8px horizontal, 4px vertical
+'gap-x3'; // 12px gap
+
+// ❌ Wrong - hardcoded spacing
+'px-4 py-3'; // Use px-x4 py-x3 instead
+'mx-2 my-1'; // Use mx-x2 my-x1 instead
+'gap-3'; // Use gap-x3 instead
+```
+
+## Typography Tokens
+
+### Font Sizes
+
+```css
+--text-headline-1: 2rem; /* 32px */
+--text-headline-2: 1.5rem; /* 24px */
+--text-headline-3: 1.25rem; /* 20px */
+--text-body-1: 1rem; /* 16px */
+--text-body-2: 0.875rem; /* 14px */
+--text-meta: 0.75rem; /* 12px */
+--text-mini: 0.6875rem; /* 11px */
+--text-amount: 4rem; /* 64px */
+```
+
+### Typography Utilities
+
+Use predefined typography utilities from `/packages/react/src/styles/utility/typography.css`:
+
+```typescript
+// ✅ Correct - using typography utilities
+'typo-headline-1'; // Headline 1 with proper font features
+'typo-headline-2'; // Headline 2 with proper font features
+'typo-headline-3'; // Headline 3 with proper font features
+'typo-body-1'; // Body 1 text
+'typo-body-2'; // Body 2 text
+'typo-body-2-emphasized'; // Body 2 with emphasis
+'typo-meta'; // Meta text
+'typo-amount'; // Amount/currency text
+
+// ❌ Wrong - manual typography
+'text-2xl font-bold'; // Use typo-headline-1 instead
+'text-xl font-semibold'; // Use typo-headline-2 instead
+'text-lg font-medium'; // Use typo-headline-3 instead
+'text-base'; // Use typo-body-1 instead
+'text-sm font-medium'; // Use typo-body-2-emphasized instead
+```
+
+## Radius Tokens
+
+### Border Radius Scale
+
+```css
+--radius-x1: 0.25rem; /* 4px */
+--radius-x2: 0.5rem; /* 8px */
+--radius-x3: 0.75rem; /* 12px */
+--radius-x4: 1rem; /* 16px */
+--radius-x5: 1.25rem; /* 20px */
+--radius-x6: 1.5rem; /* 24px */
+```
+
+### Usage in Components
+
+```typescript
+// ✅ Correct - using radius tokens
+'rounded-x2'; // 8px border radius
+'rounded-x4'; // 16px border radius
+'rounded-t-x2'; // 8px top border radius
+
+// ❌ Wrong - hardcoded radius
+'rounded-md'; // Use rounded-x2 instead
+'rounded-lg'; // Use rounded-x4 instead
+'rounded-t-md'; // Use rounded-t-x2 instead
+```
+
+## Shadow Tokens
+
+### Shadow Scale
+
+```css
+--color-shadows-s3: #00000008; /* Very light shadow */
+--color-shadows-s5: #0000000d; /* Light shadow */
+--color-shadows-s6: #0000000f; /* Subtle shadow */
+--color-shadows-s8: #00000014; /* Medium shadow */
+--color-shadows-s10: #0000001a; /* Strong shadow */
+--color-shadows-s15: #00000026; /* Very strong shadow */
+--color-shadows-s20: #00000033; /* Maximum shadow */
+```
+
+### Usage in Components
+
+```typescript
+// ✅ Correct - using shadow tokens
+'shadow-s3'; // Very light shadow
+'shadow-s8'; // Medium shadow
+'shadow-s15'; // Strong shadow
+
+// ❌ Wrong - hardcoded shadows
+'shadow-sm'; // Use shadow-s3 instead
+'shadow-md'; // Use shadow-s8 instead
+'shadow-lg'; // Use shadow-s15 instead
+```
+
+## Gradient Tokens
+
+### Linear Gradients
+
+```css
+--gradient-brand: linear-gradient(135deg, #0069f1 0%, #0056cc 100%);
+--gradient-destructive: linear-gradient(135deg, #d82938 0%, #b71c1c 100%);
+--gradient-success: linear-gradient(135deg, #008246 0%, #006633 100%);
+```
+
+### Usage in Components
+
+```typescript
+// ✅ Correct - using gradient tokens
+'bg-linear-brand'; // Brand gradient
+'bg-linear-destructive'; // Destructive gradient
+'bg-linear-success'; // Success gradient
+
+// ❌ Wrong - hardcoded gradients
+'bg-gradient-to-r from-blue-500 to-blue-600';
+```
+
+## Component Implementation
+
+### CVA with Design Tokens
+
+```typescript
+import { cva } from 'class-variance-authority';
+
+export const buttonVariants = cva(
+  // Base styles using design tokens
+  [
+    'typo-body-2-emphasized whitespace-nowrap rounded-x2',
+    'flex items-center justify-center w-fit',
+    'disabled:pointer-events-none disabled:cursor-not-allowed',
+    'relative overflow-hidden focus-visible:!outline-[2px] focus-visible:!outline-offset-2 focus-visible:!outline-stroke-brand',
+  ],
+  {
+    variants: {
+      $variant: {
+        primary: [
+          'bg-background-brand !text-text-and-icons-always-white',
+          'border-background-brand',
+          'hover:bg-linear-brand active:bg-linear-pressed-brand focus-visible:bg-linear-brand',
+        ],
+        secondary: [
+          'bg-background-secondary text-text-and-icons-primary',
+          'border-stroke-secondary',
+          'hover:bg-background-tertiary active:bg-background-tertiary',
+        ],
+      },
+      $size: {
+        sm: 'px-x3 py-x2 text-typo-body-3 min-h-[32px]',
+        md: 'px-x4 py-x3 text-typo-body-2 min-h-[40px]',
+        lg: 'px-x6 py-x4 text-typo-body-1 min-h-[48px]',
+      },
+    },
+    defaultVariants: {
+      $variant: 'primary',
+      $size: 'md',
+    },
+  },
+);
+```
+
+## Best Practices
+
+### 1. Always Use Tokens
+
+```typescript
+// ✅ Good - consistent with design system
+'bg-background-brand text-text-and-icons-always-white px-x4 py-x3 rounded-x2';
+
+// ❌ Bad - inconsistent with design system
+'bg-blue-500 text-white px-4 py-3 rounded-md';
+```
+
+### 2. Use Typography Utilities
+
+```typescript
+// ✅ Good - using typography utilities
+'typo-headline-1 text-text-and-icons-primary';
+
+// ❌ Bad - manual typography
+'text-2xl font-bold text-gray-900';
+```
+
+### 3. Consistent Spacing
+
+```typescript
+// ✅ Good - using spacing tokens
+'p-x4 m-x2 gap-x3';
+
+// ❌ Bad - inconsistent spacing
+'p-4 m-2 gap-3';
+```
+
+### 4. Semantic Colors
+
+```typescript
+// ✅ Good - using semantic colors
+'bg-background-danger text-text-and-icons-always-white';
+
+// ❌ Bad - using generic colors
+'bg-red-500 text-white';
+```
+
+## Token Maintenance
+
+- **Never modify tokens directly** - use the design system tools
+- **Always use the latest tokens** - keep tokens updated
+- **Test token changes** - ensure consistency across components
+- **Document token usage** - maintain clear documentation
