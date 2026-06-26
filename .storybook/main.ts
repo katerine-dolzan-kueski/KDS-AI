@@ -5,7 +5,7 @@ import type { StorybookConfig } from '@storybook/react-vite';
 const require = createRequire(import.meta.url);
 
 const config: StorybookConfig = {
-  stories: ['../packages/**/src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../packages/react/src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
 
   addons: [
     getAbsolutePath('@storybook/addon-links'),
