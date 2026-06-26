@@ -9,7 +9,7 @@ on:
 
 # Sets permissions for GitHub Pages deployment
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -45,12 +47,25 @@ jobs:
       - name: Install dependencies
         run: pnpm install
         env:
-          # GITHUB_TOKEN has read:packages access within the same org.
-          # If this repo is personal (outside kueski-dev org), create a PAT
-          # with read:packages scope and add it as a repo secret named
-          # PACKAGES_TOKEN, then change the line below to:
-          #   NODE_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build compiled CSS
+        run: |
+          mkdir -p packages/react/dist
+          npx --yes @tailwindcss/cli@next \
+            -i packages/react/src/styles/index.css \
+            -o packages/react/dist/kds.css \
+            --minify
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit compiled CSS
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add packages/react/dist/kds.css
+          git diff --cached --quiet || git commit -m "chore: update compiled kds.css [skip ci]"
+          git push
 
       - name: Build Storybook
         run: pnpm build-storybook
