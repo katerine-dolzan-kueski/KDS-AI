@@ -56,6 +56,7 @@ const config: StorybookConfig = {
         ...config.resolve?.alias,
         '@kueski-dev/kds-react': resolve(process.cwd(), 'packages/react/src'),
         '@kueski-dev/kds-legacy': resolve(process.cwd(), 'packages/react-legacy/src'),
+        '@': resolve(process.cwd(), 'packages/react/src'),
       },
     };
 
