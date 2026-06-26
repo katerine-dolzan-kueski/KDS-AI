@@ -65,8 +65,9 @@ const config: StorybookConfig = {
       global: 'globalThis',
     };
 
-    // Set base path correctly for both dev and build
-    config.base = '/';
+    // Set base path: repo subpath on GitHub Pages, root for local dev
+    const repoName = process.env.GITHUB_REPOSITORY?.split('/')[1];
+    config.base = repoName ? `/${repoName}/` : '/';
 
     // Configure build settings properly
     if (config.build) {
