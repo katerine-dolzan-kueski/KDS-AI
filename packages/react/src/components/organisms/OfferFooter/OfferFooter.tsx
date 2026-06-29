@@ -1,5 +1,6 @@
 import { cn } from '../../../lib/utils';
-import { ShieldLockIcon, Shimmer, Card } from '../../..';
+import { Shimmer, Card } from '../../..';
+import { DataProtectionBadge } from '../../molecules/DataProtectionBadge';
 import {
   OfferFooterWrapperProps,
   OfferFooterRowAmountProps,
@@ -77,13 +78,12 @@ const RowsWrapper = ({ children, className, ...props }: PropsOf<'div'>) => (
   </div>
 );
 
-const DataProtection = ({ $link, $linkText, className, ...restProps }: OfferFooterDataProtectionProps) => (
-  <div className={cn('flex gap-x2 items-center self-center', className)} {...restProps}>
-    <ShieldLockIcon className="w-x6 h-x6 text-stroke-success" />
-    <a href={$link} target="_blank" rel="noreferrer" className="typo-body-2 text-text-and-icons-secondary underline">
-      {$linkText || 'Como protegemos tus datos'}
-    </a>
-  </div>
+const DataProtection = ({ $link, $linkText, className }: OfferFooterDataProtectionProps) => (
+  <DataProtectionBadge
+    href={$link}
+    label={$linkText}
+    className={cn('self-center', className)}
+  />
 );
 
 const defaultLabels: Record<OfferFooterDataRow['type'], string> = {

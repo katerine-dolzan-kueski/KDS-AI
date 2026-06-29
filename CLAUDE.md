@@ -105,7 +105,8 @@ When creating or updating a ComponentSet via plugin:
 | Checkbox | 11, 17000 | 1536, 17000 | 2500, 17000 |
 | Divider | 11, 18500 | 1536, 18500 | 2500, 18500 |
 | Input | 11, 20000 | 1536, 20000 | 2500, 20000 |
-| **Next** | **11, 23500** | **1536, 23500** | **2500, 23500** |
+| OTPInput | 11, 23500 | 1536, 23500 | 2500, 23500 |
+| **Next** | **11, 27000** | **1536, 27000** | **2500, 27000** |
 
 Place each new component at the next available y position and update this table.
 
@@ -114,7 +115,7 @@ Place each new component at the next available y position and update this table.
 ## What's already done
 
 The following components have completed all 4 steps:
-Button-v2, Badge-v2, Chip, Avatar, Card, CarouselStepper, Checkbox, Divider, Input
+Button-v2, Badge-v2, Chip, Avatar, Card, CarouselStepper, Checkbox, Divider, Input, OTPInput
 
 ---
 
