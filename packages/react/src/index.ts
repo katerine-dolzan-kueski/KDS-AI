@@ -64,6 +64,7 @@ export { RadioGroup, RadioGroupOption, type RadioGroupProps } from './components
 export { FieldBase } from './components/atoms/FieldBase';
 
 export { Checkbox, type CheckboxProps } from './components/atoms/Checkbox';
+export { OTPInput, type OTPInputProps } from './components/atoms/OTPInput';
 export {
   SegmentedTabs,
   type SegmentedTabsProps,
@@ -94,6 +95,7 @@ export { AmountInput, type AmountInputProps } from './components/molecules/Amoun
 export { DropDown, type DropDownProps } from './components/molecules/DropDown';
 export { Stepper, type StepperProps } from './components/molecules/Stepper';
 export { SectionHeader, type SectionHeaderProps } from './components/molecules/SectionHeader';
+export { DataProtectionBadge, type DataProtectionBadgeProps } from './components/molecules/DataProtectionBadge';
 
 // ============================================
 // Organisms
@@ -115,6 +117,9 @@ export {
   type OfferFooterRowSaveProps,
   type OfferFooterWrapperProps
 } from './components/organisms/OfferFooter';
+
+export { Footer, type FooterProps } from './components/organisms/Footer';
+export { NavigationHeader, type NavigationHeaderProps } from './components/organisms/NavigationHeader';
 
 export {
   OfferSuccessPage,
@@ -149,6 +154,18 @@ export {
   type CurpConfirmationSheetProps,
   type CurpConfirmationSheetState,
 } from './components/flows/PersonalInfoFlow';
+
+export {
+  RegistrationFlow,
+  type RegistrationFlowProps,
+  type RegistrationFlowStep,
+  OnboardingScreen,
+  type OnboardingScreenProps,
+  CreateAccountScreen,
+  type CreateAccountScreenProps,
+  VerifyPhoneScreen,
+  type VerifyPhoneScreenProps,
+} from './components/flows/RegistrationFlow';
 
 export {
   FunnelLayout,
