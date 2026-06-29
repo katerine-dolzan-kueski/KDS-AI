@@ -5,7 +5,7 @@ import { SegmentedTabs } from '../../../atoms/SegmentedTabs';
 import { ChevronLeftIcon } from '../../../atoms/Icons/ChevronLeftIcon';
 import { ChevronBottomIcon } from '../../../atoms/Icons/ChevronBottomIcon';
 import { CrossIcon } from '../../../atoms/Icons/CrossIcon';
-import { ShieldCheckIcon } from '../../../atoms/Icons/ShieldCheckIcon';
+import { DataProtectionBadge } from '../../../molecules/DataProtectionBadge';
 import { cn } from '../../../../lib/utils';
 
 export interface PersonalInfoScreenProps {
@@ -307,16 +307,7 @@ export const PersonalInfoScreen = ({
         </Button>
 
         {/* Data protection link */}
-        <button
-          type="button"
-          onClick={onDataProtection}
-          className="flex items-center justify-center gap-1.5 cursor-pointer"
-        >
-          <ShieldCheckIcon $width={16} $height={16} className="text-text-and-icons-secondary shrink-0" />
-          <span className="typo-body-2 text-text-and-icons-secondary underline">
-            Cómo protegemos tus datos
-          </span>
-        </button>
+        <DataProtectionBadge onPress={onDataProtection} />
 
         {/* Home indicator */}
         <div className="flex items-center justify-center h-5">

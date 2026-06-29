@@ -4,16 +4,13 @@ on:
   push:
     branches:
       - main
-  # Allow manual trigger from GitHub Actions tab
   workflow_dispatch:
 
-# Sets permissions for GitHub Pages deployment
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
-# Only one deployment runs at a time
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -25,8 +22,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -40,7 +35,6 @@ jobs:
           node-version: 22.12.0
           cache: pnpm
           cache-dependency-path: ./pnpm-lock.yaml
-          # Authenticates against GitHub Packages for @kueski-dev scoped packages
           registry-url: https://npm.pkg.github.com/
           scope: "@kueski-dev"
 
@@ -52,26 +46,17 @@ jobs:
       - name: Build compiled CSS
         run: |
           mkdir -p packages/react/dist
-          npx --yes @tailwindcss/cli@next \
+          npx --yes @tailwindcss/cli@4.1.18 \
             -i packages/react/src/styles/index.css \
             -o packages/react/dist/kds.css \
             --minify
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Commit compiled CSS
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add packages/react/dist/kds.css
-          git diff --cached --quiet || git commit -m "chore: update compiled kds.css [skip ci]"
-          git push
-
       - name: Build Storybook
         run: pnpm build-storybook
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
