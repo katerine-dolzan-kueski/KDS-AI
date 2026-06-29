@@ -118,4 +118,5 @@ debug-storybook.log
 # Bundle analysis reports
 bundle-analysis/
 **/bundle-analysis/
-vite.config.d.ts.map
+vite.config.d.ts.map.npmrc
+.npmrc

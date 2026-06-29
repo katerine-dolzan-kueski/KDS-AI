@@ -52,7 +52,7 @@ jobs:
       - name: Build compiled CSS
         run: |
           mkdir -p packages/react/dist
-          npx --yes @tailwindcss/cli@next \
+          npx --yes @tailwindcss/cli@4.1.18 \
             -i packages/react/src/styles/index.css \
             -o packages/react/dist/kds.css \
             --minify
