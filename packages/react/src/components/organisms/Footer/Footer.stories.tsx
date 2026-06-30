@@ -267,6 +267,7 @@ export const WithSystemBar: Story = {
     docs: {
       description: {
         story:
+          '`$systemBar=true` adds the Android home indicator at the bottom. Use only when the screen renders below the device\'s gesture navigation bar.',
           '`$systemBar=true` adds the Android home indicator at the bottom. Use only when the screen renders below the device's gesture navigation bar.',
       },
     },
